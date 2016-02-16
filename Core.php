@@ -51,18 +51,36 @@ class Core {
         return self::$_instance;
 	}
 	
+	/**
+	 * 网站正常启动流程
+	 */
 	public function init(){
 		//autoload
 		self::_init_autoload();
 		self::_init_version();//初始化网站版本
 		self::_init_container();//引入容器
 		self::_init_cache();//初始化缓存使用
-		self::_init_db();//初始化mysql
+		// self::_init_db();//初始化mysql
 		self::_init_env();//初始化环境
 		self::_init_cookie();
 		self::_init_user();//初始化用户
 		self::_init_input();
 		self::_init_output();
+	}
+
+	/**
+	 * 单元测试专用启动路程,用于引导phpunit,bootstrap的路由文件进入.在这里我们要实现如下功能:
+	 * 1. 自动加载
+	 * 2. 初始化容器
+	 * 3. 初始化缓存
+	 * 4. 初始化测试持久层存储,用于测试数据库和程序分离
+	 */
+	public function initTest(){
+
+		self::_init_autoload();//autoload
+		self::_init_version();//初始化网站版本
+		self::_init_container();//引入容器
+		self::_init_cache();//初始化缓存使用
 	}
 	
 	/**
