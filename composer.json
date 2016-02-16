@@ -1,0 +1,11 @@
+{
+    "require": {
+        "php-di/php-di": "^5.2",
+        "doctrine/annotations": "^1.2",
+        "doctrine/cache": "~1.4",
+        "monolog/monolog": "^1.17",
+        "phpunit/phpunit": "~5.2.4",
+        "nikic/fast-route": "^0.7.0",
+        "ocramius/proxy-manager": "~1.0"
+    }
+}
