@@ -1,5 +1,8 @@
 <?php
 namespace System\Command\Cache;
+use System\Interfaces;
+use System\Observer;
+use System\Classes;
 use Core;
 /**
  * 删除cache缓存命令
@@ -7,7 +10,7 @@ use Core;
  *
  */
 
-class DelCacheCommand implements Command {
+class DelCacheCommand implements Interfaces\Command {
 	
 	private $key;
 	
@@ -19,6 +22,9 @@ class DelCacheCommand implements Command {
 		return Core::$_cacheDriver->delete($this->key);
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function undo() {
 		//
 	}

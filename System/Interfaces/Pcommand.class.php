@@ -1,5 +1,5 @@
 <?php
-namespace System\Interface;
+namespace System\Interfaces;
 /**
  * 进程接口,所有子进程要执行该接口
  *

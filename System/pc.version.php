@@ -5,6 +5,6 @@ if(!defined('IN_PHP')) {
 }
 /* 文件用途：模块全局引用文见 */
 
-define('NITE_VERSION', 'v1.4.14.20131105');
+define('MARMOT_VERSION', 'v1.0');
 
 ?>

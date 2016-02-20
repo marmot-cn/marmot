@@ -1,5 +1,5 @@
 <?php
-namespace System\Interface;
+namespace System\Interfaces;
 /**
  * 观察者subject接口
  */

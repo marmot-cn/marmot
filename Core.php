@@ -19,7 +19,7 @@ define('D_BUG',1); //开发环境
 
 date_default_timezone_set("PRC");
 
-D_BUG?error_reporting(7):error_reporting(0);//6143
+D_BUG?error_reporting(6143):error_reporting(0);//6143
 
 /**
  * 文件核心类
@@ -58,10 +58,10 @@ class Core {
 		//autoload
 		self::_init_autoload();
 		self::_init_version();//初始化网站版本
+		self::_init_env();//初始化环境
 		self::_init_container();//引入容器
 		self::_init_cache();//初始化缓存使用
-		// self::_init_db();//初始化mysql
-		self::_init_env();//初始化环境
+		self::_init_db();//初始化mysql
 		self::_init_cookie();
 		self::_init_user();//初始化用户
 		self::_init_input();
@@ -79,8 +79,10 @@ class Core {
 
 		self::_init_autoload();//autoload
 		self::_init_version();//初始化网站版本
+		self::_init_env();//初始化环境
 		self::_init_container();//引入容器
 		self::_init_cache();//初始化缓存使用
+		self::_init_db();//初始化mysql
 	}
 	
 	/**
@@ -109,32 +111,31 @@ class Core {
 				$classFile = str_replace('\\', '/', $className) . '.class.php';
 				$classFile = S_ROOT.'Application/'.$classFile;
 			}
-
 			if(file_exists($classFile)){
 		        include_once $classFile;
 		    }
 		  
 		});
 	    //加载框架Application文件的autoload,匿名函数 -- 开始
-
 	}
+
 	/**
 	 * 初始化网站运行环境的一些全局变量
 	 * @author chloroplast1983
 	 * @version 1.0.20131016
 	 */
 	private function _init_env() {
-		global $_FWGLOBAL,$_TPL,$_FWC;
-		
+		global $_FWGLOBAL;
+	
+
 		//开启session
 		// session_start();
 		
-		$_TPL = $_FWCOOKIE = $_FWC = array();
+		// $_FWGLOBAL = array();
 		
-		//设定框架全局时间戳,代替各自调时间函数
-		$mtime = explode(' ', microtime());
-		$_FWGLOBAL['timestamp'] = $mtime[1];//全局时间戳
-		
+		// //设定框架全局时间戳,代替各自调时间函数
+		// $mtime = explode(' ', microtime());
+		// $_FWGLOBAL['timestamp'] = $mtime[1];//全局时间戳
 	}
 
 	/**
@@ -170,7 +171,7 @@ class Core {
 	}
 
 	private function _init_user(){
-		global $_FWGLOBAL;
+		// global $_FWGLOBAL;
 		// user::checkauth();
 	}
 	
@@ -179,10 +180,10 @@ class Core {
 	 * @version 1.0.20160204
 	 */
 	private function _init_cookie(){
-		global $_FWC,$_FWCOOKIE;
-		$magic_quote = get_magic_quotes_gpc();
-		//COOKIE
-		$prelength = strlen($_FWC['cookiepre']);
+		// global $_FWCOOKIE;
+		// $magic_quote = get_magic_quotes_gpc();
+		// //COOKIE
+		// $prelength = strlen($_FWC['cookiepre']);
 		
 		// foreach($_COOKIE as $key => $val) {
 		// 	if(substr($key, 0, $prelength) == $_FWC['cookiepre']) {
@@ -203,13 +204,13 @@ class Core {
 		$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
 			//添加默认首页路由 -- 开始
 			$r->addRoute('GET', '/', ['Controller\HomeController','index']);
+			$r->addRoute('GET', '/User', ['Controller\UserController','index']);
 			//添加默认首页路由 -- 结束
 
 			//获取配置好的路由规则
 			$routeRules = include(S_ROOT.'/Application/Controller/routeRules.php');
 			foreach($routeRules as $controller=>$methodList){
 				foreach($methodList as $method){
-
 					switch ($method) {
 						case 'GET':
 							//首页,搜索
@@ -226,13 +227,13 @@ class Core {
 							//这里创建支持POST,是因为form表单只能支持POST.而我们的REST接口则支持PUT
 							$r->addRoute(['POST','PUT'], '/'.$controller.'/{id}',['Controller\\'.$controller.'Controller','action']);
 							break;
-						case 'DELETE':	
+						// case 'DELETE':	
 							//rest接口对应的删除
 							//delete 有问题需要检查
 							// $r->addRoute(['DELETE'],'/'.$controller.'/{id}',['Controller\\'.$controller.'Controller','delete']);
 							//网站自己本身的删除使用GET方法
-							$r->addRoute('GET', '/'.$controller.'/del/{id}',['Controller\\'.$controller.'Controller','delete']);
-							break;
+							//$r->addRoute('GET', '/'.$controller.'/del/{id}',['Controller\\'.$controller.'Controller','delete']);
+							//break;
 					}
 				}
 			}
@@ -285,7 +286,7 @@ class Core {
 	 */
 	private function _init_db() {
 
-		self::$_dbDriver = self::$_container->get('\System\Core\MyPdo');
+		self::$_dbDriver = self::$_container->get('\System\Classes\MyPdo');
 	}
 
 	/**
@@ -303,7 +304,7 @@ class Core {
 	 * @version 1.0.20160204
 	 */
 	private function _init_cache(){
-		global $_FWC,$memCacheDriver;
+		global $memCacheDriver;
 
 		//初始化memcached缓存 -- 开始
 		$memcached = new Memcached();

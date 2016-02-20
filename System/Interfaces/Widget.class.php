@@ -1,5 +1,5 @@
 <?php
-namespace System\Interface;
+namespace System\Interfaces;
 /**
  * widget接口文件
  */

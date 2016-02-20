@@ -1,6 +1,5 @@
 <?php
-
-namespace System\Interface;
+namespace System\Interfaces;
 /**
  * 命令模式接口
  */

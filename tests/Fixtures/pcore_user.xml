@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="test">
+	<table_data name="pcore_user">
+	<row>
+		<field name="uid">1</field>
+		<field name="userName">tom</field>
+		<field name="password">96e79218965eb72c92a549dd5a330112</field>
+	</row>
+	<row>
+		<field name="uid">2</field>
+		<field name="userName">jerry</field>
+		<field name="password">96e79218965eb72c92a549dd5a330112</field>
+	</row>
+	<row>
+		<field name="uid">3</field>
+		<field name="userName">kevin</field>
+		<field name="password">96e79218965eb72c92a549dd5a330112</field>
+	</row>
+	</table_data>
+</database>
+</mysqldump>

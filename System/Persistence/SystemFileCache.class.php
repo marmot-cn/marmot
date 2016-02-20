@@ -2,15 +2,14 @@
 //powered by kevin
 namespace System\Persistence;
 
-use System\Class;
+use System\Classes;
 /**
  * 上传文件memcache缓存类
  *
  */
 
-class SystemFileMemcache extends Cache{
+class SystemFileCache extends Classes\Cache{
 	
-	protected static $key = 'system_file';
 }
 
 
