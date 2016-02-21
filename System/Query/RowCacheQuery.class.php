@@ -65,7 +65,7 @@ abstract class RowCacheQuery {
 
 		if($miss){
 				//未缓存数据从数据库读取
-			$missRows = itemModel::select($this->primaryKey.' in (' . implode(',', $miss) . ')', '*');
+			$missRows = $this->dbLayer->select($this->primaryKey.' in (' . implode(',', $miss) . ')', '*');
 			if($missRows){
 				foreach ($missRows as $val){
 					//添加memcache缓存数据
@@ -86,7 +86,7 @@ abstract class RowCacheQuery {
 			//按照传入id列表初始顺序排序
 			foreach ($ids as $val){
 				if($result[$val]){
-					$resArray[$val] = $result[$val];
+					$resArray[] = $result[$val];
 				}
 			}
 			unset($result);

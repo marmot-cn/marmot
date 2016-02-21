@@ -2,13 +2,12 @@
 /**
  * 一个计算用户总数的片段缓存用于代码展示
  */
-namespace Query\User;
+namespace Query\User\FragmentCache;
 use System\Query\FragmentCacheQuery;
 
 class UserCountFragmentQuery extends FragmentCacheQuery {
 
 	private $fragmentKey = 'userCount';//片段缓存key名
-
 	
 	private $cacheLayer;//缓存层	
 

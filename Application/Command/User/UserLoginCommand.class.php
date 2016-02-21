@@ -1,7 +1,10 @@
 <?php
 namespace Command\user;
+use System\Interfaces\Pcommand;
+use Model\User;
+use Core;
 
-class UserLoginCommand {
+class UserLoginCommand implements Pcommand{
 	
 	private $user;
 
@@ -30,5 +33,9 @@ class UserLoginCommand {
 		//处理cookie
 		//如果使用内存表作为存储用户数据(不使用session),插入内存表
 		return true;
+	}
+
+	public function report(){
+
 	}
 }

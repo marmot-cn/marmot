@@ -9,10 +9,10 @@ class UserController {
 	 */
 	public function index(){
 
-		$userCountFragmentQuery = Core::$_container->get('Query\User\UserCountFragmentQuery');
-		$userCountFragmentData = $userCountFragmentQuery -> get();
-		var_dump($userCountFragmentData);
-		exit();
+		// $userCountFragmentQuery = Core::$_container->get('Query\User\UserCountFragmentQuery');
+		// $userCountFragmentData = $userCountFragmentQuery -> get();
+		// var_dump($userCountFragmentData);
+		// exit();
 	}
 
 	public function login($userName,$password){
@@ -32,9 +32,9 @@ class UserController {
 		//这里演示,用的是传参的uid
 		//验证uid
 
-		$userQuery = Core::$_container->get('Query\User\UserQuery');
+		$UserRepository = Core::$_container->get('Query\User\UserRepository');
 
-		var_dump($userQuery->getOne($uid));
-		exit();
+		var_dump($UserRepository->getOne($uid));
+		// exit();
 	}
 }

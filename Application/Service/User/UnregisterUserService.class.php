@@ -16,19 +16,15 @@ class UnregisterUserService implements UnregisterUserServiceInterface{
 
 	public function regist(){
 		
-		//command
-		$command = Core::$_container->make('Command\User\UserRegistCommand',['user'=>$this->user]);
-		if($command->execute()){//注册
-			//这里暂时用主动更新片段缓存,稍后可以写成存储在redis的观察者模式更新缓存
-			Core::$_container->call(['Query\User\UserCountFragmentQuery','refresh']);
-		}
+		$command = Core::$_container->call(['Command\User\UserCommandFactory','createCommand'],['type'=>'regist','data'=>$this->user]);
+		$command->execute();
 	}
 
 	public function login(){
 
 		//command
-		$command = Core::$_container->make('Command\User\UserLoginCommand',['user'=>$this->user]);
-		return $command->execute();//登录
+		// $command = Core::$_container->make('Command\User\UserLoginCommand',['user'=>$this->user]);
+		// return $command->execute();//登录 
 	}
 
 

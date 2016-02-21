@@ -1,8 +1,10 @@
 <?php
 namespace Command\user;
+use System\Interfaces\Pcommand;
 use Model\User;
+use Core;
 
-class UserRegistCommand {
+class UserRegistCommand implements Pcommand{
 	
 	private $user;
 
@@ -38,6 +40,12 @@ class UserRegistCommand {
 		//返回用户主键id,写会$user对象,为领域服务间互相调用服务
 		$this->user->setUid($uid);
 		
+		Core::$_container->call(['Query\User\FragmentCache\UserFragmentFactory','createFragment'],['count','refresh']);
+		
 		return true;
+	}
+
+	public function report(){
+
 	}
 }

@@ -30,6 +30,7 @@ return [
 
 	//Query
 	'System\Query\RowCacheQuery' => S_ROOT.'System/Query/RowCacheQuery.class.php',
+	'System\Query\RowQuery' => S_ROOT.'System/Query/RowQuery.class.php',
 	'System\Query\FragmentCacheQuery' => S_ROOT.'System/Query/FragmentCacheQuery.class.php',
 	'System\Query\VectorCacheQuery' => S_ROOT.'System/Query/VectorCacheQuery.class.php',
 ];

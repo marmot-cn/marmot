@@ -20,7 +20,7 @@ class UserRegistCommandTest extends GenericTestsDatabaseTestCase{
 		$this->user->setUserName($userName);
 		$this->user->setPassword($password);
 
-		$command = Core::$_container->make('Command\User\UserRegistCommand',['user'=>$this->user]);
+		$command = Core::$_container->call(['Command\User\UserCommandFactory','createCommand'],['type'=>'regist','data'=>$this->user]);
 
 		$property = $this->getPrivateProperty('Command\User\UserRegistCommand', 'user');
 
@@ -43,7 +43,7 @@ class UserRegistCommandTest extends GenericTestsDatabaseTestCase{
 		$lastUid = $lastUserInfo[0]['uid'];
 
 		//command
-		$command = Core::$_container->make('Command\User\UserRegistCommand',['user'=>$this->user]);
+		$command =  Core::$_container->call(['Command\User\UserCommandFactory','createCommand'],['type'=>'regist','data'=>$this->user]);
 		$result = $command->execute();//注册
 		$this->assertTrue($result);
 
@@ -77,7 +77,7 @@ class UserRegistCommandTest extends GenericTestsDatabaseTestCase{
 		$oldUserCounts = Core::$_dbDriver->query('SELECT COUNT(*) as count FROM pcore_user');
 
 		//command
-		$command = Core::$_container->make('Command\User\UserRegistCommand',['user'=>$this->user]);
+		$command =  Core::$_container->call(['Command\User\UserCommandFactory','createCommand'],['type'=>'regist','data'=>$this->user]);
 		$result = $command->execute();//注册
 
 		$this->assertFalse($result);

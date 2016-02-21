@@ -39,13 +39,15 @@ class UnRegisterUserServiceCommandTest extends GenericTestsDatabaseTestCase{
 		$oldUserCount = Core::$_dbDriver->query('SELECT COUNT(*) as count FROM pcore_user');
 		$oldUserCount = $oldUserCount[0]['count'];
 		//获取片段缓存
-		$count = Core::$_container->call(['Query\User\UserCountFragmentQuery','get']);
+		$userRepository = Core::$_container->get('Query\User\UserRepository');
+		$count = $userRepository->getUserCount();
 		$this->assertEquals($oldUserCount,$count);
 
 		$unregistUserService = new Service\User\UnRegisterUserService($userName,$password);
 		$unregistUserService->regist();
 
-		$count = Core::$_container->call(['Query\User\UserCountFragmentQuery','get']);	
+		$userRepository = Core::$_container->get('Query\User\UserRepository');
+		$count = $userRepository->getUserCount();
 		//检测注册后是否数据+1,片段缓存更新
 		$this->assertEquals($oldUserCount+1,$count);	
 	}
