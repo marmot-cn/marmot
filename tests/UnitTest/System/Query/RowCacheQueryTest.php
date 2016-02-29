@@ -2,7 +2,7 @@
 
 class RowCacheQueryTest extends GenericTestsDatabaseTestCase{
 
-	public $fixtures = array('pcore_table_a','pcore_table_b');
+	public $fixtures = array('pcore_system_test_a','pcore_system_test_b');
 
 	private $dbStub;
 
@@ -11,8 +11,8 @@ class RowCacheQueryTest extends GenericTestsDatabaseTestCase{
 	private $rowCacheQuery;
 
 	private $primaryKey = 'id';
-	private $table = 'table_a';
-	private $cacheKeyPrefix = 'phpCore';
+	private $table = 'system_test_a';
+	private $cacheKeyPrefix = 'pcore';
 
 	public function setUp(){
 		$this->cacheStub = $this->getMockBuilder('System\Classes\Cache')

@@ -11,8 +11,14 @@ use System\Interfaces\DbLayer;
 
 abstract class Db implements DbLayer{
 	
+	/**
+	 * @var string DB操作表名,不需要添加前缀
+	 */
 	protected $table;
 
+	/**
+	 * @var string DB表的前缀
+	 */
 	private $tablepre = 'pcore_';	
 	
 	public function __construct(string $table){
@@ -47,7 +53,7 @@ abstract class Db implements DbLayer{
 		$sqlstr = 'SELECT ' . $select . ' FROM ' . $this->tname($this->table) . $useIndex . $sql;
 		return Core::$_dbDriver->query($sqlstr);
 	}
-	
+
 	/**
 	 * 更新数据表数据
 	 * @param array $setSqlArr 需要更新的数据数组

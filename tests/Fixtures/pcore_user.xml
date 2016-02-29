@@ -1,21 +1,69 @@
 <?xml version="1.0"?>
 <mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<database name="test">
+<database name="hzy_dev_test">
 	<table_data name="pcore_user">
 	<row>
-		<field name="uid">1</field>
-		<field name="userName">tom</field>
-		<field name="password">96e79218965eb72c92a549dd5a330112</field>
+		<field name="id">1</field>
+		<field name="cellPhone">18700990442</field>
+		<field name="salt">qwer</field>
+		<field name="password">d51bb756bcd7c909bdd96a534d0beb44</field>
+		<field name="avatarId">1</field>
+		<field name="realName">张三</field>
+		<field name="provinceId">24</field>
+		<field name="cityId">311</field>
+		<field name="districtId">2596</field>
+		<field name="colleage">高新一中</field>
+		<field name="birthday">1990-01-06</field>
+		<field name="gender">1</field>
+		<field name="subject">2</field>
+		<field name="email">1@qq.com</field>
+		<field name="qq">1348107673</field>
+		<field name="createTime">1456380262</field>
+		<field name="status">1</field>
+		<field name="lastScore">550</field>
+		<field name="isVip">1</field>
 	</row>
 	<row>
-		<field name="uid">2</field>
-		<field name="userName">jerry</field>
-		<field name="password">96e79218965eb72c92a549dd5a330112</field>
+		<field name="id">2</field>
+		<field name="cellPhone">15129392661</field>
+		<field name="salt">asdf</field>
+		<field name="password">41d2980a04aecc516f88b42899abd948</field>
+		<field name="avatarId">2</field>
+		<field name="realName">李四</field>
+		<field name="provinceId">11</field>
+		<field name="cityId">149</field>
+		<field name="districtId">1255</field>
+		<field name="colleage">西铁一中</field>
+		<field name="birthday">1990-01-01</field>
+		<field name="gender">2</field>
+		<field name="subject">1</field>
+		<field name="email">2@qq.com</field>
+		<field name="qq">185334543</field>
+		<field name="createTime">1456380277</field>
+		<field name="status">2</field>
+		<field name="lastScore">540</field>
+		<field name="isVip">1</field>
 	</row>
 	<row>
-		<field name="uid">3</field>
-		<field name="userName">kevin</field>
-		<field name="password">96e79218965eb72c92a549dd5a330112</field>
+		<field name="id">3</field>
+		<field name="cellPhone">13571779176</field>
+		<field name="salt">zxcv</field>
+		<field name="password">d40be954e1ec52317487e0ea2640dea9</field>
+		<field name="avatarId">3</field>
+		<field name="realName">王五</field>
+		<field name="provinceId">3</field>
+		<field name="cityId">3401</field>
+		<field name="districtId">3402</field>
+		<field name="colleage">高级中学</field>
+		<field name="birthday">1993-03-04</field>
+		<field name="gender">1</field>
+		<field name="subject">2</field>
+		<field name="email">3@qq.com</field>
+		<field name="qq">12345678901</field>
+		<field name="createTime">1456380788</field>
+		<field name="status">1</field>
+		<field name="lastScore">430</field>
+		<field name="isVip">0</field>
 	</row>
 	</table_data>
 </database>

@@ -1,15 +1,16 @@
 <?php
-namespace Persistence\User;
+namespace System\Persistence;
 
 use System\Classes\Db;
 /**
  * 系统文件数据库操作类 
  *
  */
-class UserDb extends Db{
-	
+
+class FileDb extends Db{
+		
 	public function __construct(){
-		parent::__construct('user');
+		parent::__construct('file');
 	}
 }
 

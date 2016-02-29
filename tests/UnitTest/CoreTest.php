@@ -18,7 +18,6 @@ class CoreTest extends PHPUnit_Framework_TestCase{
 							   S_ROOT.'/System/Classes/',
 							   S_ROOT.'/System/Interfaces/',
 							   S_ROOT.'/System/Observer/',
-							   S_ROOT.'/System/Persistence/',
 							   S_ROOT.'/System/Query/',
 							  );
 		//准备系统文件的文件夹,用于统计系统文件总数 -- 结束
@@ -38,8 +37,8 @@ class CoreTest extends PHPUnit_Framework_TestCase{
 		}
 
 		//测试Application加载文件,HomeController
-		$homeController = new \Controller\HomeController();
-		$this->assertTrue($homeController instanceof \Controller\HomeController ,'Application not autoload');
+		$homeController = new Home\Controller\IndexController();
+		$this->assertTrue($homeController instanceof Home\Controller\IndexController ,'Application not autoload');
 	}
 
 	/**
@@ -85,5 +84,13 @@ class CoreTest extends PHPUnit_Framework_TestCase{
 	 */
 	public function testInitCache(){
 		$this->assertTrue(is_object(Core::$_cacheDriver) && Core::$_cacheDriver instanceof \Doctrine\Common\Cache\MemcachedCache);
+	}
+
+	/**
+	 * 测试是否初始化了环境
+	 */
+	public function testInitEnv(){
+		global $_FWGLOBAL;
+		$this->assertGreaterThan(0,$_FWGLOBAL['timestamp']);//判断是否为大于0的数字
 	}
 }

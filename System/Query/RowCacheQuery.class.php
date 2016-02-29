@@ -1,12 +1,17 @@
 <?php
-/**
- * Query层的行缓存处理,一张需要行缓存的数据表对应一个RowCacheQuer层,主要实现2个方法:
- * 1. getOne($id) 获取一条记录,需要先判断缓存中是否存在,不存在则从数据获取,存入缓存
- * 2. getList(array $ids) 获取多条记录,需要先判断缓存中是否存在,如果有不存在的,则把不存在id放入数据中查询
- */
 namespace System\Query;
 use System\Classes;
 use System\Interfaces;
+/**
+ * RowCacheQuery文件,abstract抽象类.所有针对数据库行处理且需要缓存的类需要继承该类.
+ * 
+ * Query层的行缓存处理,一张需要行缓存的数据表对应一个RowCacheQuer层,主要实现2个方法:
+ * 1. getOne($id) 获取一条记录,需要先判断缓存中是否存在,不存在则从数据获取,存入缓存
+ * 2. getList(array $ids) 获取多条记录,需要先判断缓存中是否存在,如果有不存在的,则把不存在id放入数据中查询
+ * 
+ * @author chloroplast
+ * @version 1.0.0: 20160224
+ */
 
 abstract class RowCacheQuery {
 

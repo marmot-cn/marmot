@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="hzy_dev_test">
+	<table_data name="pcore_system_test_b">
+	<row>
+		<field name="id">1</field>
+		<field name="title">titleB1</field>
+		<field name="user">userB1</field>
+	</row>
+	<row>
+		<field name="id">2</field>
+		<field name="title">titleB2</field>
+		<field name="user">userB2</field>
+	</row>
+	<row>
+		<field name="id">3</field>
+		<field name="title">titleB2</field>
+		<field name="user">userB2</field>
+	</row>
+	</table_data>
+</database>
+</mysqldump>

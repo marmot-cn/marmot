@@ -2,8 +2,12 @@
 namespace System\Interfaces;
 /**
  * 观察者subject接口
+ * 
+ * @codeCoverageIgnore
+ * 
+ * @author chloroplast
+ * @version 1.0: 20160222
  */
-
 interface Subject {
 
     /**

@@ -15,7 +15,7 @@
 class CacheTest extends PHPUnit_Framework_TestCase{
 
 	private $stub;
-  private $cacheKeyPrefix = 'phpCore';
+  private $cacheKeyPrefix = 'pcore';
 	private $data;
 
 	public function setUp(){
@@ -47,21 +47,6 @@ class CacheTest extends PHPUnit_Framework_TestCase{
      */
     public function testAdd(){
 
-    	$class = new ReflectionClass($this->stub);
-
-    	// $method = $class->getMethod("save");
-    	// $method->setAccessible(true);
-
-    	// //通过反射获取静态变量
-    	// $staticProperties = $class->getStaticProperties();
-    	// $cacheKeyPrefix = $staticProperties['key'];
-
-    	// //循环保存数据
-    	// //invokeArgs:static method 传递 null
-    	// foreach($this->data as $key=>$value){
-    	// 	$this->assertTrue($method->invokeArgs(null, array($key,$value)));
-    	// }
-
       foreach($this->data as $key=>$value){
         $this->assertTrue($this->stub->save($key,$value));
       }
@@ -77,15 +62,6 @@ class CacheTest extends PHPUnit_Framework_TestCase{
      */
     public function testGet(){
     	
-    	$class = new ReflectionClass($this->stub);
-
-    	// $method = $class->getMethod("get");
-    	// $method->setAccessible(true);
-
-    	// //通过反射获取静态protected变量
-    	// $staticProperties = $class->getStaticProperties();
-    	// $cacheKeyPrefix = $staticProperties['key'];
-
     	//循环保存数据
     	foreach($this->data as $key=>$value){
     		$this->assertTrue(Core::$_cacheDriver->save($this->cacheKeyPrefix.'_'.$key,$value));
@@ -103,15 +79,6 @@ class CacheTest extends PHPUnit_Framework_TestCase{
      * 测试 Cache:del()
      */
     public function testDel(){
-
-    	// $class = new ReflectionClass($this->stub);
-
-    	// $method = $class->getMethod("del");
-    	// $method->setAccessible(true);
-
-    	// //通过反射获取静态protected变量
-    	// $staticProperties = $class->getStaticProperties();
-    	// $cacheKeyPrefix = $staticProperties['key'];
 
     	//循环保存数据
     	//因为在cache层,有前缀
@@ -137,16 +104,6 @@ class CacheTest extends PHPUnit_Framework_TestCase{
      */
     public function testGetList(){
     	
-
-    	// $class = new ReflectionClass($this->stub);
-
-    	// $method = $class->getMethod("getList");
-    	// $method->setAccessible(true);
-
-    	// //通过反射获取静态protected变量
-    	// $staticProperties = $class->getStaticProperties();
-    	// $cacheKeyPrefix = $staticProperties['key'];
-
     	//循环保存数据
     	//因为在cache层,有前缀
     	//所以这里需要拼接cacheKeyPrefix
@@ -175,7 +132,6 @@ class CacheTest extends PHPUnit_Framework_TestCase{
   		array_shift($this->data);
 
   		//再次批量获取
-  		// list($hits, $misses) = $method->invokeArgs(null, array($keys));
       list($hits, $misses) = $this->stub->getList($keys);
 
   		//测试命中数据和弹出数据一致

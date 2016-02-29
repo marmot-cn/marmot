@@ -20,10 +20,6 @@ return [
 	'System\Command\Cache\SaveCacheCommand' => S_ROOT.'System/Command/Cache/SaveCacheCommand.class.php',
 	'System\Command\Cache\DelCacheCommand' => S_ROOT.'System/Command/Cache/DelCacheCommand.class.php',
 
-	//core persistence
-	'System\Persistence\SystemFileCache' => S_ROOT.'System/Persistence/SystemFileCache.class.php',
-	'System\Persistence\SystemFileDb' => S_ROOT.'System/Persistence/SystemFileDb.class.php',
-
 	//core observer
 	'System\Observer\CacheObserver' => S_ROOT.'System/Observer/CacheObserver.class.php',
 	'System\Observer\Subject' => S_ROOT.'System/Observer/Subject.class.php',
@@ -32,7 +28,8 @@ return [
 	'System\Query\RowCacheQuery' => S_ROOT.'System/Query/RowCacheQuery.class.php',
 	'System\Query\RowQuery' => S_ROOT.'System/Query/RowQuery.class.php',
 	'System\Query\FragmentCacheQuery' => S_ROOT.'System/Query/FragmentCacheQuery.class.php',
-	'System\Query\VectorCacheQuery' => S_ROOT.'System/Query/VectorCacheQuery.class.php',
+	'System\Query\VectorQuery' => S_ROOT.'System/Query/VectorQuery.class.php',
+	'System\Query\SearchQuery' => S_ROOT.'System/Query/SearchQuery.class.php',
 ];
 
 ?>

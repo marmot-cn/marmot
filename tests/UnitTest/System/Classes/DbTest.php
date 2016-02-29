@@ -8,9 +8,9 @@
  */
 class DbTest extends GenericTestsDatabaseTestCase{
 
-	public $fixtures = array('pcore_table_a','pcore_table_b');
+	public $fixtures = array('pcore_system_test_a','pcore_system_test_b');
 
-    private $table = 'table_a';
+    private $table = 'system_test_a';
 
     private $stub;
 
@@ -38,12 +38,12 @@ class DbTest extends GenericTestsDatabaseTestCase{
         $this->assertEquals(2,$row);
 
         //检索出所有row的总数
-        $results = Core::$_dbDriver->query('SELECT COUNT(*) as count FROM pcore_table_a');
+        $results = Core::$_dbDriver->query('SELECT COUNT(*) as count FROM pcore_system_test_a');
         //确认总行数已经减少
         $this->assertEquals(1,$results[0]['count'],'after delete the left data size of date not right');
 
         //根据检索条件搜索确认数据已经删除成功
-        $results = Core::$_dbDriver->query('SELECT COUNT(*) as count FROM pcore_table_a WHERE user=\'userA2\'');
+        $results = Core::$_dbDriver->query('SELECT COUNT(*) as count FROM pcore_system_test_a WHERE user=\'userA2\'');
         $this->assertEquals(0,$results[0]['count'],'the condition data size not equal to 0');
     }
 
@@ -51,7 +51,6 @@ class DbTest extends GenericTestsDatabaseTestCase{
      * 测试 Db::insert()添加方法,返回lastrInserId
      */
     public function testDbInsertWithLastInserId(){
-
 
     	//插入数据
         $row = $this->stub->insert(array('title'=>'titleA3','user'=>'userA3'));
@@ -61,8 +60,7 @@ class DbTest extends GenericTestsDatabaseTestCase{
         $this->assertEquals(4,$row);
 
         //检索出最新的插入数据,看数据是否插入成功
-        $results = Core::$_dbDriver->query('SELECT * FROM pcore_table_a');
-
+        $results = Core::$_dbDriver->query('SELECT * FROM pcore_system_test_a');
         //在插入一条数据后,tableA有3条数据,我们验证是否符合数据条目符合
         $this->assertEquals(4, sizeof($results),'after insert table_a count not right'); 
 
@@ -85,7 +83,7 @@ class DbTest extends GenericTestsDatabaseTestCase{
         $this->assertEquals(1,$row);
 
         //检索出最新的插入数据,看数据是否插入成功
-        $results = Core::$_dbDriver->query('SELECT * FROM pcore_table_a');
+        $results = Core::$_dbDriver->query('SELECT * FROM pcore_system_test_a');
 
         //在插入一条数据后,tableA有3条数据,我们验证是否符合数据条目符合
         $this->assertEquals(4, sizeof($results),'after insert table_a count not right'); 
@@ -97,15 +95,15 @@ class DbTest extends GenericTestsDatabaseTestCase{
     }
 
     /**
-     * 测试 Db::select()添加方法,返回影响的行数
+     * 测试 Db::select()添加方法,返回查询到的结果
      */
     public function testDbSelect(){
 
         //通过MyPdo类检索数据
-        // $results = $method->invokeArgs(null, array('SELECT * FROM pcore_table_a'));
+        // $results = $method->invokeArgs(null, array('SELECT * FROM pcore_system_test_a'));
         $results = $this->stub->select('');
 
-        //tableA有2条数据,我们验证是否符合数据条目符合
+        //tableA有3条数据,我们验证是否符合数据条目符合
         $this->assertEquals(3, sizeof($results),'table_a count not right');
 
         //验证第一条数据记录
@@ -123,7 +121,6 @@ class DbTest extends GenericTestsDatabaseTestCase{
         $this->assertEquals('titleA2',$results[2]['title']);
         $this->assertEquals('userA2',$results[2]['user']);
     }
-
     /**
      * 测试 Db::update()添加方法,返回影响的行数
      */
@@ -136,7 +133,7 @@ class DbTest extends GenericTestsDatabaseTestCase{
         $this->assertEquals(2,$row);
 
         //检索数据
-        $results = Core::$_dbDriver->query('SELECT * FROM pcore_table_a');
+        $results = Core::$_dbDriver->query('SELECT * FROM pcore_system_test_a');
 
         //验证数据总数没有发生变化
         $this->assertEquals(3, sizeof($results),'after update table_a count not right'); 

@@ -7,7 +7,7 @@
  */
 class TransactionTest extends GenericTestsDatabaseTestCase{
 
-	public $fixtures = array('pcore_table_a','pcore_table_b');
+	public $fixtures = array('pcore_system_test_a','pcore_system_test_b');
 
     public function setUp(){    
       parent::setUp();
@@ -21,14 +21,14 @@ class TransactionTest extends GenericTestsDatabaseTestCase{
     	$ids = array();
         //查出旧数据
         $conn = $this->getConnection()->getConnection();
-        $query = $conn->query('SELECT * FROM pcore_table_a');
+        $query = $conn->query('SELECT * FROM pcore_system_test_a');
         $results = $query->fetchAll(PDO::FETCH_ASSOC);
         $oldCount = sizeof($results);
 
         //开启事务
         System\Classes\Transaction::beginTransaction();
         //插入一条语句
-        Core::$_dbDriver->insert('pcore_table_a',array('title'=>'titleA3','user'=>'userA3'));
+        Core::$_dbDriver->insert('pcore_system_test_a',array('title'=>'titleA3','user'=>'userA3'));
         $ids[] = Core::$_dbDriver->lastInertId();//保存到ids[]数组,因为要添加多条数据需要测试从缓存读取数据
  		
         //保存数据到缓存,key为主键id
@@ -36,7 +36,7 @@ class TransactionTest extends GenericTestsDatabaseTestCase{
         $command -> execute();
         // var_dump($ids);exit();
         //插入一条语句
-        Core::$_dbDriver->insert('pcore_table_a',array('title'=>'titleA4','user'=>'userA4'));
+        Core::$_dbDriver->insert('pcore_system_test_a',array('title'=>'titleA4','user'=>'userA4'));
 
         $ids[] = Core::$_dbDriver->lastInertId();//保存到ids[]数组,因为要添加多条数据需要测试从缓存读取数据
         //保存数据到缓存,key为主键id
@@ -47,7 +47,7 @@ class TransactionTest extends GenericTestsDatabaseTestCase{
         $this->assertTrue($status);
         //检索插入的数据已经插入成功
         //检索总数据数量为旧的总数+2
-        $results = Core::$_dbDriver->query('SELECT * FROM pcore_table_a');
+        $results = Core::$_dbDriver->query('SELECT * FROM pcore_system_test_a');
         $newCount = sizeof($results);
 
         $this->assertEquals($oldCount+2,$newCount);
@@ -79,23 +79,23 @@ class TransactionTest extends GenericTestsDatabaseTestCase{
      * 测试MyPdo的事务功能回滚
      */
     public function testTransactionRollBack(){
-
+ 
     	$ids = array();
         //查出旧数据
-        $oldResults = Core::$_dbDriver->query('SELECT * FROM pcore_table_a');
+        $oldResults = Core::$_dbDriver->query('SELECT * FROM pcore_system_test_a');
         $oldCount = sizeof($oldResults);
 
         //开启事务
         System\Classes\Transaction::beginTransaction();
         //插入一条语句
-        Core::$_dbDriver->insert('pcore_table_a',array('title'=>'titleA3','user'=>'userA3'));
+        Core::$_dbDriver->insert('pcore_system_test_a',array('title'=>'titleA3','user'=>'userA3'));
         $ids[] = Core::$_dbDriver->lastInertId();//保存到ids[]数组,因为要添加多条数据需要测试从缓存读取数据
 
         //保存数据到缓存,key为主键id
         $command = new System\Command\Cache\SaveCacheCommand($ids[0],array('id'=>$ids[0],'title'=>'titleA3','user'=>'userA3'));
         $command -> execute();
         //插入一条语句
-        Core::$_dbDriver->insert('pcore_table_a',array('title'=>'titleA4','user'=>'userA4'));
+        Core::$_dbDriver->insert('pcore_system_test_a',array('title'=>'titleA4','user'=>'userA4'));
         $ids[] = Core::$_dbDriver->lastInertId();//保存到ids[]数组,因为要添加多条数据需要测试从缓存读取数据
         //保存数据到缓存,key为主键id
         $command = new System\Command\Cache\SaveCacheCommand($ids[1],array('id'=>$ids[1],'title'=>'titleA4','user'=>'userA4'));
@@ -104,7 +104,7 @@ class TransactionTest extends GenericTestsDatabaseTestCase{
         $status = System\Classes\Transaction::rollBack();
         $this->assertTrue($status);
         //检索插入的数据没有插入成功
-        $newResults = Core::$_dbDriver->query('SELECT * FROM pcore_table_a');
+        $newResults = Core::$_dbDriver->query('SELECT * FROM pcore_system_test_a');
 
         //确认旧数据的内容一致
         $this->assertEquals($oldResults,$newResults);

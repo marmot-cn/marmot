@@ -230,8 +230,6 @@ class MyPdo {
         return $this->statement->errorCode();
     }
      
-     
-     
     //简化操作for insert
     public function insert($table,array $data){
 

@@ -131,11 +131,11 @@ class Core {
 		//开启session
 		// session_start();
 		
-		// $_FWGLOBAL = array();
+		$_FWGLOBAL = array();
 		
 		// //设定框架全局时间戳,代替各自调时间函数
-		// $mtime = explode(' ', microtime());
-		// $_FWGLOBAL['timestamp'] = $mtime[1];//全局时间戳
+		$mtime = explode(' ', microtime());
+		$_FWGLOBAL['timestamp'] = $mtime[1];//全局时间戳
 	}
 
 	/**
@@ -205,6 +205,7 @@ class Core {
 			//添加默认首页路由 -- 开始
 			$r->addRoute('GET', '/', ['Controller\HomeController','index']);
 			$r->addRoute('GET', '/User', ['Controller\UserController','index']);
+			$r->addRoute('POST', '/user/testPost', ['Controller\UserController','testPost']);
 			//添加默认首页路由 -- 结束
 
 			//获取配置好的路由规则
@@ -212,21 +213,21 @@ class Core {
 			foreach($routeRules as $controller=>$methodList){
 				foreach($methodList as $method){
 					switch ($method) {
-						case 'GET':
-							//首页,搜索
-							$r->addRoute('GET', '/'.$controller.'/', ['Controller\\'.$controller.'Controller','index']);
-							//根据单个id获取数据,根据id1,id2,id3获取多条数据,暂时还未写id1,id2,id3的正则
-							$r->addRoute('GET', '/'.$controller.'/{ids:.+}',['Controller\\'.$controller.'Controller','get']);
-							break;
-						case 'POST':
-							//创建
-							$r->addRoute('POST', '/'.$controller,['Controller\\'.$controller.'Controller','post']);
-							break;
-						case 'PUT':
-							//如果有id,则为修改.
-							//这里创建支持POST,是因为form表单只能支持POST.而我们的REST接口则支持PUT
-							$r->addRoute(['POST','PUT'], '/'.$controller.'/{id}',['Controller\\'.$controller.'Controller','action']);
-							break;
+						// case 'GET':
+						// 	//首页,搜索
+						// 	$r->addRoute('GET', '/'.$controller.'/', ['Controller\\'.$controller.'Controller','index']);
+						// 	//根据单个id获取数据,根据id1,id2,id3获取多条数据,暂时还未写id1,id2,id3的正则
+						// 	$r->addRoute('GET', '/'.$controller.'/{ids:.+}',['Controller\\'.$controller.'Controller','get']);
+						// 	break;
+						// case 'POST':
+						// 	//创建
+						// 	$r->addRoute('POST', '/'.$controller,['Controller\\'.$controller.'Controller','post']);
+						// 	break;
+						// case 'PUT':
+						// 	//如果有id,则为修改.
+						// 	//这里创建支持POST,是因为form表单只能支持POST.而我们的REST接口则支持PUT
+						// 	$r->addRoute(['POST','PUT'], '/'.$controller.'/{id}',['Controller\\'.$controller.'Controller','action']);
+						// 	break;
 						// case 'DELETE':	
 							//rest接口对应的删除
 							//delete 有问题需要检查

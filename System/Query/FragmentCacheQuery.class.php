@@ -1,12 +1,15 @@
 <?php
-/**
- * Query层的片段存处理,需要处理页面中的一个片段.
- * 
- */
 namespace System\Query;
 use System\Classes;
 use System\Interfaces;
-
+/**
+ * Query层的片段存处理,需要处理页面中的一个片段.
+ * 
+ * 主要处理一些片段缓存,且这个片段缓存可能会集合若干个领域对象的数据.
+ * 
+ * @author chloroplast
+ * @version 1.0.0: 20160224
+ */
 abstract class FragmentCacheQuery {
 
 	private $fragmentKey;//片段缓存key名
