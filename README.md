@@ -2,13 +2,24 @@
 
 ###版本
 
-**v1.0.20160301**
+**v2.0.20160301**
 
 ###框架简介
 
-该框架主要是基于`DDD`,`CQRS`的思路去架构.使用`composer`做第三方package管理.`phpunit`做单元测试.
+该框架主要是基于`DDD`,`CQRS`的思路去架构.基于`DDD`领域驱动架构,我们可以更好的和用户方来分析项目需求(可以配合使用`四色原型`),大家可以使用通用的领域语言来讨论领域对象.使用`composer`做第三方package管理.`phpunit`做单元测试.开发环境是基于PHP7.0.3做的开发.
 
-开发环境是基于PHP7.0.3做的开发.
+主要是解决上个版本框架中的:
+
+1. 自动加载问题
+2. memcached 在事务的回滚
+3. REST形式的路由
+4. phpunit的引入
+5. 引入composer来管理第三方包
+6. 引入DDD思想来进行解耦
+7. CQRS的分离
+8. 配合四色原型来进行业务分析.
+
+更多是想把一些基于数据库编程(一个表单为一个对象)的思路,解耦为领域对象和存储层.数据库的表只是作为一个存储层来考虑.领域对象是我们通用讨论的对象.
 
 ###开发环境下载
 
@@ -29,7 +40,6 @@ docker-compose.yml(待补全)
 
 		输出 Hello World
 
-
 ###框架目录
 
 ####Application
@@ -44,8 +54,8 @@ docker-compose.yml(待补全)
 			--Persistence
 			--Repository
 				--Query
-			config.php
-			routeRules.php
+		config.php
+		routeRules.php
 			
 **AppName**
 
@@ -89,8 +99,33 @@ docker-compose.yml(待补全)
 4. xxSearchQuery: 搜索查询文件
 5. xxVectorQuery: 关系型缓存文件
 
+**config.php**
+
+主要存放我们项目使用的常量.
+
+		define('xxx',xxx);
+
+**routeRules.php**
+
+路由文件,设定路由规则匹配我们的controller文件.
+
+####System
+
+待补全
 
 
+###命名规范
+
+1. 变量命名为`驼峰`.
+2. 类的命名规则为第`一`个字母`大写`.
+3. Command命名规范: `动词`+`名称`+`Command`
+4. Repository命名规范: `名称`+`Repository`
+5. Persistence命名规范: `名称`+`Db|Cache`
+6. Query命名规范: `名称`+`FragmentCacheQuery|RowCacheQuery|RowQuery|SearchQuery|VectorQuery`
+
+###注释规范
+
+参考[phpdoc](https://www.phpdoc.org// "phpdoc")
 
 
 		
