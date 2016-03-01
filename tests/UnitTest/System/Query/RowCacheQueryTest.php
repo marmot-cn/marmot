@@ -1,4 +1,9 @@
 <?php
+/**
+ * System\Query\RowCacheQuery.class.php 测试文件
+ * @author chloroplast
+ * @version 1.0.20160218
+ */
 
 class RowCacheQueryTest extends GenericTestsDatabaseTestCase{
 
@@ -33,6 +38,7 @@ class RowCacheQueryTest extends GenericTestsDatabaseTestCase{
 	public function tearDown(){
     	unset($this->dbStub);
     	unset($this->cacheStub);
+    	unset($this->rowQuery);
     	//清空缓存数据
     	Core::$_cacheDriver->flushAll();
     	parent::tearDown();
@@ -43,7 +49,8 @@ class RowCacheQueryTest extends GenericTestsDatabaseTestCase{
 		$testId = 1;
 		//获取第一条数据
 		$dbResult = $this->dbStub->select($this->primaryKey.'='.$testId);
-
+		$dbResult = $dbResult[0];
+		
 		//确认缓存一开始无数据
 		$this->assertEmpty($this->cacheStub->get($testId));
 

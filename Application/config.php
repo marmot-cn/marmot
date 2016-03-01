@@ -11,6 +11,11 @@ define('USER_STATUS_NORMAL',0);
  */
 define('USER_STATUS_BANNED',-1);
 
+//盐长度
+/**
+ * @var int SALT_LENGTH 盐长度
+ */
+define('SALT_LENGTH',4);
 
 //手机短信
 /**

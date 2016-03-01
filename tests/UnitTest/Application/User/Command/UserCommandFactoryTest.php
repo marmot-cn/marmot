@@ -36,17 +36,6 @@ class UserCommandFactoryTest extends GenericTestCase{
 	}
 
 	/**
-	 * 测试updateLastScore命令返回
-	 */
-	public function testUserCommandFactoryUpdateLastScore(){
-
-		$command = $this->stub->createCommand('updateLastScore',new User\Model\User());
-		//测试返回类型是否正确
-		$this->assertInstanceOf('User\Command\UpdateLastScoreUserCommand',$command);
-		$this->assertInstanceOf('System\Interfaces\Pcommand',$command);
-	}	
-
-	/**
 	 * 测试updateProfile命令返回
 	 */
 	public function testUserCommandFactoryUpdateProfile(){
@@ -57,15 +46,5 @@ class UserCommandFactoryTest extends GenericTestCase{
 		$this->assertInstanceOf('System\Interfaces\Pcommand',$command);
 	}	
 
-	/**
-	 * 测试upgrade命令返回
-	 */
-	public function testUserCommandFactoryUpgrade(){
-
-		$command = $this->stub->createCommand('upgrade',new User\Model\User());
-		//测试返回类型是否正确
-		$this->assertInstanceOf('User\Command\UpgradeUserCommand',$command);
-		$this->assertInstanceOf('System\Interfaces\Pcommand',$command);
-	}	
 }	
 ?>

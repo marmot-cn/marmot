@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="test">
+	<table_data name="pcore_user">
+	<row>
+		<field name="id">1</field>
+		<field name="cellPhone">18700990442</field>
+		<field name="salt">qwer</field>
+		<field name="password">d51bb756bcd7c909bdd96a534d0beb44</field>
+		<field name="avatarId">1</field>
+		<field name="realName">张三</field>
+		<field name="provinceId">24</field>
+		<field name="cityId">311</field>
+		<field name="districtId">2596</field>
+		<field name="email">1@qq.com</field>
+		<field name="qq">1348107673</field>
+		<field name="createTime">1456380262</field>
+		<field name="status">0</field>
+	</row>
+	<row>
+		<field name="id">2</field>
+		<field name="cellPhone">15129392661</field>
+		<field name="salt">asdf</field>
+		<field name="password">41d2980a04aecc516f88b42899abd948</field>
+		<field name="avatarId">0</field>
+		<field name="realName">李四</field>
+		<field name="provinceId">11</field>
+		<field name="cityId">149</field>
+		<field name="districtId">1255</field>
+		<field name="email">2@qq.com</field>
+		<field name="qq">185334543</field>
+		<field name="createTime">1456380277</field>
+		<field name="status">0</field>
+	</row>
+	<row>
+		<field name="id">3</field>
+		<field name="cellPhone">13571779176</field>
+		<field name="salt">zxcv</field>
+		<field name="password">d40be954e1ec52317487e0ea2640dea9</field>
+		<field name="avatarId">0</field>
+		<field name="realName">王五</field>
+		<field name="provinceId">3</field>
+		<field name="cityId">3401</field>
+		<field name="districtId">3402</field>
+		<field name="email">3@qq.com</field>
+		<field name="qq">12345678901</field>
+		<field name="createTime">1456380788</field>
+		<field name="status">0</field>
+	</row>
+	</table_data>
+</database>
+</mysqldump>

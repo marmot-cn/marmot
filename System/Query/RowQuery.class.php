@@ -1,5 +1,7 @@
 <?php
 namespace System\Query;
+use System\Classes;
+use System\Interfaces;
 /**
  * RowQuery文件,abstract抽象类.所有针对数据库行处理不需要缓存的类需要继承该类.
  *

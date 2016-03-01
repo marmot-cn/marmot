@@ -1,3 +1,4 @@
 vendor
 config.php
-!Application/config.php
+!Application/config.phpcd 
+Global/attachment

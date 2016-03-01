@@ -14,10 +14,8 @@ class SignUpUserCommandTest extends GenericTestsDatabaseTestCase{
 	public function setUp(){    
 		//初始化user
 		$this->user = new User\Model\User();
-
 		$this->user->setCellPhone('15202939435');
 		$this->user->setPassword('111111');
-
 		parent::setUp();
 	}
 
@@ -57,7 +55,7 @@ class SignUpUserCommandTest extends GenericTestsDatabaseTestCase{
 	/**
 	 * 测试一个已经注册过的手机号,期望命令返回失败,数据库没有成功插入数据
 	 */
-	public function testSignUpWithExistCellPhoneNumber(){
+	public function testSignUpWithDuplicateCellPhoneNumber(){
 
 		//旧的用户总数
 		$oldCount = Core::$_dbDriver->query('SELECT COUNT(*) as count FROM pcore_user');

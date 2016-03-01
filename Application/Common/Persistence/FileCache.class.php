@@ -1,6 +1,6 @@
 <?php
 //powered by kevin
-namespace System\Persistence;
+namespace Common\Persistence;
 
 use System\Classes\Cache;
 /**

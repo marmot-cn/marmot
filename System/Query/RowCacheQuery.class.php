@@ -46,7 +46,7 @@ abstract class RowCacheQuery {
 
 		//如果没有数据,去数据库查询根据primaryKey 和 id
 		$mysqlData = $this->dbLayer->select($this->primaryKey.'='.$id,'*');
-
+		$mysqlData = $mysqlData[0];
 		//如果数据为空,返回false
 		if(empty($mysqlData)){
 			return false;

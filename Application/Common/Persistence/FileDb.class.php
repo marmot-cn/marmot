@@ -1,5 +1,5 @@
 <?php
-namespace System\Persistence;
+namespace Common\Persistence;
 
 use System\Classes\Db;
 /**

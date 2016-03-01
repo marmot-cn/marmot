@@ -48,10 +48,6 @@ class UpdateProfileUserCommandTest extends GenericTestsDatabaseTestCase{
 									   'provinceId'=>11,
 									   'cityId'=>149,
 									   'districtId'=>1255,
-									   'colleage'=>'高新一中初中部',
-									   'birthday'=>'1990-01-07',
-									   'gender'=>2,
-									   'subject'=>1,
 									   'email'=>'15@qq.com',
 									   'qq'=>'1348107675');
 
@@ -61,10 +57,6 @@ class UpdateProfileUserCommandTest extends GenericTestsDatabaseTestCase{
     	$this->user->getProvince()->setId($updateUserProfileInfo['provinceId']);
     	$this->user->getCity()->setId($updateUserProfileInfo['cityId']);
     	$this->user->getDistrict()->setId($updateUserProfileInfo['districtId']);
-    	$this->user->setColleage($updateUserProfileInfo['colleage']);
-    	$this->user->setBirthday($updateUserProfileInfo['birthday']);
-    	$this->user->setGender($updateUserProfileInfo['gender']);
-    	$this->user->setSubject($updateUserProfileInfo['subject']);
     	$this->user->setEmail($updateUserProfileInfo['email']);
     	$this->user->setQq($updateUserProfileInfo['qq']);
 
@@ -80,10 +72,10 @@ class UpdateProfileUserCommandTest extends GenericTestsDatabaseTestCase{
 		$this->assertEmpty($this->userCacheLayer->get($this->user->getId()));
 
 		//查询新用户的数据
-		$newUserProfileInfo = Core::$_dbDriver->query('SELECT * FROM pcore_user WHERE id='.$this->user->getId());
+		$newUserProfileInfo = Core::$_dbDriver->query('SELECT avatarId,realName,provinceId,cityId,districtId,email,qq FROM pcore_user WHERE id='.$this->user->getId());
 		$newUserProfileInfo = $newUserProfileInfo[0];
 		//确认更新后的用户profile数据一致
-		$this->assertNotEquals($updateUserProfileInfo,$newUserProfileInfo);
+		$this->assertEquals($updateUserProfileInfo,$newUserProfileInfo);
     }
 
     /**
@@ -94,7 +86,7 @@ class UpdateProfileUserCommandTest extends GenericTestsDatabaseTestCase{
      */
     public function testUpdateProfileWithOldProfile(){
 
-    	$oldNewProfileInfo = Core::$_dbDriver->query('SELECT * FROM pcore_user WHERE id='.$this->user->getId());
+    	$oldNewProfileInfo = Core::$_dbDriver->query('SELECT avatarId,realName,provinceId,cityId,districtId,email,qq FROM pcore_user WHERE id='.$this->user->getId());
 	    $oldNewProfileInfo = $oldNewProfileInfo[0];
 
     	//拼接用户profile
@@ -103,10 +95,6 @@ class UpdateProfileUserCommandTest extends GenericTestsDatabaseTestCase{
     	$this->user->getProvince()->setId($oldNewProfileInfo['provinceId']);
     	$this->user->getCity()->setId($oldNewProfileInfo['cityId']);
     	$this->user->getDistrict()->setId($oldNewProfileInfo['districtId']);
-    	$this->user->setColleage($oldNewProfileInfo['colleage']);
-    	$this->user->setBirthday($oldNewProfileInfo['birthday']);
-    	$this->user->setGender($oldNewProfileInfo['gender']);
-    	$this->user->setSubject($oldNewProfileInfo['subject']);
     	$this->user->setEmail($oldNewProfileInfo['email']);
     	$this->user->setQq($oldNewProfileInfo['qq']);
 
@@ -122,7 +110,7 @@ class UpdateProfileUserCommandTest extends GenericTestsDatabaseTestCase{
 		$this->assertEquals('test',$this->userCacheLayer->get($this->user->getId()));
 
 		//查询新用户的数据
-		$newUserProfileInfo = Core::$_dbDriver->query('SELECT * FROM pcore_user WHERE id='.$this->user->getId());
+		$newUserProfileInfo = Core::$_dbDriver->query('SELECT avatarId,realName,provinceId,cityId,districtId,email,qq FROM pcore_user WHERE id='.$this->user->getId());
 		$newUserProfileInfo = $newUserProfileInfo[0];
 		//确认用户profile没有更新
 		$this->assertEquals($oldNewProfileInfo,$newUserProfileInfo);

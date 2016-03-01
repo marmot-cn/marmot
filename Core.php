@@ -4,7 +4,6 @@
  * @author chloroplast1983
  * @version 1.0.20131007
  */
-
 define('IN_PHP', TRUE);		//设置底层常量保护包含文件
 
 define('S_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);	//默认访问程序路径，请勿修改
@@ -58,10 +57,10 @@ class Core {
 		//autoload
 		self::_init_autoload();
 		self::_init_version();//初始化网站版本
-		self::_init_env();//初始化环境
 		self::_init_container();//引入容器
 		self::_init_cache();//初始化缓存使用
 		self::_init_db();//初始化mysql
+		self::_init_env();//初始化环境
 		self::_init_cookie();
 		self::_init_user();//初始化用户
 		self::_init_input();
@@ -121,21 +120,24 @@ class Core {
 
 	/**
 	 * 初始化网站运行环境的一些全局变量
+	 * 
+	 * @global int $_FWGLOBAL['timestamp'] 当前时间的时间戳
 	 * @author chloroplast1983
 	 * @version 1.0.20131016
 	 */
 	private function _init_env() {
 		global $_FWGLOBAL;
-	
-
 		//开启session
-		// session_start();
+		session_start();
 		
 		$_FWGLOBAL = array();
 		
-		// //设定框架全局时间戳,代替各自调时间函数
+		//设定框架全局时间戳,代替各自调时间函数
 		$mtime = explode(' ', microtime());
 		$_FWGLOBAL['timestamp'] = $mtime[1];//全局时间戳
+
+		//加载应用配置文件
+		require(S_ROOT.'Application/config.php');
 	}
 
 	/**
@@ -203,46 +205,20 @@ class Core {
 		//创建路由规则,如果对外提供接口考虑token用于验证
 		$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
 			//添加默认首页路由 -- 开始
-			$r->addRoute('GET', '/', ['Controller\HomeController','index']);
-			$r->addRoute('GET', '/User', ['Controller\UserController','index']);
-			$r->addRoute('POST', '/user/testPost', ['Controller\UserController','testPost']);
-			//添加默认首页路由 -- 结束
+			$r->addRoute('GET', '/', ['Home\Controller\IndexController','index']);
 
 			//获取配置好的路由规则
-			$routeRules = include(S_ROOT.'/Application/Controller/routeRules.php');
-			foreach($routeRules as $controller=>$methodList){
-				foreach($methodList as $method){
-					switch ($method) {
-						// case 'GET':
-						// 	//首页,搜索
-						// 	$r->addRoute('GET', '/'.$controller.'/', ['Controller\\'.$controller.'Controller','index']);
-						// 	//根据单个id获取数据,根据id1,id2,id3获取多条数据,暂时还未写id1,id2,id3的正则
-						// 	$r->addRoute('GET', '/'.$controller.'/{ids:.+}',['Controller\\'.$controller.'Controller','get']);
-						// 	break;
-						// case 'POST':
-						// 	//创建
-						// 	$r->addRoute('POST', '/'.$controller,['Controller\\'.$controller.'Controller','post']);
-						// 	break;
-						// case 'PUT':
-						// 	//如果有id,则为修改.
-						// 	//这里创建支持POST,是因为form表单只能支持POST.而我们的REST接口则支持PUT
-						// 	$r->addRoute(['POST','PUT'], '/'.$controller.'/{id}',['Controller\\'.$controller.'Controller','action']);
-						// 	break;
-						// case 'DELETE':	
-							//rest接口对应的删除
-							//delete 有问题需要检查
-							// $r->addRoute(['DELETE'],'/'.$controller.'/{id}',['Controller\\'.$controller.'Controller','delete']);
-							//网站自己本身的删除使用GET方法
-							//$r->addRoute('GET', '/'.$controller.'/del/{id}',['Controller\\'.$controller.'Controller','delete']);
-							//break;
-					}
-				}
+			$routeRules = include(S_ROOT.'/Application/routeRules.php');
+			foreach($routeRules as $route){
+				$r->addRoute($route['method'],$route['rule'],$route['controller']);
 			}
 		});
+
 		$httpMethod = $_SERVER['REQUEST_METHOD'];
 		$uri = rawurldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-
+		
 		$routeInfo = $dispatcher->dispatch($httpMethod, $uri);
+		
 		switch ($routeInfo[0]) {
 		    case FastRoute\Dispatcher::NOT_FOUND:
 		        // ... 404 Not Found

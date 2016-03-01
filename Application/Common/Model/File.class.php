@@ -1,5 +1,5 @@
 <?php
-namespace System\Classes;
+namespace Common\Model;
 
 class File{
 	
@@ -35,12 +35,12 @@ class File{
 	private $siteUrl;
 
 	/**
-	 * @Inject("System\Persistence\FileCache")
+	 * @Inject("Common\Persistence\FileCache")
 	 */
 	private $cacheLayer;//缓存层	
 
 	/**
-	 * @Inject("System\Persistence\FileDb")
+	 * @Inject("Common\Persistence\FileDb")
 	 */
 	private $dbLayer;//数据层
 
@@ -62,8 +62,11 @@ class File{
 			'av','real','flash','image','office','pdf','rar','text'
 		);
 	
-	public function uploads($FILES)
-	{
+	public function getAttachDir(){
+		return $this->attachDir;
+	}
+
+	public function uploads($FILES){
 		if (is_array($FILES))
 		{
 			$return = array();
@@ -100,8 +103,8 @@ class File{
 			$this->fileOwner = 'user';
 			$this->fileUid = 0;
 		}
-		//确定文件存储路径(含文件名)
-		$this->getPath();
+		// //确定文件存储路径(含文件名)
+		// $this->getPath();
 		//上传、移动临时文件部分
 		$this->fileMove($this->fileTemp, $this->getPath(), true);
 		//记录数据库
@@ -114,7 +117,7 @@ class File{
 	private function saveFileToDB(){
 		$setArr = array(
 						'fileHash'	=> $this->fileHash,
-						'fileName'	=> $this->fileName,
+						'fileName'	=> addslashes($this->fileName),
 						'fileExt'	=> $this->fileExt,
 						'filePath'	=> $this->filePath,
 						'fileSize'	=> $this->fileSize,
@@ -122,7 +125,7 @@ class File{
 						'fileOwner'	=> $this->fileOwner,
 						'fileUid'	=> $this->fileUid
 						);
-		$fileId = $this->dbLayer->insert(saddslashes($setArr),true);
+		$fileId = $this->dbLayer->insert($setArr,true);
 
 		$setArr['fileId'] = $fileId;
 		return $setArr;
@@ -169,18 +172,21 @@ class File{
 		}
 		//判断第一层文件夹
 		$newfilename = $this->attachDir.$name1.DIRECTORY_SEPARATOR;
+
 		if(!is_dir($newfilename)) {
 			if(!@mkdir($newfilename,0777)) {
 				// runlog('error', "DIR: $newfilename can not make");
-				return false;
+				var_dump("DIR: $newfilename can not make-1");
+				return 111;
 			}
 		}
 		//判断第二层文件夹
 		$newfilename .= $name2.DIRECTORY_SEPARATOR;
 		if(!is_dir($newfilename)) {
-			if(!@mkdir($newfilename,0777)) {
+			if(!mkdir($newfilename,0777)) {
+				var_dump("DIR: $newfilename can not make-2");
 				// runlog('error', "DIR: $newfilename can not make");
-				return false;
+				return 222;
 			}
 		}
 		//路径赋值
@@ -269,18 +275,14 @@ class File{
 				@unlink($formFilePath);
 			}
 		} elseif((function_exists('move_uploaded_file') && @move_uploaded_file($formFilePath, $toFilePath))) {
+			return 333;//调试用
 		} elseif(@rename($formFilePath, $toFilePath)) {
+			return 444;//调试用
 		} else {
-			showmessage('无法复制到指定文件夹。');
+			// showmessage('无法复制到指定文件夹。');
+			// var_dump($formFilePath.'----'.$toFilePath);
 		}
 	}
-	
-	//一般下载（获取信息、增加访问次数、判断权限）
-	// public function download($hash){
-	// 	$this->getFileData($hash);
-	// 	$this->add_downloadCount($hash);
-	// 	return $this->fileData[$hash];
-	// }
 	
 	public function getFileData($fileId){
 		
@@ -288,6 +290,7 @@ class File{
 			return false;
 		}
 		$result = $this -> cacheReadFile($fileId);
+		
 		if (empty($result)){
 			$result = $this->dbLayer->select('fileId='.$fileId);
 			$result = $result[0];
