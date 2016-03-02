@@ -79,6 +79,37 @@ class RowCacheQueryTest extends GenericTestsDatabaseTestCase{
 
 	public function testRowCacheQueryGetList(){
 		
+		$testIds = array(1,2);//id数组
+		//获取多条数据
+		$dbResults = $this->dbStub->select($this->primaryKey .' IN ('.implode(',',$testIds).')');
+
+		//确认缓存一开始无数据
+		$this->assertEmpty($this->cacheStub->get($testIds[0]));
+		$this->assertEmpty($this->cacheStub->get($testIds[1]));
+
+		//用QueryCache获取多条数据
+		$rowCacheQuerResuts = $this->rowCacheQuery->getList($testIds);
+		//确认返回数据正确
+		$this->assertEquals($dbResults,$rowCacheQuerResuts);
+
+		//检查内存是否有数据,期望缓存有数据
+		$this->assertEquals($dbResults[0],$this->cacheStub->get($testIds[0]));	
+		$this->assertEquals($dbResults[1],$this->cacheStub->get($testIds[1]));	
+
+		//现在我们需要测试如果缓存有数据,则不在读取数据库,所以我们删除缓存,测试是否可以正常获取数据
+		//正常开发场景我们应该在封装的command中,变更数据后删除缓存.这里这么处理只是用于测试
+		//删除该id对应的数据
+		$this->dbStub->delete(array($this->primaryKey=>$testIds[0]));
+		$this->dbStub->delete(array($this->primaryKey=>$testIds[1]));
+
+		//确认数据库数据已经没有
+		$this->assertEmpty($this->dbStub->select($this->primaryKey .' IN ('.implode(',',$testIds).')'));
+
+		//我们从缓存读取数据,检查数据是否从缓存获取,而不会路由到数据库查询
+		$rowCacheQuerResuts = $this->rowCacheQuery->getList($testIds);
+
+		//确认返回数据和当初的数据一致
+		$this->assertEquals($dbResults,$rowCacheQuerResuts);	
 	}
 
 }

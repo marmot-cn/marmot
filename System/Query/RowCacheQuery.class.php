@@ -15,7 +15,7 @@ use System\Interfaces;
 
 abstract class RowCacheQuery {
 
-	private $primaryKey;//主键在数据库中的命名,行缓存和数据库的交互使用主键
+	private $primaryKey;//查询键值在数据库中的命名,行缓存和数据库的交互使用键值
 
 	private $cacheLayer;//缓存层
 
@@ -85,12 +85,11 @@ abstract class RowCacheQuery {
 			//按该页要显示的id排序
 			$result = array();
 			foreach ($hits as $val) {
-				$result[$this->primaryKey] = $val;
+				$result[$val[$this->primaryKey]] = $val;
 			}
-			
 			//按照传入id列表初始顺序排序
 			foreach ($ids as $val){
-				if($result[$val]){
+				if(isset($result[$val])){
 					$resArray[] = $result[$val];
 				}
 			}

@@ -44,7 +44,7 @@ class RowQueryTest extends GenericTestsDatabaseTestCase{
 		//获取第一条数据
 		$dbResult = $this->dbStub->select($this->primaryKey.'='.$testId);
 
-		//用QueryCache获取第一条数据
+		//用RowQuery获取第一条数据
 		$rowQuerResut = $this->rowQuery->getOne($testId);
 
 		//确认返回数据正确
@@ -53,6 +53,16 @@ class RowQueryTest extends GenericTestsDatabaseTestCase{
 
 	public function testRowCacheQueryGetList(){
 		
+		$testIds = array(1,2);//id数组
+
+		//获取多条数据
+		$dbResults = $this->dbStub->select($this->primaryKey .' IN ('.implode(',',$testIds).')');
+
+		//用RowQuery获取第多条数据
+		$rowQuerResuts = $this->rowQuery->getList($testIds);
+
+		//确认返回数据正确
+		$this->assertEquals($dbResults,$rowQuerResuts);	
 	}
 
 }
