@@ -111,7 +111,83 @@ docker-compose.yml(待补全)
 
 ####System
 
-待补全
+框架核心文件存放位置,文件路径为:
+
+		Classes
+		--Cache.class.php
+		--Db.class.php
+		--MyPdo.class.php
+		--Transaction.class.php
+		Command
+		--Cache
+			--DelCacheCommand.class.php
+			--SaveCacheCommand.class.php
+		Interfaces
+		--CacheLayer.class.php
+		--Command.class.php
+		--DbLayer.class.php
+		--Observer.class.php
+		--Pcommand.class.php
+		--Subject.class.php
+		--Widge.class.php
+		Observer
+		--CacheObserver.class.php
+		--Subject.class.php
+		Query
+		--FragmentCacheQuery.class.php
+		--RowCacheQuery.class.php
+		--RowQuery.class.php
+		--SearchQuery.class.php
+		--VectorQuery.class.php
+		classMaps.php
+		pc.version.php
+
+**Classes**
+
+
+####tests
+
+测试文件夹,文件路径为
+
+		Fixtures
+		IntegrationTest
+		UnitTest
+		--Application
+		--System
+		CoreTest.php
+		GenericTestCase.php
+		GenericTestDataBaseTestCase.php
+		
+**Fxitures**
+
+数据库基境,具体细节可以参见PHPunit中的数据库测试章节.主要存放我们到处的数据库数据xml文件.在使用前需要先把数据库的表建立.
+
+导出xml文件方法:
+
+		mysqldump --xml -t -u xxx --password=xxxx databasename tablename > /path/xx.xml
+
+**IntegrationTest**
+
+集成测试用例存放位置
+
+**UnitTest**
+
+单元测试存放位置,其中`Application`文件夹存放我们应用服务的单元测试文件.`System`存放系统测试的单元测试文件.
+
+**CoreTest.php**
+
+测试`Core.php`的单元测试文件
+
+**GenericTestCase.php**
+
+框架封装的常规测试文件,继承该类即可使用PHPunit通用方法.额外提供:
+
+1. `getPrivateMethod`: 测试私有方法
+2. `getPrivateProperty`: 测试私有属性
+
+**GenericTestsDatabaseTestCase.php**
+
+框架封装的数据测试文件,继承该类即可方便的使用数据库测试方法,且也会额外的封装`GenericTestCase.php`中测试私有方法和私有属性函数.
 
 
 ###命名规范
