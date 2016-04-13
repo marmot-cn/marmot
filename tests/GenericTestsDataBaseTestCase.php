@@ -24,7 +24,7 @@ abstract class GenericTestsDatabaseTestCase extends PHPUnit_Extensions_Database_
 
         if ($this->conn === null) {
             if (self::$pdo == null) {
-                self::$pdo = new PDO($GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD']);
+                self::$pdo = new PDO($GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'], array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8") );
             }
             $this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
         }
