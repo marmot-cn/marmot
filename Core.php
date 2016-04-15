@@ -85,6 +85,22 @@ class Core {
 	}
 	
 	/**
+	 * cli模式专用启动路程,用于引导操作框架的一些操作.在这里我们要实现如下功能:
+	 * 1. 自动加载
+	 * 2. 初始化容器
+	 * 3. 初始化缓存
+	 * 4. 初始化测试持久层存储
+	 */
+	public function initCli(){
+
+		self::_init_autoload();//autoload
+		self::_init_env();//初始化环境
+		self::_init_container();//引入容器
+		self::_init_cache();//初始化缓存使用
+		self::_init_db();//初始化mysql
+	}
+
+	/**
 	 * 自动加载方法,这里分为2个部分.这里的借鉴了yii框架的自动加载
 	 * 
 	 * 1. 加载第三方的autoload,主要是composer管理的第三方依赖
