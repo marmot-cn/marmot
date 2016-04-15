@@ -52,7 +52,6 @@ class UserTest extends GenericTestCase{
 		$districtParameter = $this->getPrivateProperty('User\Model\User','district');
 		$this->assertInstanceof('Area\Model\Area',$districtParameter->getValue($this->stub));
 
-
 		//测试初始化 email
 		$emailParameter = $this->getPrivateProperty('User\Model\User','email');
 		$this->assertEmpty($emailParameter->getValue($this->stub));
@@ -394,7 +393,7 @@ class UserTest extends GenericTestCase{
 
 	//Status
 	/**
-	 * 循环测试user setStatus() 是否符合预订范围
+	 * 循环测试user setStatus() 是否符合预定范围
 	 * 
      * @dataProvider UserStatusProvider
      */
