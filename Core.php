@@ -61,6 +61,8 @@ class Core {
 		self::_init_cache();//初始化缓存使用
 		self::_init_db();//初始化mysql
 		self::_init_env();//初始化环境
+		self::_init_cookie();
+		self::_init_user();//初始化用户
 		self::_init_input();
 		self::_init_output();
 	}
@@ -185,6 +187,28 @@ class Core {
 		//创建容器
 		self::$_container = $containerBuilder->build();
 	}
+
+	private function _init_user(){
+		// global $_FWGLOBAL;
+		// user::checkauth();
+	}
+	
+	/**
+	 * 初始化cookie读取
+	 * @version 1.0.20160204
+	 */
+	private function _init_cookie(){
+		// global $_FWCOOKIE;
+		// $magic_quote = get_magic_quotes_gpc();
+		// //COOKIE
+		// $prelength = strlen($_FWC['cookiepre']);
+		
+		// foreach($_COOKIE as $key => $val) {
+		// 	if(substr($key, 0, $prelength) == $_FWC['cookiepre']) {
+		// 		$_FWCOOKIE[(substr($key, $prelength))] = empty($magic_quote) ? saddslashes($val) : $val;
+		// 	}
+		// }
+	}
 	
 	/**
 	 * 路由,需要解决以前随意由个人设置路由的习惯,而希望能用统一的路由风格来解决这个问题.
@@ -192,7 +216,8 @@ class Core {
 	 * @version 1.0.20160204
 	 */
 	private function _init_input() {
-	
+		// global $_FWGLOBAL, $_FWC;
+
 		//创建路由规则,如果对外提供接口考虑token用于验证
 		$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
 			//添加默认首页路由 -- 开始

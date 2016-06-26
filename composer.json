@@ -9,7 +9,6 @@
         "ocramius/proxy-manager": "~1.0",
         "phpunit/dbunit": "^2.0",
         "guzzlehttp/guzzle": "^6.1",
-        "respect/validation": "^1.0",
-        "neomerx/json-api": "^0.8.1"
+        "respect/validation": "^1.0"
     }
 }

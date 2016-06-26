@@ -20,12 +20,8 @@
     </php>
 
     <testsuites>
-        <testsuite name="unitApplication">
-            <directory>./tests/UnitTest/Application/</directory>
-        </testsuite>
-        <testsuite name="unitSystem">
-            <directory>./tests/UnitTest/System/</directory>
-            <file>./tests/UnitTest/CoreTest.php</file>
+        <testsuite name="unit">
+            <directory>./tests/UnitTest/</directory>
         </testsuite>
         <testsuite name="integration">
             <directory>./tests/IntegrationTest/</directory>
