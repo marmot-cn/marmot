@@ -1,12 +1,15 @@
 <?php
 namespace Home\Controller;
+use System\Classes\Controller;
 
-class IndexController{
+class IndexController extends Controller{
 
 	public function index(){
-
-		var_dump('Hello World');
-		exit();
+        $swagger = \Swagger\scan('/var/www/html/marmot/Application/User');
+        header('Content-Type: application/json');
+        echo $swagger;
+    
+		return true;		
 	}
 }
 ?>

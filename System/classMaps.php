@@ -6,6 +6,10 @@ return [
 	'System\Classes\Db'	=> S_ROOT.'System/Classes/Db.class.php',
 	'System\Classes\MyPdo' => S_ROOT.'System/Classes/MyPdo.class.php',
 	'System\Classes\Transaction' => S_ROOT.'System/Classes/Transaction.class.php',
+	'System\Classes\Controller' => S_ROOT.'System/Classes/Controller.class.php',
+	'System\Classes\Filter' => S_ROOT.'System/Classes/Filter.class.php',
+	'System\Classes\Request' => S_ROOT.'System/Classes/Request.class.php',
+	'System\Classes\Response' => S_ROOT.'System/Classes/Response.class.php',
 	
 	//interfaces
 	'System\Interfaces\Command' => S_ROOT.'System/Interfaces/Command.class.php',
@@ -15,6 +19,7 @@ return [
 	'System\Interfaces\Widget' => S_ROOT.'System/Interfaces/Widget.class.php',
 	'System\Interfaces\CacheLayer' => S_ROOT.'System/Interfaces/CacheLayer.class.php',
 	'System\Interfaces\DbLayer' => S_ROOT.'System/Interfaces/DbLayer.class.php',
+	'System\Interfaces\ResponseFormatterInterface' => S_ROOT.'System/Interfaces/ResponseFormatterInterface.class.php',
 
 	//command
 	'System\Command\Cache\SaveCacheCommand' => S_ROOT.'System/Command/Cache/SaveCacheCommand.class.php',
@@ -30,6 +35,9 @@ return [
 	'System\Query\FragmentCacheQuery' => S_ROOT.'System/Query/FragmentCacheQuery.class.php',
 	'System\Query\VectorQuery' => S_ROOT.'System/Query/VectorQuery.class.php',
 	'System\Query\SearchQuery' => S_ROOT.'System/Query/SearchQuery.class.php',
+
+	//template
+	'System\View\JsonApiResponseFormatter' => S_ROOT.'System/View/JsonApiResponseFormatter.class.php',
 ];
 
 ?>
