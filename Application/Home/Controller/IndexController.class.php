@@ -1,12 +1,13 @@
 <?php
 namespace Home\Controller;
 
-class IndexController{
+class IndexController
+{
 
-	public function index(){
+    public function index()
+    {
 
-		var_dump('Hello World');
-		exit();
-	}
+        var_dump('Hello World');
+        exit();
+    }
 }
-?>

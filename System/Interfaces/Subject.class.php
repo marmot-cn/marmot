@@ -1,14 +1,16 @@
 <?php
 namespace System\Interfaces;
+
 /**
  * 观察者subject接口
- * 
+ *
  * @codeCoverageIgnore
- * 
+ *
  * @author chloroplast
  * @version 1.0: 20160222
  */
-interface Subject {
+interface Subject
+{
 
     /**
      * 增加一个新的观察者对象
@@ -27,5 +29,3 @@ interface Subject {
      */
     public function notifyObserver();
 }
-
-?>
