@@ -1,13 +1,16 @@
 <?php
 namespace System\Query;
 
+use tests;
+use Marmot\Core;
+
 /**
  * System\Query\RowCacheQuery.class.php 测试文件
  * @author chloroplast
  * @version 1.0.20160218
  */
 
-class RowCacheQueryTest extends GenericTestsDatabaseTestCase
+class RowCacheQueryTest extends tests\GenericTestsDatabaseTestCase
 {
 
     public $fixtures = array('pcore_system_test_a','pcore_system_test_b');
@@ -45,9 +48,139 @@ class RowCacheQueryTest extends GenericTestsDatabaseTestCase
         unset($this->cacheStub);
         unset($this->rowQuery);
         //清空缓存数据
-        Core::$_cacheDriver->flushAll();
+        Core::$cacheDriver->flushAll();
         parent::tearDown();
     }
+
+    /**
+     * 测试 getPrimaryKey() 方法
+     */
+    public function testRowCacheQueryGetPrimaryKey()
+    {
+        $this->assertEquals('id', $this->rowCacheQuery->getPrimaryKey());
+    }
+
+    /**
+     * 测试 add() 方法
+     * $lasetInsertId 方法为 false
+     */
+    public function testRowCacheQueryAddWithoutLastInsertId()
+    {
+        
+        $lastId = Core::$dbDriver->query('SELECT id FROM pcore_system_test_a ORDER BY id DESC LIMIT 1');
+        $lastId = $lastId[0]['id'];
+
+        $result = $this->rowCacheQuery->add(
+            array(
+                                                'title'=>'titleA4',
+                                                'user'=>'userA4',
+                                                ),
+            false
+        );
+
+        //测试影响了一行
+        $this->assertEquals(1, $result);
+
+        //获取新添加的数据,检查是否添加成功
+        //在旧的lastId+1
+        $lastId++;
+
+        $expectArray = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a WHERE id='.$lastId);
+        $expectArray = $expectArray[0];
+
+        $this->assertEquals($expectArray['id'], $lastId);
+        $this->assertEquals($expectArray['title'], 'titleA4');
+        $this->assertEquals($expectArray['user'], 'userA4');
+    }
+
+    /**
+     * 测试 add() 方法
+     * $lasetInsertId 方法为 true
+     */
+    public function testRowCacheQueryAddWithLastInsertId()
+    {
+
+        $lastId = Core::$dbDriver->query('SELECT id FROM pcore_system_test_a ORDER BY id DESC LIMIT 1');
+        $lastId = $lastId[0]['id'];
+
+        $result = $this->rowCacheQuery->add(
+            array(
+                                                'title'=>'titleA4',
+                                                'user'=>'userA4',
+                                                ),
+            true
+        );
+
+        $lastId++;
+        //测试影响了一行
+        $this->assertEquals($lastId, $result);
+
+        //获取新添加的数据,检查是否添加成功
+        //在旧的lastId+1
+        
+        $expectArray = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a WHERE id='.$lastId);
+        $expectArray = $expectArray[0];
+
+        $this->assertEquals($expectArray['id'], $lastId);
+        $this->assertEquals($expectArray['title'], 'titleA4');
+        $this->assertEquals($expectArray['user'], 'userA4');
+    }
+
+    /**
+     * 测试 update() 方法
+     */
+    public function testRowCacheQueryUpdate()
+    {
+        //生成缓存数据
+        $testId = 1;
+        $oldArray = $this->rowCacheQuery->getOne($testId);
+
+        //测试缓存数据不为空
+        $this->assertNotEmpty($this->cacheStub->get($testId));
+
+        $updateArray = array(
+                            'title'=>'titleA4',
+                            'user'=>'userA4'
+                            );
+
+        $result = $this->rowCacheQuery->update($updateArray, array('id'=>$testId));
+
+        $this->assertTrue($result);
+
+        $expectArray = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a WHERE id='.$testId);
+        $expectArray = $expectArray[0];
+
+        $this->assertEquals($expectArray['id'], 1);
+        $this->assertEquals($expectArray['title'], $updateArray['title']);
+        $this->assertEquals($expectArray['user'], $updateArray['user']);
+
+        //测试缓存数据被清空
+        $this->assertEmpty($this->cacheStub->get($testId));
+    }
+
+    /**
+     * 测试 update() 方法
+     * 更新相同数据,返回false
+     */
+    public function testRowCacheQueryUpdateSameData()
+    {
+        //生成缓存数据
+        $testId = 1;
+        $oldArray = $this->rowCacheQuery->getOne($testId);
+
+        //测试缓存数据不为空
+        $this->assertNotEmpty($this->cacheStub->get($testId));
+
+        $updateArray = array(
+                            'title'=>$oldArray['title'],
+                            'user'=>$oldArray['user'],
+                            );
+
+        $result = $this->rowCacheQuery->update($updateArray, array('id'=>$testId));
+
+        $this->assertFalse($result);
+    }
+
     //通过rowCache读取数据,数据库有数据,测试返回数据成功,且缓存已经被正确赋值
     public function testRowCacheQueryGetOne()
     {
@@ -86,6 +219,29 @@ class RowCacheQueryTest extends GenericTestsDatabaseTestCase
         $this->assertEquals($dbResult, $rowCacheQuerResut);
     }
 
+    /**
+     * 测试 getOne() 不存在的数据
+     */
+    public function testRowCacheQueryGetOneNotExitId()
+    {
+        //查询最大id
+        $lastId = Core::$dbDriver->query('SELECT id FROM pcore_system_test_a ORDER BY id DESC LIMIT 1');
+        $lastId = $lastId[0]['id'];
+
+        //最大id+1, 并确认这个id对应的数据部存在
+        $lastId++;
+
+        $expectArray = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a WHERE id='.$lastId);
+        $this->assertEmpty($expectArray);
+
+        //测试getOne,查询不存在的id,返回false
+        $result = $this->rowCacheQuery->getOne($lastId);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * 测试 getList()
+     */
     public function testRowCacheQueryGetList()
     {
         
@@ -124,5 +280,51 @@ class RowCacheQueryTest extends GenericTestsDatabaseTestCase
 
         //确认返回数据和当初的数据一致
         $this->assertEquals($dbResults, $rowCacheQuerResuts);
+    }
+
+    /**
+     * 测试 getList 方法
+     * 传递空的数组, 期望返回false
+     */
+    public function testRowCacheQueryGetListWithEmptyIds()
+    {
+        $testIds = array();
+
+        $result = $this->rowCacheQuery->getList($testIds);
+
+        $this->assertFalse($result);
+    }
+
+    /**
+     * 测试 trait RowQueryFindable find() && size > 0
+     */
+    public function testRowCacheQueryFindWithSize()
+    {
+        $result = $this->rowCacheQuery->find('1', 0, 2);
+        $expectArray = Core::$dbDriver->query('SELECT id FROM pcore_system_test_a WHERE 1 LIMIT 0, 2');
+
+        $this->assertEquals($result, $expectArray);
+    }
+
+    /**
+     * 测试 trait RowQueryFindable find() && size = 0
+     */
+    public function testRowCacheQueryFindWithoutSize()
+    {
+        $result = $this->rowCacheQuery->find('id=1', 0, 0);
+        $expectArray = Core::$dbDriver->query('SELECT id FROM pcore_system_test_a WHERE id=1');
+
+        $this->assertEquals($result, $expectArray);
+    }
+
+    /**
+     * 测试 trait RowQueryFindable count()
+     */
+    public function testRowCacheQueryCount()
+    {
+        $result = $this->rowCacheQuery->count('1');
+        $expectArray = Core::$dbDriver->query('SELECT COUNT(*) as count FROM pcore_system_test_a WHERE 1');
+
+        $this->assertEquals($result, $expectArray[0]['count']);
     }
 }

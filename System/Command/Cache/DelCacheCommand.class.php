@@ -4,7 +4,7 @@ namespace System\Command\Cache;
 use System\Interfaces;
 use System\Observer;
 use System\Classes;
-use Core;
+use Marmot\Core;
 
 /**
  * 删除cache缓存命令
@@ -22,9 +22,9 @@ class DelCacheCommand implements Interfaces\Command
         $this->key = $key;
     }
 
-    public function execute()
+    public function execute() : bool
     {
-        return Core::$_cacheDriver->delete($this->key);
+        return Core::$cacheDriver->delete($this->key);
     }
 
     /**

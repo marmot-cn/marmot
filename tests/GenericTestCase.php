@@ -7,7 +7,7 @@ namespace tests;
  * @version 1.0.20160218
  */
 
-abstract class GenericTestCase extends PHPUnit_Framework_TestCase
+abstract class GenericTestCase extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -20,7 +20,7 @@ abstract class GenericTestCase extends PHPUnit_Framework_TestCase
      */
     public function getPrivateMethod($className, $methodName)
     {
-        $reflector = new ReflectionClass($className);
+        $reflector = new \ReflectionClass($className);
         $method = $reflector->getMethod($methodName);
         $method->setAccessible(true);
  
@@ -37,7 +37,7 @@ abstract class GenericTestCase extends PHPUnit_Framework_TestCase
      */
     public function getPrivateProperty($className, $propertyName)
     {
-        $reflector = new ReflectionClass($className);
+        $reflector = new \ReflectionClass($className);
         $property = $reflector->getProperty($propertyName);
         $property->setAccessible(true);
  

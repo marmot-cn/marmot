@@ -1,4 +1,4 @@
-#MARMOT框架说明文档
+#MARMOT微服务框架说明文档
 
 ###版本
 
@@ -17,13 +17,116 @@
 5. 引入composer来管理第三方包
 6. 引入DDD思想来进行解耦
 7. CQRS的分离
-8. 配合四色原型来进行业务分析.
+8. 配合四色原型来进行业务分析
+9. 自动化工具
+	* 自动化测试
+	* 自动化代码风格检测
+	* 自动化代码覆盖检测
+	* .... 
 
 更多是想把一些基于数据库编程(一个表单为一个对象)的思路,解耦为领域对象和存储层.数据库的表只是作为一个存储层来考虑.领域对象是我们通用讨论的对象.
 
 ###开发环境下载
 
-docker-compose.yml(待补全)
+这里使用的PHP 7.0.3 镜像,已经编译进`mongo`,`redis`,`memcached`,`pthreads`等一些常用的扩展.
+
+端口:
+
+* `80`: 程序访问端口号
+* `80801`: phpmyadmin访问端口号
+
+[docker-compose.yml](./docker-compose.yml "docker-compose.yml")
+
+###composer 包
+
+####命令
+
+**生产环境**
+
+不需要安装开发包:
+
+		composer install --no-dev
+		
+**开发环境**
+
+默认安装所有包
+
+		composer install
+
+####dev 开发中使用
+
+**phploc/phploc**
+
+衡量我们项目大小的工具
+
+[https://github.com/sebastianbergmann/phploc](https://github.com/sebastianbergmann/phploc "https://github.com/sebastianbergmann/phploc")
+
+		vendor/bin/phploc --progress Application System
+		phploc 3.0.1 by Sebastian Bergmann.
+
+		Directories                                          8
+		Files                                               34
+		
+		Size
+		...
+
+**phpmd/phpmd**
+
+wait...
+
+[https://phpmd.org](https://phpmd.org "https://phpmd.org")
+
+**sebastian/phpcpd**
+
+Copy/Paste Detector
+
+[https://github.com/sebastianbergmann/phpcpd/](https://github.com/sebastianbergmann/phpcpd/ "https://github.com/sebastianbergmann/phpcpd/")
+	
+	
+		vendor/bin/phpcpd Application System tests
+		phpcpd 2.0.4 by Sebastian Bergmann.
+
+		0.00% duplicated lines out of 4319 total lines of code.
+		
+		Time: 935 ms, Memory: 6.00MB
+		
+**pdepend/pdepend**
+
+wait...
+
+[https://pdepend.org](https://pdepend.org "https://pdepend.org")		
+**phpunit/phpunit phpunit/dbunit**
+
+单元测试
+
+配置文件`phpunit.xml`
+
+[http://phpunit.de/](http://phpunit.de/ "http://phpunit.de/")
+
+
+		vendor/bin/phpunit
+		PHPUnit 5.2.6 by Sebastian Bergmann and contributors.
+		
+		................................................................. 65 / 86 ( 75%)
+		.....................                                             86 / 86 (100%)
+		
+		Time: 8.4 seconds, Memory: 6.00MB
+		
+		OK (86 tests, 262 assertions)
+
+**squizlabs/php_codesniffer**
+
+代码风格检测
+
+配置文件`phpcs.xml`
+
+[https://github.com/squizlabs/PHP_CodeSniffer/](https://github.com/squizlabs/PHP_CodeSniffer/ "https://github.com/squizlabs/PHP_CodeSniffer/")
+
+
+		vendor/bin/phpcs
+		....................................................
+		
+		Time: 3.97 secs; Memory: 8Mb
 
 ###开始
 

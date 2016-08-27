@@ -4,7 +4,7 @@ namespace System\Classes;
 
 use System\Command\Cache;
 use System\Interfaces\CacheLayer;
-use Core;
+use Marmot\Core;
 
 abstract class Cache implements CacheLayer
 {
@@ -24,7 +24,7 @@ abstract class Cache implements CacheLayer
      * @author chloroplast1983
      * @version 1.0.20131017
      */
-    public function save($id, $data, $time = 0)
+    public function save($id, $data, $time = 0) : bool
     {
         $command = new Cache\SaveCacheCommand($this->key.'_'.$id, $data, $time);
         return $command -> execute();
@@ -34,7 +34,7 @@ abstract class Cache implements CacheLayer
      * 根据id删除缓存一个值
      * @param string $id
      */
-    public function del($id)
+    public function del($id) : bool
     {
         $command = new Cache\DelCacheCommand($this->key.'_'.$id);
         return $command -> execute();
@@ -46,7 +46,7 @@ abstract class Cache implements CacheLayer
      */
     public function get($id)
     {
-        return Core::$_cacheDriver->fetch($this->key.'_'.$id);
+        return Core::$cacheDriver->fetch($this->key.'_'.$id);
     }
     
     /**
@@ -57,7 +57,7 @@ abstract class Cache implements CacheLayer
      * )
      * @return hits:命中信息和数据 | misses:未命中数据id
      */
-    public function getList($idList)
+    public function getList($idList) : array
     {
 
         $hits = $misses = array();
@@ -68,7 +68,7 @@ abstract class Cache implements CacheLayer
         
         $flipKey = array_flip($keys);
 
-        $hits = Core::$_cacheDriver->fetchMultiple(array_values($keys));
+        $hits = Core::$cacheDriver->fetchMultiple(array_values($keys));
 
         if (!$hits) {
             return array($misses, $flipKey);

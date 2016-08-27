@@ -1,0 +1,48 @@
+nginx:
+ image: "registry.cn-hangzhou.aliyuncs.com/marmot/nginx-dev"
+ ports:
+  - "80:80"
+ links:
+  - "phpfpm"
+ volumes:
+  - ~/data/html/marmot:/usr/share/nginx/html
+  - ~/log/nginx/marmot:/var/log/nginx
+ container_name: marmot-nginx
+
+phpfpm:
+  image: "registry.aliyuncs.com/marmot/php7-dev"
+  volumes:
+   - ~/data/html/marmot:/var/www/html/
+  links:
+   - "memcached-1:memcached_1"
+   - "memcached-2:memcached_2"
+   - "mysql-master:dbw"
+  container_name: marmot-phpfpm
+
+mysql-master:
+  image: "registry.aliyuncs.com/marmot/mysql:5.6"
+  volumes:
+  - ~/data/mysql/:/var/lib/mysql
+  environment:
+   - MYSQL_ROOT_PASSWORD=123456
+  container_name: marmot-mysql-master
+
+memcached-1:
+  image: "registry.aliyuncs.com/marmot/memcached:latest"
+  command: memcached -m 32
+  container_name: marmot-memcached1
+
+memcached-2:
+  image: "registry.aliyuncs.com/marmot/memcached:latest"
+  command: memcached -m 32
+  container_name: marmot-memcached2
+
+phpmyadmin:
+  image: "registry.aliyuncs.com/marmot/phpmyadmin"
+  links:
+   - "mysql-master:mysql"
+  ports:
+   - "10081:80"
+  environment:
+   - UPLOAD_SIZE=1G
+  container_name: marmot-phpmyadmin

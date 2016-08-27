@@ -2,7 +2,7 @@
 namespace System\Classes;
 
 use System\Observer;
-use Core;
+use Marmot\Core;
 
 /**
  * 全局事物控制,这个事务会把cache封装到同步到mysql事务内
@@ -28,12 +28,12 @@ class Transaction
         //当时事务发生回滚时候,需要调用command undo
         self::$transactionSubject = new Observer\Subject();
         self::$inTransaction = true;
-        return Core::$_dbDriver->beginTA();
+        return Core::$dbDriver->beginTA();
     }
 
     public static function commit()
     {
-        if (!Core::$_dbDriver->commit()) {
+        if (!Core::$dbDriver->commit()) {
             return self::rollBack();
         }
         return true;
@@ -49,6 +49,6 @@ class Transaction
         self::$transactionSubject -> notifyObserver();
         self::$inTransaction = false;//关闭事务
         self::$transactionSubject = null;//释放subject
-        return Core::$_dbDriver->rollBack();
+        return Core::$dbDriver->rollBack();
     }
 }

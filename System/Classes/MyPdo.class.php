@@ -33,6 +33,7 @@ class MyPdo
         $dsn = "mysql:host={$host};dbname={$dbname}";
         $this->pdo = new PDO($dsn, $user, $pass, $this->options);
     }
+    
     /**
      * 全局属性设置，包括：列名格式和错误提示类型    可以使用数字也能直接使用参数
      */
@@ -77,7 +78,6 @@ class MyPdo
         } catch (Exception $e) {
             return $e->getMessage();
         }
-         
     }
     /**
      * 执行有返回值的查询,返回PDOStatement

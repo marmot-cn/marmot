@@ -15,6 +15,8 @@ use System\Interfaces;
 abstract class RowQuery
 {
 
+    use RowQueryFindable;
+    
     private $primaryKey;//主键在数据库中的命名,行缓存和数据库的交互使用主键
     private $dbLayer;//数据层
 
@@ -30,6 +32,11 @@ abstract class RowQuery
         unset($this->dbLayer);
     }
 
+    public function getPrimaryKey()
+    {
+        return $this->primaryKey;
+    }
+    
     /**
      * @param int $id,主键id
      */

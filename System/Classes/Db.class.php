@@ -2,7 +2,7 @@
 //powered by kevin
 namespace System\Classes;
 
-use Core;
+use Marmot\Core;
 use System\Interfaces\DbLayer;
 
 /**
@@ -34,7 +34,7 @@ abstract class Db implements DbLayer
      */
     public function delete($whereSqlArr)
     {
-        return Core::$_dbDriver->delete($this->tname($this->table), $whereSqlArr, $bind = "");
+        return Core::$dbDriver->delete($this->tname($this->table), $whereSqlArr, $bind = "");
     }
     
     /**
@@ -42,10 +42,10 @@ abstract class Db implements DbLayer
      * @param array $insertSqlArr 需要插入数据库的数据数组
      * @param bool $returnLastInsertId 是否返回最新插入的id
      */
-    public function insert($insertSqlArr, $returnLastInsertId = true)
+    public function insert($insertSqlArr, $returnLastInsertId = true) : int
     {
-        $rows = Core::$_dbDriver->insert($this->tname($this->table), $insertSqlArr);
-        return $returnLastInsertId ? Core::$_dbDriver->lastInertId() : $rows;
+        $rows = Core::$dbDriver->insert($this->tname($this->table), $insertSqlArr);
+        return $returnLastInsertId ? Core::$dbDriver->lastInertId() : $rows;
     }
     
     /**
@@ -57,8 +57,9 @@ abstract class Db implements DbLayer
     public function select(string $sql, string $select = '*', string $useIndex = '')
     {
         $sql = $sql == '' ? '' : ' WHERE ' . $sql;
+
         $sqlstr = 'SELECT ' . $select . ' FROM ' . $this->tname($this->table) . $useIndex . $sql;
-        return Core::$_dbDriver->query($sqlstr);
+        return Core::$dbDriver->query($sqlstr);
     }
 
     /**
@@ -66,15 +67,15 @@ abstract class Db implements DbLayer
      * @param array $setSqlArr 需要更新的数据数组
      * @param array | string $wheresqlArr 匹配条件
      */
-    public function update(array $setSqlArr, $whereSqlArr)
+    public function update(array $setSqlArr, $whereSqlArr) : bool
     {
-        return Core::$_dbDriver->update($this->tname($this->table), $setSqlArr, $whereSqlArr);
+        return Core::$dbDriver->update($this->tname($this->table), $setSqlArr, $whereSqlArr);
     }
 
     /**
      * 为表添加前缀
      */
-    private function tname($table)
+    private function tname($table) : string
     {
 
         return $this->tablepre.$table;

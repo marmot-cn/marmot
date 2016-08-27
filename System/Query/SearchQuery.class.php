@@ -2,7 +2,7 @@
 namespace System\Query;
 
 /**
- * SearchQuery文件,abstract抽象类.所有针对数据库搜索的类需要继承该类
+ * SearchQuery文件,abstract抽象类.所有针对数据库搜索的类需要继承该类.
  *
  * 这里现在暂时使用数据库,后期数据量大的话可以考虑使用sphinx等第三方.
  * 这个类设计主要是用于解耦:

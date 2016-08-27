@@ -6,11 +6,10 @@ use System\Interfaces;
 
 /**
  * 数据库DBVectoryQuery层(针对关系处理).
- *
- * Query层的关系缓存缓存处理(注意是缓存关系,(xxx的xxx的xxx),不是搜索),
- * 主要用于匹配关系查询,关系匹配数据量大时使用.
+ * Query层的关系缓存缓存处理(注意是缓存关系,(xxx的xxx的xxx),不是搜索).
+ * 主要用于匹配关系查询,关系匹配数据量大时使用
  * 把关系缓存在mysql单独一张表内,做索引(只存储id),不推荐,临时解决方案.
- * 数据量过大时候请使用VectorCacheQuery(redis).
+ * 数据量过大时候请使用VectorCacheQuery(redis),
  * 替换$dbLayer层即可.
  *
  * @codeCoverageIgnore

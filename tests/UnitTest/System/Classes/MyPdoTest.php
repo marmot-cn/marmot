@@ -1,6 +1,10 @@
 <?php
 namespace System\Classes;
 
+use tests;
+use Marmot\Core;
+use PDO;
+
 /**
  * 测试框架内封装的MyPdo,我们需要:
  * 1.建立基境(fixture)
@@ -13,7 +17,7 @@ namespace System\Classes;
  * @version 1.0.20160218
  */
  
-class MyPdoTest extends GenericTestsDatabaseTestCase
+class MyPdoTest extends tests\GenericTestsDatabaseTestCase
 {
 
     public $fixtures = array('pcore_system_test_a','pcore_system_test_b');
@@ -29,10 +33,10 @@ class MyPdoTest extends GenericTestsDatabaseTestCase
     {
 
         //测试传入空的sql语句返回false
-        $this->assertFalse(Core::$_dbDriver->query(''));
+        $this->assertFalse(Core::$dbDriver->query(''));
         
         //通过MyPdo类检索数据
-        $results = Core::$_dbDriver->query('SELECT * FROM pcore_system_test_a');
+        $results = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a');
 
         //tableA有2条数据,我们验证是否符合数据条目符合
         $this->assertEquals(3, sizeof($results), 'table_a count not right');
@@ -60,7 +64,7 @@ class MyPdoTest extends GenericTestsDatabaseTestCase
     {
 
         //插入数据
-        $row = Core::$_dbDriver->insert('pcore_system_test_a', array('title'=>'titleA3','user'=>'userA3'));
+        $row = Core::$dbDriver->insert('pcore_system_test_a', array('title'=>'titleA3','user'=>'userA3'));
 
         //确认插入一条数据返回一行(row)影响
         $this->assertEquals(1, $row);
@@ -86,9 +90,9 @@ class MyPdoTest extends GenericTestsDatabaseTestCase
     {
 
         //插入数据
-        Core::$_dbDriver->insert('pcore_system_test_a', array('title'=>'titleA3','user'=>'userA3'));
+        Core::$dbDriver->insert('pcore_system_test_a', array('title'=>'titleA3','user'=>'userA3'));
         //确认返回数据的id为自增最新的id
-        $this->assertEquals(4, Core::$_dbDriver->lastInertId());
+        $this->assertEquals(4, Core::$dbDriver->lastInertId());
     }
 
     /**
@@ -98,7 +102,7 @@ class MyPdoTest extends GenericTestsDatabaseTestCase
     {
 
         //更新多条数据
-        $row = Core::$_dbDriver->update('pcore_system_test_a', array('title'=>'titleA0'), array('user'=>'userA2'));
+        $row = Core::$dbDriver->update('pcore_system_test_a', array('title'=>'titleA0'), array('user'=>'userA2'));
         //确认返回值等于更新的条数
         $this->assertEquals(2, $row);
 
@@ -127,7 +131,7 @@ class MyPdoTest extends GenericTestsDatabaseTestCase
     public function testMyPdoDelete()
     {
         //删除两条语句
-        $row = Core::$_dbDriver->delete('pcore_system_test_a', array('user'=>'userA2'));
+        $row = Core::$dbDriver->delete('pcore_system_test_a', array('user'=>'userA2'));
 
         //确认返回影响行数为2
         $this->assertEquals(2, $row);
@@ -158,13 +162,13 @@ class MyPdoTest extends GenericTestsDatabaseTestCase
         $oldCount = sizeof($results);
 
         //开启事务
-        Core::$_dbDriver->beginTA();
+        Core::$dbDriver->beginTA();
         //插入一条语句
-        Core::$_dbDriver->insert('pcore_system_test_a', array('title'=>'titleA3','user'=>'userA3'));
+        Core::$dbDriver->insert('pcore_system_test_a', array('title'=>'titleA3','user'=>'userA3'));
         //插入一条语句
-        Core::$_dbDriver->insert('pcore_system_test_a', array('title'=>'titleA4','user'=>'userA4'));
+        Core::$dbDriver->insert('pcore_system_test_a', array('title'=>'titleA4','user'=>'userA4'));
         //commit提交
-        $status = Core::$_dbDriver->commit();
+        $status = Core::$dbDriver->commit();
         $this->assertTrue($status);
         //检索插入的数据已经插入成功
         //检索总数据数量为旧的总数+2
@@ -196,13 +200,13 @@ class MyPdoTest extends GenericTestsDatabaseTestCase
         $oldResults = $query->fetchAll(PDO::FETCH_ASSOC);
 
         //开启事务
-        Core::$_dbDriver->beginTA();
+        Core::$dbDriver->beginTA();
         //插入一条语句
-        Core::$_dbDriver->insert('pcore_system_test_a', array('title'=>'titleA3','user'=>'userA3'));
+        Core::$dbDriver->insert('pcore_system_test_a', array('title'=>'titleA3','user'=>'userA3'));
         //插入一条语句
-        Core::$_dbDriver->insert('pcore_system_test_a', array('title'=>'titleA4','user'=>'userA4'));
+        Core::$dbDriver->insert('pcore_system_test_a', array('title'=>'titleA4','user'=>'userA4'));
         //回滚
-        $status = Core::$_dbDriver->rollBack();
+        $status = Core::$dbDriver->rollBack();
         $this->assertTrue($status);
         //检索插入的数据没有插入成功
         $query = $conn->query('SELECT * FROM pcore_system_test_a');
@@ -221,16 +225,16 @@ class MyPdoTest extends GenericTestsDatabaseTestCase
      
         $oldResults = $query->fetchAll(PDO::FETCH_ASSOC);
         //开启事务
-        Core::$_dbDriver->beginTA();
+        Core::$dbDriver->beginTA();
         //插入一条语句
-        $result = Core::$_dbDriver->insert('pcore_system_test_a', array('title'=>'titleA3','user'=>'userA3'));
+        $result = Core::$dbDriver->insert('pcore_system_test_a', array('title'=>'titleA3','user'=>'userA3'));
         $this->assertEquals(1, $result);
 
         //插入一条语句,这字段名错误
-        $result = Core::$_dbDriver->insert('pcore_system_test_a', array('titleNotExist'=>'titleA4','user'=>'userA4'));
+        $result = Core::$dbDriver->insert('pcore_system_test_a', array('titleNotExist'=>'titleA4','user'=>'userA4'));
         $this->assertFalse($result);
     
-        $status = Core::$_dbDriver->rollBack();
+        $status = Core::$dbDriver->rollBack();
         $this->assertTrue($status);
    
         //检索插入的数据没有插入成功
