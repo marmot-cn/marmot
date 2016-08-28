@@ -268,7 +268,6 @@ class Core
     
     private function initOutput()
     {
-
     }
     
     /**
