@@ -400,6 +400,14 @@ wait...
 
 参考[phpdoc](https://www.phpdoc.org// "phpdoc")
 
+####接口版本
+
+`MAJOR.MINOR.PATCH`
+
+* `MAJOR`: 改变意味着其中包含向后不兼容的修改.
+* `MINOR`: 改变意味这有新功能的增加,但应该是向后兼容的.
+* `PATCH`: 改变代表对已有功能的缺陷修复.
+
 
 		
 		
