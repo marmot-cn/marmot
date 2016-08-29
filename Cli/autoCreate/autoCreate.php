@@ -24,11 +24,13 @@ function createModelFile($operation){
 	$modTemplate = new ModelTemplate();
 	if(!$modTemplate->loadProfile($operation[1])){
 		runFail($operation[1].' load profile fail');
+		exit(2);
 	}
 	if($modTemplate->generate()){
 		runSucess($operation[1].' model file create complete...');
 	}else{
 		runFail($operation[1].' model file create fail');
+		exit(2);
 	}
 }
 
@@ -38,10 +40,12 @@ function createModelUnitTestFile($operation){
 	$modelUnitTestTemplate = new ModelUnitTestTemplate();
 	if(!$modelUnitTestTemplate->loadProfile($operation[1])){
 		runFail($operation[1].' load profile fail');
+		exit(2);
 	}
 	if($modelUnitTestTemplate->generate()){
 		runSucess($operation[1].' unitTest file create complete...');
 	}else{
 		runFail($operation[1].' unitTest file create fail');
+		exit(2);
 	}
 }

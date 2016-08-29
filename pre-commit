@@ -1,0 +1,40 @@
+#!/bin/bash
+
+RED='\033[31m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+WHITE='\033[37m'
+NORMAL='\033[0m'
+
+# 运行格式检查
+echo -e "code style check: ${YELLOW}start${NORMAL}"
+docker exec marmot-phpfpm vendor/bin/phpcs
+
+if [ $? -ne 0 ]
+then 
+  echo -e "code style check: ${RED}fail${NORMAL}"
+  exit 1
+fi
+echo -e "code style check: ${GREEN}success${NORMAL}"
+
+# 运行重复代码检查
+echo -e "php copy paste detect: ${YELLOW}start${NORMAL}"
+docker exec marmot-phpfpm vendor/bin/phpcpd ./Application
+
+if [ $? -ne 0 ]
+then
+  echo -e "php copy paste detect: ${RED}fail${NORMAL}"
+  exit 1
+fi
+echo -e "php copy paste detect: ${GREEN}success${NORMAL}"
+
+# 运行单元测试检查 
+echo -e "unit test: ${YELLOW}start${NORMAL}"
+docker exec marmot-phpfpm vendor/bin/phpunit
+
+if [ $? -ne 0 ]
+then 
+  echo -e "unit test: ${RED}fail${NORMAL}"
+  exit 1
+fi
+echo -e "unit test: ${GREEN}success${NORMAL}"

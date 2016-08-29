@@ -9,8 +9,8 @@ class ModelTemplate implements TemplateInterface{
 	 * 加载配置文件信息
 	 */
 	public function loadProfile($profile){
-		if(is_file('Cli/autoCreate/'.$profile)){
-			$this->profileData = include 'Cli/autoCreate/'.$profile;
+		if(is_file('Cli/autoCreate/Profile/'.$profile)){
+			$this->profileData = include 'Cli/autoCreate/Profile/'.$profile;
 			return true;
 		}
 		return false;
@@ -62,7 +62,7 @@ class ModelTemplate implements TemplateInterface{
 		$this->buffer .= "\n";
 
 		foreach($this->profileData['parameters'] as $parameter){
-			$this->buffer .= "\t/**\n\t * @var ".$parameter['type']." $".$parameter['key']." ".$parameter['comment']."\n\t */\n\tprivate $".$parameter['key']."\n";
+			$this->buffer .= "\t/**\n\t * @var ".$parameter['type']." $".$parameter['key']." ".$parameter['comment']."\n\t */\n\tprivate $".$parameter['key'].";\n";
 		}
 	}
 
@@ -111,14 +111,14 @@ class ModelTemplate implements TemplateInterface{
 			$this->buffer .= "\t/**\n\t * 设置".$parameter['comment']."\n\t * @param ".$parameter['type']." $".$parameter['key']." ".$parameter['comment']."\n\t */\n";
 
 			$this->buffer .= "\tpublic function set".ucfirst($parameter['key'])."(".$parameter['type'].' $'.$parameter['key']."){\n";
-			if(empty($parameter['rule'])){
+			if(empty($parameter['rule'])||$parameter['rule']=='int'||$parameter['rule']=='string'){
 				$this->buffer .= "\t\t".'$this->'.$parameter['key']." = ".'$'.$parameter['key'].";\n";
 			}else if($parameter['rule']=='cellPhone'){
-				$this->buffer .= "\t\t".'$this->'.$parameter['key']." = is_numeric(".'$'.$parameter['key'].") ? ". '$'.$parameter['key']." : ''\n";
+				$this->buffer .= "\t\t".'$this->'.$parameter['key']." = is_numeric(".'$'.$parameter['key'].") ? ". '$'.$parameter['key']." : '';\n";
 			}else if($parameter['rule']=='qq'){
-				$this->buffer .= "\t\t".'$this->'.$parameter['key']." = is_numeric(".'$'.$parameter['key'].") ? ". '$'.$parameter['key']." : ''\n";
+				$this->buffer .= "\t\t".'$this->'.$parameter['key']." = is_numeric(".'$'.$parameter['key'].") ? ". '$'.$parameter['key']." : '';\n";
 			}else if($parameter['rule']=='email'){
-				$this->buffer .= "\t\t".'$this->'.$parameter['key']."= filter_var(".'$'.$parameter['key'].", FILTER_VALIDATE_EMAIL) ? ".'$'.$parameter['key']." : ''\n";
+				$this->buffer .= "\t\t".'$this->'.$parameter['key']."= filter_var(".'$'.$parameter['key'].", FILTER_VALIDATE_EMAIL) ? ".'$'.$parameter['key']." : '';\n";
 			}else if($parameter['rule']=='object'){
 				$this->buffer .= "\t\t".'$this->'.$parameter['key']." = ".'$'.$parameter['key'].";\n";
 			}

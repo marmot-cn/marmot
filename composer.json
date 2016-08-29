@@ -19,6 +19,7 @@
         "phploc/phploc": "*",
         "pdepend/pdepend" : "2.2.4",
         "sebastian/phpcpd": "*",
-        "phpmd/phpmd" : "@stable"
+        "phpmd/phpmd" : "@stable",
+        "fzaninotto/faker": "^1.6"
     }
 }

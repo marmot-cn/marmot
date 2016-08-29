@@ -2,11 +2,23 @@
 
 ###版本
 
-**v2.0.20160301**
+**v2.0.20160829**
 
-###框架简介
+###目录
 
-该框架主要是基于`DDD`,`CQRS`的思路去架构.基于`DDD`领域驱动架构,我们可以更好的和用户方来分析项目需求(可以配合使用`四色原型`),大家可以使用通用的领域语言来讨论领域对象.使用`composer`做第三方package管理.`phpunit`做单元测试.开发环境是基于PHP7.0.3做的开发.
+* [框架简介](#abstract) 
+* [环境搭建](#environment)
+* [composer](#composer)
+* [Hello World](#helloworld)
+* [框架目录](#framework)
+* [marmot.php](#marmot.php)
+* [自动化](#automatic)
+* [规范](#rule)
+
+###[框架简介](id:abstract)
+
+
+该框架主要是基于`DDD`,`CQRS`的思路去架构.基于`DDD`领域驱动的`微服务`架构,我们可以更好的和用户方来分析项目需求(可以配合使用`四色原型`),大家可以使用通用的领域语言来讨论领域对象.使用`composer`做第三方`package`管理.`phpunit`做单元测试.开发环境是基于PHP7.0.3做的开发.
 
 主要是解决上个版本框架中的:
 
@@ -26,7 +38,26 @@
 
 更多是想把一些基于数据库编程(一个表单为一个对象)的思路,解耦为领域对象和存储层.数据库的表只是作为一个存储层来考虑.领域对象是我们通用讨论的对象.
 
-###开发环境下载
+###[环境搭建](id:environment)
+
+**下载docker**
+
+[https://docs.docker.com](https://docs.docker.com ,"https://docs.docker.com")
+
+根据自己的环境版本选择docker环境.
+
+还没使用过`docker for windows`,可以考虑使用虚拟机来进行开发.
+
+**下载docker-compose**
+
+		curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+		
+		$ chmod +x /usr/local/bin/docker-compose
+		
+		$ docker-compose --version
+		docker-compose version: 1.8.0
+
+**使用docker-compose安装开发环境**
 
 这里使用的PHP 7.0.3 镜像,已经编译进`mongo`,`redis`,`memcached`,`pthreads`等一些常用的扩展.
 
@@ -35,9 +66,13 @@
 * `80`: 程序访问端口号
 * `80801`: phpmyadmin访问端口号
 
-[docker-compose.yml](./docker-compose.yml "docker-compose.yml")
+在根目录可以看见`docker-compose`文件,运行:
 
-###composer 包
+		docker-compose up -d 
+		
+启动我们的开发环境,如果没有镜像会自动拉去的
+
+###[composer](id:composer)
 
 ####命令
 
@@ -82,7 +117,8 @@ Copy/Paste Detector
 
 [https://github.com/sebastianbergmann/phpcpd/](https://github.com/sebastianbergmann/phpcpd/ "https://github.com/sebastianbergmann/phpcpd/")
 	
-	
+我们扫描`Application`,`System`和`tests`文件夹:
+
 		vendor/bin/phpcpd Application System tests
 		phpcpd 2.0.4 by Sebastian Bergmann.
 
@@ -127,8 +163,22 @@ wait...
 		....................................................
 		
 		Time: 3.97 secs; Memory: 8Mb
+		
+**fzaninotto/faker**
 
-###开始
+数据生成器,主要用于生成我们在测试文件的数据.以及生成我们数据库的`xml`文件.
+
+[https://github.com/fzaninotto/Faker](https://github.com/fzaninotto/Faker "https://github.com/fzaninotto/Faker")
+
+使用方法:
+		
+		$faker = \Faker\Factory::create('zh_CN');//我们使用中国的表述信息
+		$faker->seed(种子数字);//'种子数字'相同则生成数据一致
+		
+		$faker->name;//中文名
+		$faker->phoneNumber;//手机号
+
+###[HelloWorld](id:helloworld)
 
 1. 下载代码
 2. 下载并运行镜像
@@ -143,7 +193,7 @@ wait...
 
 		输出 Hello World
 
-###框架目录
+###[框架目录](id:framework)
 
 ####Application
 
@@ -152,6 +202,7 @@ wait...
 		Application
 		--User(AppName)
 			--Command
+			--CommandHandler
 			--Controller
 			--Model
 			--Persistence
@@ -166,16 +217,19 @@ wait...
 
 **Command**
 
-存放我们`C`qrs中的`Command`.一般我们的命名规则为: `动词`+`AppName`+`Command`
+在`应用服务层`通过`命令`来传输数据.
 
-		注册用户命令
-		SignUpUserCommand.class.php
-		
-如果一个模块内的领域对象较多,可以在该目录下在新建一个对应领域对象名字的文件夹.一套领域对象的命令集合统一创建一个`工厂文件`来封装命令的调用.
+**CommandHandler**
+
+`命令控制器`来处理`命令`.
+
+交互模式为:
+
+`Command` -> `CommandBus` -> `CommandHandler` -> `Event`
 
 **Controller**
 
-应用层服务,主要用于协调调用`领域服务`和`仓库`文件
+应用层服务,主要用于协调调用`命令(写)`和`仓库(读)`文件
 
 **Model**
 
@@ -230,7 +284,9 @@ wait...
 		--Command.class.php
 		--DbLayer.class.php
 		--Observer.class.php
-		--Pcommand.class.php
+		--ICommand.class.php
+		--ICommandHandler.class.php
+		--ICommandHandlerFactory.class.php
 		--Subject.class.php
 		--Widge.class.php
 		Observer
@@ -292,8 +348,46 @@ wait...
 
 框架封装的数据测试文件,继承该类即可方便的使用数据库测试方法,且也会额外的封装`GenericTestCase.php`中测试私有方法和私有属性函数.
 
+###[自动化](id:automatic)
 
-###命名规范
+我们使用`git`的`提交钩子`来触发自动化提交.
+
+使用:
+
+		 cp pre-commit .git/hooks/
+		 
+**检查目标**
+
+* 代码格式是否为`PSR2`
+* 代码复制黏贴检测
+* 单元测试
+
+###[marmot.php](id:marmot.php)
+
+脚手架工具.
+
+		root@0967b4c11e7e:/var/www/html# php marmot.php
+		Usage: php marmot.php COMMAND [arg...]
+		       php marmot.php [help | -h | -v | version]
+		Commands:
+			autoCreate	Add new model file and unitTest file automaticly
+			cacheClear	Clear cache in marmot framework
+
+**清理缓存**
+
+		php marmot.php cacheClear
+		
+		root@0967b4c11e7e:/var/www/html# php marmot.php cacheClear
+		memcached                                                         [  ok  ]
+		apcu                                                              [  ok  ]
+
+**生成模型文件**
+
+		
+
+###[规范](id:rule)
+
+####命名规范
 
 1. 变量命名为`驼峰`.
 2. 类的命名规则为第`一`个字母`大写`.
@@ -302,7 +396,7 @@ wait...
 5. Persistence命名规范: `名称`+`Db|Cache`
 6. Query命名规范: `名称`+`FragmentCacheQuery|RowCacheQuery|RowQuery|SearchQuery|VectorQuery`
 
-###注释规范
+####注释规范
 
 参考[phpdoc](https://www.phpdoc.org// "phpdoc")
 

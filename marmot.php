@@ -2,11 +2,10 @@
 /**
  * 自动工具包
  */
-
 define('CLI_VERSION','1.0.20160413');
 
 include_once 'Core.php';
-$core = Core::getInstance();
+$core = \Marmot\Core::getInstance();
 $core -> initCli();
 
 $aliasCommands = ['-h'=>'help',
@@ -15,36 +14,6 @@ $aliasCommands = ['-h'=>'help',
 $command = isset($argv[1]) ? $argv[1] : ''; //获取命令
 
 $command = isset($aliasCommands[$command]) ? $aliasCommands[$command] : $command;
-//如果没有给出操作符,则调用默认操作 同命令文件
-
-// class cliWindow{
-
-// 	private $cols;
-// 	private $rows;
-
-// 	public function __construct(){
-// 		$this->cols = 0;
-// 		$this->rows = 0;
-// 		//初始化cli窗口
-// 		newt_init();
-// 		newt_get_screen_size ($this->cols, $this->rows);
-// 		newt_finished();
-// 	}
-
-// 	public function runSucess($result){
-// 		$alignment = $this->rows-8;
-
-// 		printf("%".$alignment."s", "[  \033[42mok\033[0m  ]\n");
-// 	}
-
-// 	public function runFail($result){
-// 		$alignment = $this->rows-8;
-
-// 		printf("%".$alignment."s", "[ \033[41mfail\033[0m ]\n");
-// 	}
-// }
-
-// $cliWindow = new cliWindow();
 
 function runSucess($result){
 	$strlen = strlen($result);

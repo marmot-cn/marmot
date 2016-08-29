@@ -44,8 +44,8 @@ class ModelUnitTestTemplate implements TemplateInterface{
 	 * 加载配置文件信息
 	 */
 	public function loadProfile($profile){
-		if(is_file('Cli/autoCreate/'.$profile)){
-			$this->profileData = include 'Cli/autoCreate/'.$profile;
+		if(is_file('Cli/autoCreate/Profile/'.$profile)){
+			$this->profileData = include 'Cli/autoCreate/Profile/'.$profile;
 			return true;
 		}
 		return false;
@@ -66,17 +66,19 @@ class ModelUnitTestTemplate implements TemplateInterface{
 	 */
 	public function generateBeginInfo(){
 		$this->buffer .= "<?php";
+		$this->buffer .= "\nnamespace ".$this->profileData['nameSpace'].";";
+		$this->buffer .= "\nuse GenericTestCase;";
 		$this->buffer .= "\n/**";
-		$this->buffer .= "\n * ".$this->profileData['nameSpace']."\\".$this->profileData['className'].'class.php 测试文件';
+		$this->buffer .= "\n * ".$this->profileData['nameSpace']."\\".$this->profileData['className'].'.class.php 测试文件';
 		$this->buffer .= "\n * @author chloroplast";
 		$this->buffer .= "\n * @version 1.0.0:".date('Y.m.d',time());
 		$this->buffer .= "\n */";
-		$this->buffer .= "\n\nclass ".$this->profileData['className']."Test {\n";
+		$this->buffer .= "\n\nclass ".$this->profileData['className']."Test extends GenericTestCase{\n";
 		$this->buffer .= "\n";
-		$this->buffer .= "\tprivate ".'$stub'."\n";
+		$this->buffer .= "\tprivate ".'$stub;'."\n";
 		$this->buffer .= "\n";
 		$this->buffer .= "\tpublic function setUp(){\n";
-		$this->buffer .= "\t\t".'$'."this->stub = new ".$this->profileData['nameSpace']."\\".$this->profileData['className']."();\n";
+		$this->buffer .= "\t\t".'$'."this->stub = new \\".$this->profileData['nameSpace']."\\".$this->profileData['className']."();\n";
 		$this->buffer .= "\t}\n";
 	}
 
@@ -98,7 +100,7 @@ class ModelUnitTestTemplate implements TemplateInterface{
 			$default = $parameter['default'] !== '' ? $parameter['default'] : "''";
 			//注释
 			$this->buffer .= "\t\t//测试初始化".$parameter['comment']."\n";
-			$this->buffer .= "\t\t".'$'.$parameter['key']."Parameter = ".'$'."this->getPrivateProperty(".$this->profileData['nameSpace']."\\".$this->profileData['className'].",'".$parameter['key']."');\n";
+			$this->buffer .= "\t\t".'$'.$parameter['key']."Parameter = ".'$'."this->getPrivateProperty('".$this->profileData['nameSpace']."\\".$this->profileData['className']."','".$parameter['key']."');\n";
 			if($parameter['type'] == 'int'){//整型
 				if($parameter['rule'] == 'time'){
 					$this->buffer .= "\t\t".'$'."this->assertGreaterThan(0,".'$'.$parameter['key']."Parameter->getValue(".'$'."this->stub));\n";	
@@ -111,7 +113,11 @@ class ModelUnitTestTemplate implements TemplateInterface{
 				}
 			}else{//如果规则是对象
 				if($parameter['rule'] == 'object'){
-					$this->buffer .= "\t\t".'$'."this->assertInstanceof(".$parameter['default'].",".'$'.$parameter['key']."Parameter->getValue(".'$'."this->stub));\n";
+					if(!empty($parameter['default'])){
+						$this->buffer .= "\t\t".'$'."this->assertInstanceof('".$parameter['type']."',".'$'.$parameter['key']."Parameter->getValue(".'$'."this->stub));\n";						
+					}else{
+						$this->buffer .= "\t\t".'$'."this->assertEmpty(".'$'.$parameter['key']."Parameter->getValue(".'$'."this->stub));\n";
+					}
 				}
 			}
 			$this->buffer .= "\n";
@@ -262,7 +268,7 @@ class ModelUnitTestTemplate implements TemplateInterface{
 		//测试正确类型但是不是数字,期望返回空 -- 开始
 		$this->buffer .= "\t/**\n\t * 设置 ".$this->profileData['className']." set".ucfirst($parameter['key'])."() 正确的传参类型,但是不属于手机格式,期望返回空."."\n\t */\n";
 		$this->buffer .= "\tpublic function testSet".ucfirst($parameter['key'])."CorrectTypeButNotEmail(){\n";
-		$this->buffer .= "\t\t".'$'."this->stub->set".ucfirst($parameter['key'])."('$this->testCellPhone'a);\n";
+		$this->buffer .= "\t\t".'$'."this->stub->set".ucfirst($parameter['key'])."('$this->testCellPhone'.'a');\n";
 		$this->buffer .= "\t\t".'$'."this->assertEquals('',".'$'."this->stub->get".ucfirst($parameter['key'])."()".");\n";
 		$this->buffer .= "\t}\n";
 		//测试正确类型但是不是数字,期望返回空 -- 结束
@@ -319,7 +325,7 @@ class ModelUnitTestTemplate implements TemplateInterface{
 		//添加错误类型测试函数 -- 开始
 		$this->buffer .= "\t/**\n\t * 设置 ".$this->profileData['className']." set".ucfirst($parameter['key'])."() 错误的传参类型,期望期望抛出TypeError exception\n\t *\n\t * @expectedException TypeError \n\t */\n";
 		$this->buffer .= "\tpublic function testSet".ucfirst($parameter['key'])."WrongType(){\n";
-		$this->buffer .= "\t\t".'$'."this->stub->set".ucfirst($parameter['key'])."(".'$'."this->testSring);\n";
+		$this->buffer .= "\t\t".'$'."this->stub->set".ucfirst($parameter['key'])."('$this->testString');\n";
 		$this->buffer .= "\t}\n";
 		//添加错误类型测试函数 -- 结束
 	}
@@ -339,7 +345,7 @@ class ModelUnitTestTemplate implements TemplateInterface{
 		$this->buffer .= "\n";
 		//生成数据构建器
 		$this->buffer .= "\t/**\n\t * 循环测试 ".$this->profileData['className']." set".ucfirst($parameter['key'])."() 数据构建器\n\t */\n";
-		$this->buffer .= "\tpublic function".$parameter['key']."Provider(){\n";
+		$this->buffer .= "\tpublic function ".$parameter['key']."Provider(){\n";
 		$this->buffer .= "\t\treturn array(\n";
 		foreach($parameter['rule'] as $rule){
 			$this->buffer .= "\t\t\tarray(".$rule.",".$rule."),\n";
@@ -378,13 +384,13 @@ class ModelUnitTestTemplate implements TemplateInterface{
 					$this->generateTestRangeFunction($parameter);
 				}
 			}else if($parameter['type'] == 'string'){//字符
-				if($parameter['rule'] == ''){
+				if($parameter['rule'] == 'int' || $parameter['rule'] == 'string'){
 					$this->generateTestSetStringFunction($parameter);
 				}elseif($parameter['rule'] == 'email'){
 					$this->generateTestSetEmailFunction($parameter);
 				}elseif($parameter['rule'] == 'cellPhone'){
 					$this->generateTestSetCellPhoneFunction($parameter);
-				}elseif($parameter['rule'] = 'qq'){
+				}elseif($parameter['rule'] == 'qq'){
 					$this->generateTestSetQQFunction($parameter);
 				}
 			}else{//如果规则是对象
