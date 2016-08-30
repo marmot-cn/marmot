@@ -90,7 +90,7 @@
 
 ####dev 开发中使用
 
-**phploc/phploc**
+#####phploc/phploc
 
 衡量我们项目大小的工具
 
@@ -105,7 +105,7 @@
 		Size
 		...
 
-**phpmd/phpmd**
+#####phpmd/phpmd
 
 wait...
 
@@ -150,6 +150,10 @@ wait...
 		
 		OK (86 tests, 262 assertions)
 
+`生成代码覆盖报告`:
+
+		phpdbg -qrr ./vendor/bin/phpunit --coverage-html ./Docs/xxx
+
 **squizlabs/php_codesniffer**
 
 代码风格检测
@@ -177,6 +181,16 @@ wait...
 		
 		$faker->name;//中文名
 		$faker->phoneNumber;//手机号
+		
+`常用fake数据`:
+
+* `手机号`: `$faker->phoneNumber`
+* `用户名`: `$faker->userName`
+* `昵称`: `$faker->userName`
+* `密码`: `md5($faker->password)`
+* `类型,状态`: `$faker -> randomElement($array = array (xxx, xx))`
+* `时间`: `$faker->unixTime()`
+* `银行卡号`: `faker->creditCardNumber`
 
 ###[HelloWorld](id:helloworld)
 
