@@ -2,6 +2,7 @@
 namespace tests;
 
 use PDO;
+use tests\MyAppDbUnitArrayDataSet;
 
 /**
  * 框架自用数据库测试抽象用例,其他数据库测试继承该类即可.
@@ -52,17 +53,18 @@ abstract class GenericTestsDatabaseTestCase extends \PHPUnit_Extensions_Database
         if (empty($fixtures)) {
             $fixtures = $this->fixtures;
         }
-        $compositeDs = new \PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array());
+
+        $compositeDs = array();
 
         $fixturePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Fixtures';
 
         //循环载入基境的表
         foreach ($fixtures as $fixture) {
-            $path =  $fixturePath . DIRECTORY_SEPARATOR . $fixture.'.xml';
-            $ds = $this->createMySQLXMLDataSet($path);
-            $compositeDs->addDataSet($ds);
+            $path =  $fixturePath . DIRECTORY_SEPARATOR . $fixture.'.php';
+            $ds = include $path;
+            $compositeDs = array_merge($ds, $compositeDs);
         }
-        return $compositeDs;
+        return new MyAppDbUnitArrayDataSet($compositeDs);
     }
 
     public function loadDataSet($dataSet)
@@ -77,6 +79,7 @@ abstract class GenericTestsDatabaseTestCase extends \PHPUnit_Extensions_Database
     {
 
         $allTables = $this->getDataSet($this->fixtures)->getTableNames();
+        // var_dump($allTables);
         foreach ($allTables as $table) {
             // drop table
             $conn = $this->getConnection();
@@ -97,7 +100,7 @@ abstract class GenericTestsDatabaseTestCase extends \PHPUnit_Extensions_Database
      */
     public function getPrivateMethod($className, $methodName)
     {
-        $reflector = new ReflectionClass($className);
+        $reflector = new \ReflectionClass($className);
         $method = $reflector->getMethod($methodName);
         $method->setAccessible(true);
  
@@ -114,7 +117,7 @@ abstract class GenericTestsDatabaseTestCase extends \PHPUnit_Extensions_Database
      */
     public function getPrivateProperty($className, $propertyName)
     {
-        $reflector = new ReflectionClass($className);
+        $reflector = new \ReflectionClass($className);
         $property = $reflector->getProperty($propertyName);
         $property->setAccessible(true);
  

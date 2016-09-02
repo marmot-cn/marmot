@@ -38,6 +38,9 @@ class Core
     //数据库驱动
     public static $dbDriver;
 
+    //mongo驱动
+    public static $mongoDriver;
+
     //核心文件映射关系数组
     private $classMaps;
     
@@ -64,6 +67,7 @@ class Core
         self::initCache();//初始化缓存使用
         self::initEnv();//初始化环境
         self::initDb();//初始化mysql
+        self::initMongo();
         self::initInput();
         self::initOutput();
     }
@@ -85,6 +89,7 @@ class Core
         self::initContainer('test');//引入容器
         self::initCache();//初始化缓存使用
         self::initDb();//初始化mysql
+        // self::initMongo();
     }
     
     /**
@@ -103,6 +108,7 @@ class Core
         self::initContainer();//引入容器
         self::initCache();//初始化缓存使用
         self::initDb();//初始化mysql
+        // self::initMongo();
     }
     
     /**
@@ -288,6 +294,19 @@ class Core
     {
 
         self::$dbDriver = self::$container->get('\System\Classes\MyPdo');
+    }
+
+    /**
+     * 初始化 MongoDB 数据库
+     */
+    private function initMongo()
+    {
+
+        $mongoHost = self::$container->get('mongo.host');
+
+        if (!empty($mongoHost)) {
+            self::$mongoDriver = new \MongoDB\Client('mongodb://'.$mongoHost.':27017');
+        }
     }
 
     /**

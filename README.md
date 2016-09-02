@@ -111,7 +111,7 @@ wait...
 
 [https://phpmd.org](https://phpmd.org "https://phpmd.org")
 
-**sebastian/phpcpd**
+#####sebastian/phpcpd
 
 Copy/Paste Detector
 
@@ -126,12 +126,12 @@ Copy/Paste Detector
 		
 		Time: 935 ms, Memory: 6.00MB
 		
-**pdepend/pdepend**
+#####pdepend/pdepend
 
 wait...
 
 [https://pdepend.org](https://pdepend.org "https://pdepend.org")		
-**phpunit/phpunit phpunit/dbunit**
+#####phpunit/phpunit phpunit/dbunit
 
 单元测试
 
@@ -154,7 +154,7 @@ wait...
 
 		phpdbg -qrr ./vendor/bin/phpunit --coverage-html ./Docs/xxx
 
-**squizlabs/php_codesniffer**
+#####squizlabs/php_codesniffer
 
 代码风格检测
 
@@ -168,7 +168,7 @@ wait...
 		
 		Time: 3.97 secs; Memory: 8Mb
 		
-**fzaninotto/faker**
+#####fzaninotto/faker
 
 数据生成器,主要用于生成我们在测试文件的数据.以及生成我们数据库的`xml`文件.
 
@@ -191,6 +191,43 @@ wait...
 * `类型,状态`: `$faker -> randomElement($array = array (xxx, xx))`
 * `时间`: `$faker->unixTime()`
 * `银行卡号`: `faker->creditCardNumber`
+
+####通用
+
+#####mongodb/mongodb
+
+[github](https://github.com/mongodb/mongo-php-library "https://github.com/mongodb/mongo-php-library")
+
+[mongo-php 文档链接](http://mongodb.github.io/mongo-php-library/ "http://mongodb.github.io/mongo-php-library/")
+
+[mongo官方文档](https://docs.mongodb.com/ "https://docs.mongodb.com/")
+
+php mongoDb 封装使用包,封装了我们对mongo的常用操作.
+
+我们使用mongo主要用于存储一些非格式化数据.
+
+**插入单条数据**
+
+		$collection = Core::$mongoDriver->库->Collection;
+		$result = $collection->insertOne( array(xxx) );
+		$result->getInsertedId();//返回上次插入id
+		
+**获取单条数据**
+		
+		$collection = Core::$mongoDriver->库->Collection
+		$document = $collection->findOne(['_id' => new \MongoDB\BSON\ObjectID('xxxx')]);
+		var_dump((array)$document);
+
+**获取多条数据**
+
+		$collection = Core::$mongoDriver->库->Collection
+		$cursor = $collection->find(['_id' => ['$in' => [new \MongoDB\BSON\ObjectID('xx'),new \MongoDB\BSON\ObjectID('xx'),new \MongoDB\BSON\ObjectID('xx')]]]);
+		
+		foreach ($cursor as $document) {
+			echo $document['_id'], "\n";
+		}
+
+
 
 ###[HelloWorld](id:helloworld)
 
