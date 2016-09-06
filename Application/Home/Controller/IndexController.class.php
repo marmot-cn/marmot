@@ -3,82 +3,47 @@ namespace Home\Controller;
 
 use System\Classes\Controller;
 use Marmot\Core;
+use Common\Controller\JsonApiController;
 
-// use Home\Model\News;
-// use Home\View\NewsSchema;
-// use Home\Model\Comment;
-// use Home\View\CommentSchema;
+use Home\View\NewsView;
+use Home\Model\{News, Comment};
 
-// use Neomerx\JsonApi\Http\Request;
-// use Neomerx\JsonApi\Encoder\Encoder;
-// use Neomerx\JsonApi\Encoder\EncoderOptions;
-// use Neomerx\JsonApi\Encoder\Parameters\EncodingParameters;
-// use Neomerx\JsonApi\Document\Error;
-// use Neomerx\JsonApi\Document\Link;
-// use Neomerx\JsonApi\Factories\Factory;
+
 //use PhpAmqpLib\Connection\AMQPStreamConnection;
 //use PhpAmqpLib\Message\AMQPMessage;
 
 class IndexController extends Controller
-{
+{   
+
+    use JsonApiController;
     /**
      * @codeCoverageIgnore
      */
     public function index()
     {	
 
-      var_dump(getmypid());
-      return false;
-      // $client = Core::$mongoDriver;
-      // $collection = $client->demo->beers;
+    	//http://www.marmot.com/?filter[test]=1&filter[aa]=2&sort=-created,title&include=comments.author&fields[articles]=title,body&page[num]=1&page[size]=10
+        $news = new News(1, 'title');
+        $news->setContent('content');
 
+        $comments = array();
 
-      // $cursor = $collection->find(['_id' => ['$in' => [new \MongoDB\BSON\ObjectID('57c67b14d2934900083f22c2'),new \MongoDB\BSON\ObjectID('57c67aead2934900083f22c1'),new \MongoDB\BSON\ObjectID('57c67a02d29349000960f181')]]]);
+        $comments[] = new Comment(1, 'content1');
+        $comments[] = new Comment(2, 'content2');
 
-      // foreach ($cursor as $document) {
-      //     echo $document['name'], "\n";
-      // }
+        $news2 = new News(2, 'title2');
+        $news2->setContent('content2');
 
-      // $document = $collection->findOne(['_id' => new \MongoDB\BSON\ObjectID('57c67b14d2934900083f22c2')]);
-      // var_dump((array)$document);
-
-      $result = $collection->insertOne( [ 'name' => 'Hinterland1', 'brewery' => 'BrewDog1' ] );
-      // var_dump($result->getInsertedId());
-      echo "Inserted with Object ID '{$result->getInsertedId()}'";
-
-    	//http://www.marmot.com/?filter[test]=1&filter[aa]=2&sort=-created,title&include=comments.author
-  //   	$nonPsr7request = $this->getRequest();
-
-  //   	$psr7request  = new Request(function() use ($nonPsr7request) { 
-  //   		return $nonPsr7request->getMethod();
-  //   	}, function ($name) use ($nonPsr7request) {
-		//     return $nonPsr7request->getHeader($name);
-		// }, function () use ($nonPsr7request) {
-		//     return $nonPsr7request->getQueryParams();
-		// });
-
-  //   	$factory    = new Factory();
-		// $parameters = $factory->createQueryParametersParser()->parse($psr7request);
-		// echo '<pre>';
-		// var_export($parameters);
-		// exit();
-
-  //       $news = new News(1, 'title');
-  //       $news->setContent('content');
-
-  //       $comments = array();
-
-  //       $comments[] = new Comment(1, 'content1');
-  //       $comments[] = new Comment(2, 'content2');
-
-  //       $news->setComments($comments);
+        // $news->setComments($comments);
         
-  //       $encoder = Encoder::instance([
-  //       	Comment::class => CommentSchema::class,
-  //           News::class => NewsSchema::class,
-  //       ], new EncoderOptions(JSON_PRETTY_PRINT, 'http://example.com/api/v1'));
+        // $a = [
+        //   Comment::class => CommentSchema::class,
+        //   News::class => NewsSchema::class,
+        // ];
 
-  //       $result = $encoder->encodeData($news);
+        // $result = $this->jsonApiFormat([$news, $news2], $a, '');
+
+        
 
 //        $exchange = 'router';
 //        $queue = 'msgs';
@@ -96,6 +61,11 @@ class IndexController extends Controller
 //        $connection->close();
         // echo '<pre>';
         // echo $result;
+
+        $view = new NewsView([$news, $news2]);
+        // $url = 'users/'.http_build_query($gets);
+
+        $this->render($view->pagination($url = 'users', $conditions = $this->getRequest()->get(), $num = 50, $perpage = 10, $curpage = 2));
         // var_dump("Hello World"); 
         return true;
     }

@@ -1,0 +1,5 @@
+FROM registry.aliyuncs.com/marmot/php7-dev
+
+RUN curl -L https://api.github.com/chloroplast1983/marmot/tarball/dev > dev.tar.gz | tar -xJC /var/www/html/
+
+

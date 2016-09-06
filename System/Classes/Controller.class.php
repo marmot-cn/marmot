@@ -3,6 +3,7 @@
 namespace System\Classes;
 
 use Marmot\Core;
+use System\Interfaces\IView;
 
 /**
  * 应用层服务父类,控制应用服务层的 Request 和 Reponse
@@ -58,9 +59,9 @@ abstract class Controller
      * 渲染输出内容
      * @var array|string 输出源内容
      */
-    public function render($data = '')
-    {
-        $this->getResponse()->data = $data;
+    public function render(IView $iview)
+    {   
+        $this->getResponse()->data = $iview->display();
         return $this->getResponse()->send();
     }
 }

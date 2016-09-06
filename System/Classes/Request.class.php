@@ -30,6 +30,11 @@ class Request
      */
     private $rawBody;
 
+    /**
+     * @var $headers
+     */
+    private $headers;
+
    /**
      * Returns the method of the current request (e.g. GET, POST, HEAD, PUT, PATCH, DELETE).
      * @return string request method, such as GET, POST, HEAD, PUT, PATCH, DELETE.
@@ -280,8 +285,33 @@ class Request
         return isset($params[$name]) ? $params[$name] : $defaultValue;
     }
 
-    public function getHeader($name)
+    private function getHeaders()
     {
-        return true;
+        foreach ($_SERVER as $name => $value) {
+            if (strncmp($name, 'HTTP_', 5) === 0) {
+                $name = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))));
+                $this->headers[strtolower($name)] = $value;
+            }
+        }
+    }
+
+    public function getHeader($name, $default = null)
+    {      
+        $this->getHeaders();
+
+        $name = strtolower($name);
+        if (isset($this->headers[$name])) {
+            return $this->headers[$name];
+        } else {
+            return $default;
+        }
+    }
+
+    public function setHeader($name, $value = '')
+    {
+        $this->getHeaders();
+
+        $name = strtolower($name);
+        $this->headers[$name] = $value;
     }
 }

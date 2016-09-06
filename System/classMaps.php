@@ -20,6 +20,7 @@ return [
     'System\Interfaces\Widget' => S_ROOT.'System/Interfaces/Widget.class.php',
     'System\Interfaces\CacheLayer' => S_ROOT.'System/Interfaces/CacheLayer.class.php',
     'System\Interfaces\DbLayer' => S_ROOT.'System/Interfaces/DbLayer.class.php',
+    'System\Interfaces\IView' => S_ROOT.'System/Interfaces/IView.class.php',
     'System\Interfaces\ICommand' => S_ROOT.'System/Interfaces/ICommand.class.php',
     'System\Interfaces\ICommandHandler' => S_ROOT.'System/Interfaces/ICommandHandler.class.php',
     'System\Interfaces\ICommandHandlerFactory' => S_ROOT.'System/Interfaces/ICommandHandlerFactory.class.php',
@@ -44,4 +45,5 @@ return [
 
     //view
     'System\View\JsonApiResponseFormatter' => S_ROOT.'System/View/JsonApiResponseFormatter.class.php',
+    'System\View\EmptyView' => S_ROOT.'System/View/EmptyView.class.php',
 ];

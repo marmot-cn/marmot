@@ -184,13 +184,20 @@ wait...
 		
 `常用fake数据`:
 
+* `随机单个数不为空`: `$faker->randomDigitNotNull`
+* `随机单个数可为空`: `$faker->randomDigit`
+* `随机数`: `$faker->randomNumber($nbDigits = NULL) // 79907610`
+* `随机小树`: `$faker->randomFloat($nbMaxDecimals = NULL, $min = 0, $max = NULL) // 48.8932`
+* `随机范围数`: `$faker->numberBetween($min = 1000, $max = 9000) // 8567`
+* `随机字母`: `$faker->randomLetter`
+* `随机元素`: `$faker->randomElement($array = array ('a','b','c')) // 'b'`
 * `手机号`: `$faker->phoneNumber`
 * `用户名`: `$faker->userName`
 * `昵称`: `$faker->userName`
 * `密码`: `md5($faker->password)`
 * `类型,状态`: `$faker -> randomElement($array = array (xxx, xx))`
 * `时间`: `$faker->unixTime()`
-* `银行卡号`: `faker->creditCardNumber`
+* `银行卡号`: `$faker->creditCardNumber`
 
 ####通用
 
