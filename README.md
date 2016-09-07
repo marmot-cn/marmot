@@ -38,6 +38,10 @@
 
 更多是想把一些基于数据库编程(一个表单为一个对象)的思路,解耦为领域对象和存储层.数据库的表只是作为一个存储层来考虑.领域对象是我们通用讨论的对象.
 
+采取事件驱动模式开发:
+
+`Command` -> `CommandBus` -> `CommandHandler` -> `Event`
+
 ###[环境搭建](id:environment)
 
 **下载docker**
@@ -258,6 +262,11 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 应用目录,我们构建的代码都会放在该目录.
 
 		Application
+		--Common(通用)
+			--Controller
+				--JsonApiController.class.php
+			--View
+				--JsonApiView.class.php
 		--User(AppName)
 			--Command
 			--CommandHandler
@@ -324,6 +333,15 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 
 路由文件,设定路由规则匹配我们的controller文件.
 
+常用路由:
+
+* `/xxx[/{ids:[\d,]+}]`
+	* xxx.com/xxx/id
+	* xxx.com/xxx/id1,id2,id3
+	* xxx.com/xxx?filter[]...
+* `/xxx/{id:\d+}`
+	* xxx/com/xxx/id 
+
 ####System
 
 框架核心文件存放位置,文件路径为:
@@ -345,6 +363,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 		--ICommand.class.php
 		--ICommandHandler.class.php
 		--ICommandHandlerFactory.class.php
+		--ResponseFormatterInterface.class.php
 		--Subject.class.php
 		--Widge.class.php
 		Observer
@@ -356,6 +375,9 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 		--RowQuery.class.php
 		--SearchQuery.class.php
 		--VectorQuery.class.php
+		View
+		--EmptyView.class.php
+		--JsonApiResponseFormatter.class.php
 		classMaps.php
 		pc.version.php
 
@@ -377,11 +399,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 		
 **Fxitures**
 
-数据库基境,具体细节可以参见PHPunit中的数据库测试章节.主要存放我们到处的数据库数据xml文件.在使用前需要先把数据库的表建立.
-
-导出xml文件方法:
-
-		mysqldump --xml -t -u xxx --password=xxxx databasename tablename > /path/xx.xml
+每张表的数据对应一张表.在表内通过使用`Faker`自动生成数据.
 
 **IntegrationTest**
 
@@ -405,6 +423,10 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 **GenericTestsDatabaseTestCase.php**
 
 框架封装的数据测试文件,继承该类即可方便的使用数据库测试方法,且也会额外的封装`GenericTestCase.php`中测试私有方法和私有属性函数.
+
+**MyAppDbUnitArrayDataSet.php**
+
+生成测试数据库文件,我们这里主要通过`Faker`生成测试数据到数据表内.过去我们需要手动添加测试数据较为麻烦.并且数据较为不规范,我们现在选用`php`文件生成.
 
 ###[自动化](id:automatic)
 
