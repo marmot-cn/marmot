@@ -4,22 +4,23 @@ namespace System\View;
 use System\Interfaces\IView;
 
 class EmptyView implements IView
-{	
-	private $rules;
+{
+   
+    private $rules;
 
-	private $data;
+    private $data;
 
-	public function __construct($data)
-	{	
-		//判断data是否合法
-		//单个是否为对象,多个是否为数组的对象
-		$this->data = $data;
+    public function __construct($data)
+    {
+        //判断data是否合法
+        //单个是否为对象,多个是否为数组的对象
+        $this->data = $data;
 
-		$this->rules = array();
-	}
+        $this->rules = array();
+    }
 
-	public function display()
-	{	
-		return '';
-	}
+    public function display()
+    {
+        return '';
+    }
 }

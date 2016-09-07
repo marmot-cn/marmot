@@ -296,7 +296,7 @@ class Request
     }
 
     public function getHeader($name, $default = null)
-    {      
+    {
         $this->getHeaders();
 
         $name = strtolower($name);

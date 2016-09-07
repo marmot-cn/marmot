@@ -6,5 +6,5 @@ namespace System\Interfaces;
  */
 interface IView
 {
-	public function display();
+    public function display();
 }

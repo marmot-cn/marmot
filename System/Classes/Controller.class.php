@@ -60,7 +60,7 @@ abstract class Controller
      * @var array|string 输出源内容
      */
     public function render(IView $iview)
-    {   
+    {
         $this->getResponse()->data = $iview->display();
         return $this->getResponse()->send();
     }
