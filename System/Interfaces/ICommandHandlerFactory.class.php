@@ -14,5 +14,5 @@ interface ICommandHandlerFactory
     /**
      * 返回 CommandHandler
      */
-    public function getHandler() : IComamndHandler ;
+    public function getHandler(string $commandName) : ICommandHandler ;
 }

@@ -14,5 +14,5 @@ interface ICommandHandler
     /**
      * 执行
      */
-    public function execute();
+    public function execute(ICommand $command);
 }
