@@ -3,6 +3,7 @@
 namespace System\Classes;
 
 use System\Interfaces\ICommandHandlerFactory;
+use System\Interfaces\ICommand;
 
 /**
  * 命令总线
@@ -22,12 +23,12 @@ class CommandBus
         $this->commandHandlerFactory = $commandHandlerFactory;
     }
 
-    public function send(Command $command)
+    public function send(ICommand $command)
     {
-        $handler = $this->commandHandlerFactory->getHandler(get_class($command));
+        $handler = $this->commandHandlerFactory->getHandler($command);
 
         if ($handler != null) {
-            $handler->execute();
+            return $handler->execute($command);
         } else {
             //@todo
             //exception

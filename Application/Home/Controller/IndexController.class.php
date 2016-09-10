@@ -10,8 +10,8 @@ use Common\Controller\JsonApiController;
 class IndexController extends Controller
 {
 
-
     use JsonApiController;
+    
     /**
      * @codeCoverageIgnore
      */
