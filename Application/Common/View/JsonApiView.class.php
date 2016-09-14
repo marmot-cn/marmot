@@ -9,8 +9,8 @@ use \Neomerx\JsonApi\Document\Link;
 trait JsonApiView
 {
 
-    private $links;
-    private $meta;
+    private $links = [];
+    private $meta = [];
 
     public function pagination(string $url, array $conditions, int $num, int $perpage, int $curpage)
     {
