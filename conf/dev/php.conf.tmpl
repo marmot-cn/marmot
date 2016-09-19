@@ -1,15 +1,15 @@
 <?php
 return [
 	//database
-    'database.host'     => '{{getv "/marmot/database/host"}}',
-    'database.dbname'   => '{{getv "/marmot/database/dbname"}}',
-    'database.user'		=> '{{getv "/marmot/database/user"}}',
-    'database.passwod'	=> '{{getv "/marmot/database/passwod"}}',
-    'database.tablepre' => '{{getv "/marmot/database/tablepre"}}',
+    'database.host'     => '{{getv "/marmot/dev/database/host"}}',
+    'database.dbname'   => '{{getv "/marmot/dev/database/dbname"}}',
+    'database.user'		=> '{{getv "/marmot/dev/database/user"}}',
+    'database.passwod'	=> '{{getv "/marmot/dev/database/passwod"}}',
+    'database.tablepre' => '{{getv "/marmot/dev/database/tablepre"}}',
     //mongo
-    'mongo.host' => '{{getv "/marmot/mongo/host"}}',
+    'mongo.host' => '{{getv "/marmot/dev/mongo/host"}}',
     //memcached
-    'memcached.serevice'=>{{getv "/marmot/memcached/serevice"}},
+    'memcached.serevice'=>{{getv "/marmot/dev/memcached/serevice"}},
 ];
 ?>
 
