@@ -1,4 +1,5 @@
 FROM registry.aliyuncs.com/marmot/php7-dev
 
 COPY . /var/www/html/
-RUN composer selfupdate && composer install && composer dump-autoload --optimize
+RUN omposer install 
+RUN composer dump-autoload --optimize
