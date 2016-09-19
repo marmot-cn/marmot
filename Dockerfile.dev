@@ -1,5 +1,5 @@
 FROM registry.aliyuncs.com/marmot/php7-dev
 
 COPY . /var/www/html/
-RUN omposer install 
+RUN composer install 
 RUN composer dump-autoload --optimize
