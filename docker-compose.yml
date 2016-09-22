@@ -17,7 +17,7 @@ phpfpm:
    - "memcached-1:memcached_1"
    - "memcached-2:memcached_2"
    - "mysql-master:dbw"
-   - "mongo:mongo"
+   # - "mongo:mongo"
   container_name: marmot-phpfpm
 
 mysql-master:
@@ -28,11 +28,11 @@ mysql-master:
    - MYSQL_ROOT_PASSWORD=123456
   container_name: marmot-mysql-master
 
-mongo:
-  image: "registry.cn-hangzhou.aliyuncs.com/marmot/mongo:3.2"
-  volumes:
-   - ~/data/mongo/:/data/db
-  container_name: marmot-mongo  
+# mongo:
+#   image: "registry.cn-hangzhou.aliyuncs.com/marmot/mongo:3.2"
+#   volumes:
+#    - ~/data/mongo/:/data/db
+#   container_name: marmot-mongo  
 
 memcached-1:
   image: "registry.aliyuncs.com/marmot/memcached:latest"
@@ -54,10 +54,10 @@ phpmyadmin:
    - UPLOAD_SIZE=1G
   container_name: marmot-phpmyadmin
     
-rockmongo:
-  image: "registry.cn-hangzhou.aliyuncs.com/marmot/rockmongo"
-  links:
-   - "mongo:db"
-  ports:
-   - "10082:80"
-  container_name: marmot-rockmongo
+# rockmongo:
+#   image: "registry.cn-hangzhou.aliyuncs.com/marmot/rockmongo"
+#   links:
+#    - "mongo:db"
+#   ports:
+#    - "10082:80"
+#   container_name: marmot-rockmongo
