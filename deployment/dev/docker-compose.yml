@@ -1,0 +1,52 @@
+phpfpm:
+  external_links:
+  - Mysql/mysql:dbw
+  - memcached/memcached-1:memcached_1
+  - memcached/memcached-2:memcached_2
+  labels:
+    io.rancher.container.pull_image: always
+  tty: true
+  image: registry.aliyuncs.com/marmot/php7-dev
+  volumes_from:
+  - datacontainer
+  stdin_open: true
+datacontainer:
+  external_links:
+  - Mysql/mysql:dbw
+  - memcached/memcached-1:memcached_1
+  - memcached/memcached-2:memcached_2
+  labels:
+    io.rancher.container.pull_image: always
+    io.rancher.container.start_once: 'true'
+  tty: true
+  command:
+  - bash
+  - sync-config.sh
+  - dev
+  image: registry.cn-hangzhou.aliyuncs.com/marmot/marmot-data-container-dev:1.0.0
+  volumes:
+  - /var/www/html
+  stdin_open: true
+marmot-lb:
+  ports:
+  - 8000:80
+  tty: true
+  image: rancher/load-balancer-service
+  links:
+  - nginx-1:nginx-1
+  stdin_open: true
+nginx-1:
+  external_links:
+  - Mysql/mysql:dbw
+  - memcached/memcached-1:memcached_1
+  - memcached/memcached-2:memcached_2
+  labels:
+    io.rancher.sidekicks: phpfpm,datacontainer
+    io.rancher.container.pull_image: always
+  tty: true
+  image: registry.cn-hangzhou.aliyuncs.com/marmot/nginx-dev
+  volumes:
+  - /log/nginx/marmot:/var/log/nginx
+  volumes_from:
+  - datacontainer
+  stdin_open: true
