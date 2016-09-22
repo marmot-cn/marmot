@@ -23,7 +23,7 @@ datacontainer:
   - bash
   - sync-config.sh
   - dev
-  image: registry.cn-hangzhou.aliyuncs.com/marmot/marmot-data-container-dev:1.0.2
+  image: registry.cn-hangzhou.aliyuncs.com/marmot/marmot-data-container-dev:1.0.3
   volumes:
   - /var/www/html
   stdin_open: true
