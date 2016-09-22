@@ -17,7 +17,7 @@ class IndexController extends Controller
      */
     public function index()
     {
-        var_dump("Hello World test aa");
+        var_dump("Hello World test aa11");
         return true;
     }
 }
