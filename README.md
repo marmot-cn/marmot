@@ -275,6 +275,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 			--Persistence
 			--Repository
 				--Query
+			--Services
 		config.php
 		routeRules.php
 			
@@ -322,6 +323,10 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 3. xxRowQuery: 行查询文件
 4. xxSearchQuery: 搜索查询文件
 5. xxVectorQuery: 关系型缓存文件
+
+**Services**
+
+领域服务层,用于协调多个领域对象的操作
 
 **config.php**
 
