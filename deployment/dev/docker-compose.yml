@@ -6,7 +6,7 @@ phpfpm:
   labels:
     io.rancher.container.pull_image: always
   tty: true
-  image: registry.aliyuncs.com/marmot/php7-dev
+  image: registry.cn-hangzhou.aliyuncs.com/marmot/phpfpm-7.0:1.0
   volumes_from:
   - datacontainer
   stdin_open: true
@@ -27,14 +27,14 @@ datacontainer:
   volumes:
   - /var/www/html
   stdin_open: true
-marmot-lb:
-  ports:
-  - 8000:80
-  tty: true
-  image: rancher/load-balancer-service
-  links:
-  - nginx-1:nginx-1
-  stdin_open: true
+# marmot-lb:
+#   ports:
+#   - 8000:80
+#   tty: true
+#   image: rancher/load-balancer-service
+#   links:
+#   - nginx-1:nginx-1
+#   stdin_open: true
 nginx-1:
   external_links:
   - Mysql/mysql:dbw
@@ -44,7 +44,7 @@ nginx-1:
     io.rancher.sidekicks: phpfpm,datacontainer
     io.rancher.container.pull_image: always
   tty: true
-  image: registry.cn-hangzhou.aliyuncs.com/marmot/nginx-dev
+  image: registry.cn-hangzhou.aliyuncs.com/marmot/nginx-phpfpm-saas:1.0
   volumes:
   - /log/nginx/marmot:/var/log/nginx
   volumes_from:

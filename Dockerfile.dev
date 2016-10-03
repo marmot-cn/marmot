@@ -1,4 +1,4 @@
-FROM registry.aliyuncs.com/marmot/php7-dev
+FROM registry.cn-hangzhou.aliyuncs.com/marmot/phpfpm-7.0:1.0
 
 COPY composer.json /var/www/html/
 RUN composer install 
