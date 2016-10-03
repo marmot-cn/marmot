@@ -1,5 +1,5 @@
 nginx:
- image: "registry.cn-hangzhou.aliyuncs.com/marmot/nginx-dev"
+ image: "registry.cn-hangzhou.aliyuncs.com/marmot/nginx-phpfpm-saas:1.0"
  ports:
   - "80:80"
  links:
@@ -10,7 +10,7 @@ nginx:
  container_name: marmot-nginx
 
 phpfpm:
-  image: "registry.aliyuncs.com/marmot/php7-dev"
+  image: "registry.cn-hangzhou.aliyuncs.com/marmot/phpfpm-7.0:1.0"
   volumes:
    - ~/data/html/marmot:/var/www/html/
   links:
@@ -21,7 +21,7 @@ phpfpm:
   container_name: marmot-phpfpm
 
 mysql-master:
-  image: "registry.aliyuncs.com/marmot/mysql:5.6"
+  image: "registry.aliyuncs.com/marmot/mysql-5.6:1.0"
   volumes:
   - ~/data/mysql/:/var/lib/mysql
   environment:
@@ -29,23 +29,23 @@ mysql-master:
   container_name: marmot-mysql-master
 
 # mongo:
-#   image: "registry.cn-hangzhou.aliyuncs.com/marmot/mongo:3.2"
+#   image: "registry.cn-hangzhou.aliyuncs.com/marmot/mongo-3.2:1.0"
 #   volumes:
 #    - ~/data/mongo/:/data/db
 #   container_name: marmot-mongo  
 
 memcached-1:
-  image: "registry.aliyuncs.com/marmot/memcached:latest"
+  image: "registry.aliyuncs.com/marmot/memcached:1.0"
   command: memcached -m 32
   container_name: marmot-memcached1
 
 memcached-2:
-  image: "registry.aliyuncs.com/marmot/memcached:latest"
+  image: "registry.aliyuncs.com/marmot/memcached:1.0"
   command: memcached -m 32
   container_name: marmot-memcached2
 
 phpmyadmin:
-  image: "registry.aliyuncs.com/marmot/phpmyadmin"
+  image: "registry.aliyuncs.com/marmot/phpmyadmin:1.0"
   links:
    - "mysql-master:mysql"
   ports:
