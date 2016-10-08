@@ -30,7 +30,7 @@ datacontainer:
   volumes:
   - /var/www/html
   stdin_open: true
-nginx-1:
+service:
   external_links:
   - Mysql/mysql:dbw
   - memcached/memcached-1:memcached_1
