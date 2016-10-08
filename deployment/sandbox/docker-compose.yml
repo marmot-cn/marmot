@@ -3,6 +3,9 @@ phpfpm:
   - Mysql/mysql:dbw
   - memcached/memcached-1:memcached_1
   - memcached/memcached-2:memcached_2
+  labels:
+    io.rancher.scheduler.global: 'true'
+    io.rancher.scheduler.affinity:host_label: type=code
   tty: true
   image: registry.cn-hangzhou.aliyuncs.com/marmot/phpfpm-7.0:1.0
   volumes_from:
@@ -14,8 +17,10 @@ datacontainer:
   - memcached/memcached-1:memcached_1
   - memcached/memcached-2:memcached_2
   labels:
+    io.rancher.scheduler.global: 'true'
     io.rancher.container.pull_image: always
     io.rancher.container.start_once: 'true'
+    io.rancher.scheduler.affinity:host_label: type=code
   tty: true
   command:
   - bash
@@ -31,7 +36,9 @@ nginx-1:
   - memcached/memcached-1:memcached_1
   - memcached/memcached-2:memcached_2
   labels:
+    io.rancher.scheduler.global: 'true'
     io.rancher.sidekicks: phpfpm,datacontainer
+    io.rancher.scheduler.affinity:host_label: type=code
   tty: true
   image: registry.cn-hangzhou.aliyuncs.com/marmot/nginx-phpfpm-saas:1.0
   volumes:
