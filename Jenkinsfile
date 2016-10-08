@@ -1,16 +1,16 @@
 node {
     stage 'checkout compose file'
-    git([url: 'https://github.com/chloroplast1983/marmot.git', branch: 'master'])
+    git([credentialsId: '576f44ca-5da6-4dba-9e3f-a618ceab2623', url: 'https://github.com/chloroplast1983/marmot', branch: 'master'])
     echo 'checkout'
     stage 'test'
     echo 'test'
     stage 'release sandbox'
     dir('deployment/sandbox') {
-        sh 'rancher-compose --verbose -p marmot up -d --upgrade --batch-size 1 --interval "30000" --confirm-upgrade nginx-1'
+        sh 'rancher-compose --url ${RANCHER_URL} --access-key ${RANCHER_ACCESS_KEY} --secret-key ${RANCHER_SECRET_KEY} --verbose -p marmot up -d --upgrade --confirm-upgrade service'
     }
     echo 'release sandbox'
     stage 'release production'
-    timeout(time:10, unit:'SECONDS') {
+    timeout(time:2, unit:'DAYS') {
         input message:'Release Production ?', ok: 'Release'
     }
     echo 'release production'
