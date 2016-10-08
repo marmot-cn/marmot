@@ -4,6 +4,6 @@ phpfpm:
 datacontainer:
   upgrade_strategy:
     start_first: true
-nginx-1:
+service:
   upgrade_strategy:
     start_first: true
