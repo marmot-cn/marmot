@@ -20,13 +20,14 @@ class UserController extends Controller
     {
         $this->getResponse()->setStatusCode(201);
         $data = $this->getRequest()->post();
+        print_r($data);
         var_dump("user controller post");
         return true;
     }
 
     public function put(int $id)
     {
-        $data = $this->getRequest()->put('data');
+        $data = $this->getRequest()->put();
         print_r($data);
         var_dump("user controller put:".$id);
         return true;

@@ -10,7 +10,8 @@ phpfpm:
 
 datacontainer:
   labels:
-    - io.rancher.container.network=true
+    io.rancher.container.network: 'true'
+    io.rancher.container.start_once: 'true'
   tty: true
   command:
   - bash
