@@ -14,4 +14,28 @@ return [
             'get'
         ]
     ],
+    [
+        'method'=>'POST',
+        'rule'=>'/users',
+        'controller'=>[
+            'User\Controller\UserController',
+            'post'
+        ]
+    ],
+    [
+        'method'=>'PUT',
+        'rule'=>'/users/{id:\d+}',
+        'controller'=>[
+            'User\Controller\UserController',
+            'put'
+        ]
+    ],
+    [
+        'method'=>'DELETE',
+        'rule'=>'/users/{id:\d+}',
+        'controller'=>[
+            'User\Controller\UserController',
+            'delete'
+        ]
+    ]
 ];

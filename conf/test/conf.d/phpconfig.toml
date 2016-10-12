@@ -1,6 +1,6 @@
 [template]
 src = "./php.conf.tmpl"
-dest = "/var/www/html/config.php"
+dest = "/var/www/html/configtest.php"
 keys = [
     "/marmot/dev/database/host",
     "/marmot/dev/database/dbname",
