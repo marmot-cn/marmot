@@ -1,4 +1,6 @@
 phpfpm:
+  labels:
+    - io.rancher.container.network=true
   tty: true
   image: registry-internal.cn-hangzhou.aliyuncs.com/marmot/phpfpm-7.0:1.0
   volumes_from:
@@ -7,6 +9,8 @@ phpfpm:
   container_name: marmot-phpfpm
 
 datacontainer:
+  labels:
+    - io.rancher.container.network=true
   tty: true
   command:
   - bash
@@ -30,9 +34,7 @@ service:
 memcached-1:
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"
   command: memcached -m 32
-  container_name: marmot-memcached1
 
 memcached-2:
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"
   command: memcached -m 32
-  container_name: marmot-memcached2

@@ -4,18 +4,18 @@ node {
     echo 'checkout success'
     stage 'build environment'
     dir('deployment/test') {
-        sh 'docker-compose up -d'
+        sh 'sudo docker-compose up -d'
     }
     stage 'code style check'
-    sh 'docker exec marmot-phpfpm vendor/bin/phpcs'
+    sh 'sudo docker exec marmot-phpfpm vendor/bin/phpcs'
     stage 'code copy paste check'
-    sh 'docker exec marmot-phpfpm vendor/bin/phpcpd ./Application'
+    sh 'sudo docker exec marmot-phpfpm vendor/bin/phpcpd ./Application'
     satge 'code unit test'
-    sh 'docker exec marmot-phpfpm vendor/bin/phpunit'
+    sh 'sudo docker exec marmot-phpfpm vendor/bin/phpunit'
     stage 'clean environment'
     dir('deployment/test') {
-        sh 'docker-compose stop'
-        sh 'docker-compose rm -v'
+        sh 'sudo docker-compose stop'
+        sh 'sudo docker-compose rm -v'
     }
     stage 'release sandbox'
     dir('deployment/sandbox') {

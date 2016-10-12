@@ -19,7 +19,7 @@ class UserController extends Controller
     public function post()
     {
         $this->getResponse()->setStatusCode(201);
-        $data = $this->getRequest()->post('data');
+        $data = $this->getRequest()->post();
 
         $this->render(
             new class($data) implements IView{
