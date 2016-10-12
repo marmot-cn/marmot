@@ -17,7 +17,7 @@ phpfpm:
    - "memcached-1:memcached_1"
    - "memcached-2:memcached_2"
   external_links:
-   - "mysql-master:dbw"
+   - "mysql-master:mysql.mysql"
    # - "mongo:mongo"
   container_name: marmot-phpfpm
 
