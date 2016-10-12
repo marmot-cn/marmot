@@ -10,12 +10,12 @@ node {
     sh 'sudo docker exec marmot-phpfpm vendor/bin/phpcs'
     stage 'code copy paste check'
     sh 'sudo docker exec marmot-phpfpm vendor/bin/phpcpd ./Application'
-    satge 'code unit test'
+    stage 'code unit test'
     sh 'sudo docker exec marmot-phpfpm vendor/bin/phpunit'
     stage 'clean environment'
     dir('deployment/test') {
         sh 'sudo docker-compose stop'
-        sh 'sudo docker-compose rm -v'
+        sh 'sudo docker-compose rm -v -f'
     }
     stage 'release sandbox'
     dir('deployment/sandbox') {
