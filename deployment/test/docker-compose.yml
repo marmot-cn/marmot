@@ -23,6 +23,8 @@ datacontainer:
   container_name: marmot-data-container
 
 service:
+  labels:
+    - io.rancher.container.network=true
   tty: true
   image: registry-internal.cn-hangzhou.aliyuncs.com/marmot/nginx-phpfpm-saas:1.0
   volumes:
@@ -32,9 +34,11 @@ service:
   stdin_open: true
 
 memcached-1:
+  labels:
+    - io.rancher.container.network=true
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"
-  command: memcached -m 32
 
 memcached-2:
+  labels:
+    - io.rancher.container.network=true
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"
-  command: memcached -m 32
