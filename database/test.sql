@@ -1,4 +1,6 @@
-CREATE DATABASE tt_marmot DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE marmot_test DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+use marmot_test;
 
 CREATE TABLE `pcore_system_test_a` (
   `id` int(11) NOT NULL,
