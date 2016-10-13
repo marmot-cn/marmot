@@ -30,6 +30,4 @@ memcached-1:
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"
 
 memcached-2:
-  labels:
-    - io.rancher.container.network=true
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"
