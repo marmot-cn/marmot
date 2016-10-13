@@ -11,7 +11,7 @@ return [
     // 'cookie.domain'		=>	'',
     // 'cookie.path'		=>	'/',
     //memcached
-    'memcached.serevice'=>[['memcached_1',11211],['memcached_2',11211]],
+    'memcached.serevice'=>[['memcached-1',11211],['memcached-2',11211]],
     //file upload
     // 'file.attachDir'    => 'Global/attachment/',
     // 'file.uploadDirType' => 'date',
