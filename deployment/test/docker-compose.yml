@@ -1,6 +1,4 @@
 phpfpm:
-  labels:
-    - io.rancher.container.network=true
   tty: true
   image: registry-internal.cn-hangzhou.aliyuncs.com/marmot/phpfpm-7.0:1.0
   volumes_from:
@@ -9,23 +7,17 @@ phpfpm:
   container_name: marmot-phpfpm
 
 datacontainer:
-  labels:
-    io.rancher.container.network: 'true'
-    io.rancher.container.start_once: 'true'
   tty: true
   command:
   - bash
   - sync-config.sh
   - test
-  image: registry-internal.cn-hangzhou.aliyuncs.com/marmot/marmot-data-container:0.2
+  image: registry-internal.cn-hangzhou.aliyuncs.com/marmot/marmot-data-container
   volumes:
   - /var/www/html
   stdin_open: true
-  container_name: marmot-data-container
 
 service:
-  labels:
-    - io.rancher.container.network=true
   tty: true
   image: registry-internal.cn-hangzhou.aliyuncs.com/marmot/nginx-phpfpm-saas:1.0
   volumes:
@@ -35,8 +27,6 @@ service:
   stdin_open: true
 
 memcached-1:
-  labels:
-    - io.rancher.container.network=true
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"
 
 memcached-2:

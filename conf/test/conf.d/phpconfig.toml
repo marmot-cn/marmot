@@ -2,10 +2,10 @@
 src = "./php.conf.tmpl"
 dest = "/var/www/html/configtest.php"
 keys = [
-    "/marmot/dev/database/host",
-    "/marmot/dev/database/dbname",
-    "/marmot/dev/database/user",
-    "/marmot/dev/database/passwod",
-    "/marmot/dev/database/tablepre",
-    "/marmot/dev/memcached/serevice",
+    "/marmot/test/database/host",
+    "/marmot/test/database/dbname",
+    "/marmot/test/database/user",
+    "/marmot/test/database/passwod",
+    "/marmot/test/database/tablepre",
+    "/marmot/test/memcached/serevice",
 ]
