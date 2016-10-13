@@ -1,6 +1,6 @@
 phpfpm:
   labels:
-    label io.rancher.container.network: true
+    label io.rancher.container.network: 'true'
   tty: true
   links:
   - "memcached-1"
