@@ -1,5 +1,8 @@
 phpfpm:
   tty: true
+  links:
+  - "memcached-1"
+  - "memcached-2"
   image: registry-internal.cn-hangzhou.aliyuncs.com/marmot/phpfpm-7.0:1.0
   volumes_from:
   - datacontainer
@@ -19,6 +22,8 @@ datacontainer:
 
 service:
   tty: true
+  links:
+  - "phpfpm"
   image: registry-internal.cn-hangzhou.aliyuncs.com/marmot/nginx-phpfpm-saas:1.0
   volumes:
   - /log/nginx/marmot:/var/log/nginx
