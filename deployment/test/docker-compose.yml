@@ -38,7 +38,7 @@ mysql:
   - datacontainer
   environment:
    - MYSQL_ROOT_PASSWORD=123456
-  container_name: marmot-mysql-master
+  container_name: marmot-mysql
 
 memcached-1:
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"
