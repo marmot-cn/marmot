@@ -12,6 +12,8 @@ phpfpm:
   container_name: marmot-phpfpm
 
 datacontainer:
+  labels:
+    label io.rancher.container.network: 'true'
   tty: true
   command:
   - bash
@@ -23,6 +25,8 @@ datacontainer:
   stdin_open: true
 
 service:
+  labels:
+    label io.rancher.container.network: 'true'
   tty: true
   links:
   - "phpfpm"
@@ -34,7 +38,11 @@ service:
   stdin_open: true
 
 memcached-1:
+  labels:
+    label io.rancher.container.network: 'true'
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"
 
 memcached-2:
+  labels:
+    label io.rancher.container.network: 'true'
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"
