@@ -1,7 +1,7 @@
 <?php
 return [
 	//database
-    'database.host'     => 'mysql.mysql',
+    'database.host'     => 'mysql',
     'database.port'     => 3306,
     'database.dbname'   => 'marmot_test',
     'database.user'		=> 'root',

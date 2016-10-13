@@ -1,10 +1,9 @@
 phpfpm:
-  labels:
-    label io.rancher.container.network: 'true'
   tty: true
   links:
   - "memcached-1"
   - "memcached-2"
+  - "mysql"
   image: registry-internal.cn-hangzhou.aliyuncs.com/marmot/phpfpm-7.0:1.0
   volumes_from:
   - datacontainer
@@ -12,8 +11,6 @@ phpfpm:
   container_name: marmot-phpfpm
 
 datacontainer:
-  labels:
-    label io.rancher.container.network: 'true'
   tty: true
   command:
   - bash
@@ -25,8 +22,6 @@ datacontainer:
   stdin_open: true
 
 service:
-  labels:
-    label io.rancher.container.network: 'true'
   tty: true
   links:
   - "phpfpm"
@@ -37,12 +32,16 @@ service:
   - datacontainer
   stdin_open: true
 
+mysql:
+  image: "registry.aliyuncs.com/marmot/mysql-5.6:1.0"
+  volumes:
+  - /var/www/html
+  environment:
+   - MYSQL_ROOT_PASSWORD=123456
+  container_name: marmot-mysql-master
+
 memcached-1:
-  labels:
-    label io.rancher.container.network: 'true'
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"
 
 memcached-2:
-  labels:
-    label io.rancher.container.network: 'true'
   image: "registry-internal.aliyuncs.com/marmot/memcached:1.0"

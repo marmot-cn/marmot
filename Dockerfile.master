@@ -1,6 +1,0 @@
-FROM registry.aliyuncs.com/marmot/php7-dev
-
-COPY composer.json /var/www/html/
-RUN composer install --no-dev
-RUN composer dump-autoload --optimize
-COPY . /var/www/html/
