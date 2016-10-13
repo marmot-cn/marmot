@@ -7,15 +7,8 @@ return [
     'database.user'		=> 'root',
     'database.passwod'	=> '123456',
     'database.tablepre' => 'pcore_',
-    //cookie
-    // 'cookie.domain'		=>	'',
-    // 'cookie.path'		=>	'/',
     //memcached
     'memcached.serevice'=>[['memcached-1',11211],['memcached-2',11211]],
-    //file upload
-    // 'file.attachDir'    => 'Global/attachment/',
-    // 'file.uploadDirType' => 'date',
-    // 'file.siteUrl'      => isset($_SERVER['HTTP_HOST']) ? 'http://'.$_SERVER['HTTP_HOST']. '/' : ''
 ];
 ?>
 
