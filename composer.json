@@ -10,7 +10,7 @@
         "respect/validation": "^1.0",
         "neomerx/json-api": "^0.8.1",
         "php-amqplib/php-amqplib": "2.6.*",
-        "chloroplast1983/marmot-common": "1.0.0",
+        "chloroplast1983/marmot-common": "1.1.0",
         "mongodb/mongodb": "^1.0.0"
     },
     "require-dev": {
