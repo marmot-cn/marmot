@@ -447,6 +447,54 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 * 代码复制黏贴检测
 * 单元测试
 
+####deployment 部署使用的脚本
+
+**`deployment/sandbox`**
+
+沙箱环境部署脚本文件,自动化部署时读取该文件
+
+**`deployment/production`**
+
+生产环境部署脚本文件,自动化部署时候读取该文件
+
+**`deployment/test`**
+
+测试环境部署脚本文件,做`CI`集时候部署的脚本文件
+
+####database 持续集成的数据库脚本
+
+**`database/database.sql`**
+
+测试数据库加载表结构文件
+
+**`database/test.sql`**
+
+测试数据库加载系统测试表结构文件
+
+####Jenkinsfile
+
+jenkins 系统使用的部署脚本文件
+
+####VERSION
+
+我们每次开发前制定的版本号,如果测试通过会自动读取该文件的版本号并推送到版本仓库内
+
+####conf 配置文件模板
+
+基于`配置隔离`思想,我们把代码和我们的配置信息分隔开.使用的工具是`confd`
+
+**`conf/production`**
+
+生产环境模板文件
+
+**`conf/sandbox`**
+
+沙箱配置模板文件
+
+####Dockerfile.dev
+
+制作数据卷容器的脚本文件
+
 ###[marmot.php](id:marmot.php)
 
 脚手架工具.
