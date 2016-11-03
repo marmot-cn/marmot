@@ -48,6 +48,6 @@ class ControllerTest extends tests\GenericTestCase
              ->will($this->returnValue(array('key'=>'value')));
 
         $this->stub->render($ivew);
-        $this->expectOutputString(json_encode(array('key'=>'value')));
+        $this->expectOutputString(array('key'=>'value'));
     }
 }

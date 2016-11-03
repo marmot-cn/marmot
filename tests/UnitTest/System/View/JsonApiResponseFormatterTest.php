@@ -1,9 +1,8 @@
 <?php
-namespace System\Classes;
+namespace System\View;
 
 use tests;
 use Marmot\Core;
-use System\View\JsonApiResponseFormatter;
 
 class JsonApiResponseFormatterTest extends tests\GenericTestCase
 {
@@ -31,7 +30,7 @@ class JsonApiResponseFormatterTest extends tests\GenericTestCase
 
         $this->stub->format($response);
 
-        $this->assertEquals(json_encode(array('key'=>'value')), $response->content);
+        $this->assertEquals(array('key'=>'value'), $response->content);
         $this->assertArraySubset(array('application/vnd.api+json'), $response->getHeaders()['Content-Type']);
     }
 }

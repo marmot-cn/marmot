@@ -13,11 +13,11 @@ phpfpm:
   volumes:
    - ./:/var/www/html/
   links:
-   - "memcached-1:memcached_1"
-   - "memcached-2:memcached_2"
-   - "mysql"
+   - "memcached-1"
+   - "memcached-2"
+   - "mysql-master:mysql"
   # external_links:
-  #  - "mysql"
+  #  - "mysql-master"
    # - "mongo:mongo"
   container_name: marmot-phpfpm
 
@@ -27,7 +27,7 @@ mysql-master:
   - ~/data/mysql/:/var/lib/mysql
   environment:
    - MYSQL_ROOT_PASSWORD=123456
-  container_name: mysql
+  container_name: marmot-mysql
 
 # mongo:
 #   image: "registry.cn-hangzhou.aliyuncs.com/marmot/mongo-3.2:1.0"
@@ -46,7 +46,7 @@ memcached-2:
 phpmyadmin:
   image: "registry.aliyuncs.com/marmot/phpmyadmin:1.0"
   links:
-   - "mysql"
+   - "mysql-master:mysql"
   ports:
    - "10081:80"
   environment:

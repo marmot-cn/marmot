@@ -5,6 +5,9 @@ use Neomerx\JsonApi\Http\Request;
 use Neomerx\JsonApi\Factories\Factory;
 use Neomerx\JsonApi\Exceptions\JsonApiException;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait JsonApiController
 {
 

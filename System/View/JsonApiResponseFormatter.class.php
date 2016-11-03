@@ -12,7 +12,7 @@ class JsonApiResponseFormatter implements ResponseFormatterInterface
 
         $response->addHeader('Content-Type', 'application/vnd.api+json');
         if ($response->data !== null) {
-            $response->content = json_encode($response->data);
+            $response->content = $response->data;
         }
     }
 }

@@ -6,6 +6,9 @@ use Neomerx\JsonApi\Encoder\EncoderOptions;
 use Neomerx\JsonApi\Encoder\Parameters\EncodingParameters;
 use \Neomerx\JsonApi\Document\Link;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait JsonApiView
 {
 
@@ -47,6 +50,7 @@ trait JsonApiView
                     true
                 ),
         ];
+        $this->meta['count'] = $num;
         return $this;
     }
 
@@ -55,9 +59,9 @@ trait JsonApiView
 
         $encoder = Encoder::instance(
             $objectsSchema,
-            new EncoderOptions(JSON_PRETTY_PRINT, $_SERVER['HTTP_HOST'].'/')
+            new EncoderOptions(JSON_PRETTY_PRINT, $_SERVER['HTTP_HOST'])
         );
 
-        return $encoder->withLinks($this->links)->withMeta($ths->meta)->encodeData($object);
+        return $encoder->withLinks($this->links)->withMeta($this->meta)->encodeData($object);
     }
 }

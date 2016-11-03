@@ -1,0 +1,49 @@
+#!/bin/bash
+if [ $1x == "startx" ]
+then
+	docker-compose up -d
+elif [ $1x == "stopx" ]
+then
+	docker-compose stop
+elif [ $1x == "upgradex" ]
+then
+	docker-compose stop
+	docker-compose pull
+	if [ $? -ne 0 ]
+	then 
+	docker-compose rm -f
+	fi
+	docker-compose up -d
+elif [ $1x == "cbfx" ]
+then
+	docker exec marmot-phpfpm vendor/bin/phpcbf
+elif [ $1x == "composerx" ]
+then
+	docker exec marmot-phpfpm composer update
+elif [ $1x == "csx" ]
+then
+	docker exec marmot-phpfpm vendor/bin/phpcs --report-full
+elif [ $1x == "cpdx" ]
+then
+	docker exec marmot-phpfpm vendor/bin/phpcpd Application
+elif [ $1x == "unitx" ]
+then
+	docker exec marmot-phpfpm vendor/bin/phpunit --stop-on-failure
+elif [ $1x == "unitFilex" ]
+then
+	docker exec marmot-phpfpm vendor/bin/phpunit --filter="$2"
+elif [ $1x == "unitCoverx" ]
+then
+	docker exec marmot-phpfpm phpdbg -qrr ./vendor/bin/phpunit --debug --stop-on-failure --coverage-html ./Docs/UnitTestCover
+else
+	echo "start: 启动服务"
+	echo "composer: 更新扩展包服务"
+	echo "stop: 关闭服务"
+	echo "upgrade 更新环境"
+	echo "cbf: 修改代码格式"
+	echo "cs: 检测代码格式"
+	echo "cpd: 复制黏贴检测"
+	echo "unit: 单元测试"
+	echo "unitFile: 运行单个单元测试文件 unitFile xxxx(文件名,不用添加后缀.php)"
+	echo "unitCover: 单元测试覆盖率"
+fi

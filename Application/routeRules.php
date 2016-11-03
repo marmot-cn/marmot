@@ -10,32 +10,35 @@ return [
         'method'=>'GET',
         'rule'=>'/users[/{ids:[\d,]+}]',
         'controller'=>[
-            'User\Controller\UserController',
+            'Member\Controller\UserController',
             'get'
         ]
     ],
+    //注册
     [
         'method'=>'POST',
         'rule'=>'/users',
         'controller'=>[
-            'User\Controller\UserController',
-            'post'
+            'Member\Controller\UserController',
+            'signUp'
         ]
     ],
+    //登录
+    [
+        'method'=>'POST',
+        'rule'=>'/users/signIn',
+        'controller'=>[
+            'Member\Controller\UserController',
+            'signIn'
+        ]
+    ],
+    //修改用户密码
     [
         'method'=>'PUT',
-        'rule'=>'/users/{id:\d+}',
+        'rule'=>'/users/{id:\d+}/updatePassword',
         'controller'=>[
-            'User\Controller\UserController',
-            'put'
+            'Member\Controller\UserController',
+            'updatePassword'
         ]
     ],
-    [
-        'method'=>'DELETE',
-        'rule'=>'/users/{id:\d+}',
-        'controller'=>[
-            'User\Controller\UserController',
-            'delete'
-        ]
-    ]
 ];

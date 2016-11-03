@@ -3,3 +3,4 @@ config.php
 !Application/config.php
 Global/attachment
 .DS_Store
+Docs/UnitTestCover
