@@ -160,10 +160,6 @@ class UserController extends Controller
                         'cellPhone' => $data['attributes']['cellPhone']
                     )
                 );
-        
-                list($userList, $count) = $repository->filter(
-                    $filter
-                );
 
                 if ($count == 1) {
                     $loginUser = $userList[0];
