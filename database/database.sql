@@ -10,7 +10,6 @@ CREATE TABLE `pcore_user` (
   `status` tinyint(1) NOT NULL COMMENT '状态(STATUS_NORMAL,0,默认),(STATUS_DELETE,0,删除)',
   `status_time` int(10) NOT NULL COMMENT '状态更新时间',
   `real_name` varchar(255) NOT NULL COMMENT '真实姓名',
-  `identify_card_number` varchar(255) NOT NULL COMMENT '身份证号',
   `user_name` varchar(255) NOT NULL COMMENT '用户名',
   `nick_name` varchar(255) NOT NULL COMMENT '昵称'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='买家用户表';

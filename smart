@@ -2,6 +2,10 @@
 if [ $1x == "startx" ]
 then
 	docker-compose up -d
+elif [ $1x == "initialx" ]
+then
+	cat database/test.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456
+	cat database/database.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456
 elif [ $1x == "stopx" ]
 then
 	docker-compose stop
@@ -37,6 +41,7 @@ then
 	docker exec marmot-phpfpm phpdbg -qrr ./vendor/bin/phpunit --debug --stop-on-failure --coverage-html ./Docs/UnitTestCover
 else
 	echo "start: 启动服务"
+	echo "initial: 初始化 配置文件+数据库"
 	echo "composer: 更新扩展包服务"
 	echo "stop: 关闭服务"
 	echo "upgrade 更新环境"
