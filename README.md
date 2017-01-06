@@ -14,6 +14,7 @@
 * [marmot.php](#marmot.php)
 * [自动化](#automatic)
 * [规范](#rule)
+* [更新记录](./changelog.md "change log")
 
 ###[框架简介](id:abstract)
 

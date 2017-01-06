@@ -127,15 +127,15 @@ class Core
         //加载第三方的composer的autoload
         include 'vendor/autoload.php';
         //加载System核心框架内的映射关系 -- 开始
-        $this->_classMaps = include SYS_ROOT.'/classMaps.php';
+        $this->classMaps = include SYS_ROOT.'/classMaps.php';
         //加载System核心框架内的映射关系 -- 结束
 
         //加载框架Application文件的autoload,匿名函数 -- 开始
         spl_autoload_register(
             function ($className) {
 
-                if (isset($this->_classMaps[$className])) {
-                    $classFile = $this->_classMaps[$className];
+                if (isset($this->classMaps[$className])) {
+                    $classFile = $this->classMaps[$className];
                 } else {
                     $classFile = str_replace('\\', '/', $className) . '.class.php';
                     $classFile = S_ROOT.'Application/'.$classFile;
@@ -171,8 +171,6 @@ class Core
     private function initEnv()
     {
         global $_FWGLOBAL;
-        //开启session
-        session_start();
         
         $_FWGLOBAL = array();
         

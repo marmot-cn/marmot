@@ -1,5 +1,5 @@
 nginx:
- image: "registry.cn-hangzhou.aliyuncs.com/marmot/nginx-phpfpm-saas:1.0"
+ image: "registry.cn-hangzhou.aliyuncs.com/marmot/nginx-phpfpm-saas:1.1"
  ports:
   - "80:80"
  links:

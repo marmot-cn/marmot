@@ -38,6 +38,32 @@ abstract class RowQuery
     }
     
     /**
+     * @param array $data 添加数据
+     */
+    public function add(array $data, $lasetInsertId = true)
+    {
+        $result = $this->dbLayer->insert($data, $lasetInsertId);
+
+        if (!$result) {
+            return false;
+        }
+        return $result;
+    }
+
+    /**
+     * @param array | string $data 更新数据
+     * @param array $condition 更新条件 | 默认为主键
+     */
+    public function update($data, array $condition)
+    {
+        $row = $this->dbLayer->update($data, $condition);
+        if (!$row) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
      * @param int $id,主键id
      */
     public function getOne($id)

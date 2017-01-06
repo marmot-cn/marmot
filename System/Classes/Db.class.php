@@ -45,6 +45,10 @@ abstract class Db implements DbLayer
     public function insert($insertSqlArr, $returnLastInsertId = true) : int
     {
         $rows = Core::$dbDriver->insert($this->tname($this->table), $insertSqlArr);
+        if (!$rows) {
+            return false;
+        }
+        
         return $returnLastInsertId ? Core::$dbDriver->lastInertId() : $rows;
     }
     

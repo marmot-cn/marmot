@@ -39,6 +39,7 @@ return [
     'System\Query\RowQuery' => S_ROOT.'System/Query/RowQuery.class.php',
     'System\Query\FragmentCacheQuery' => S_ROOT.'System/Query/FragmentCacheQuery.class.php',
     'System\Query\VectorQuery' => S_ROOT.'System/Query/VectorQuery.class.php',
+    'System\Query\DBVectorQuery' => S_ROOT.'System/Query/DBVectorQuery.class.php',
     'System\Query\SearchQuery' => S_ROOT.'System/Query/SearchQuery.class.php',
     'System\Query\DataCacheQuery' => S_ROOT.'System/Query/DataCacheQuery.class.php',
     'System\Query\RowQueryFindable' => S_ROOT.'System/Query/RowQueryFindable.class.php',

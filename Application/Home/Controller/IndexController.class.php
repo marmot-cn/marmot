@@ -3,6 +3,7 @@ namespace Home\Controller;
 
 use System\Classes\Controller;
 use Common\Controller\JsonApiController;
+use Marmot\Core;
 
 //use PhpAmqpLib\Connection\AMQPStreamConnection;
 //use PhpAmqpLib\Message\AMQPMessage;
@@ -17,7 +18,7 @@ class IndexController extends Controller
      */
     public function index()
     {
-        var_dump("Hello World test 12");
+        var_dump("Hello World marmot");
         return true;
     }
 }

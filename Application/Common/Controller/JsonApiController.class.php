@@ -33,6 +33,19 @@ trait JsonApiController
         return $factory->createQueryParametersParser()->parse($psr7request);
     }
 
+    public function getSort()
+    {
+        $sort = array();
+        $sortParameters = $this->getParameters()->getSortParameters();
+
+        if (!empty($sortParameters)) {
+            foreach ($sortParameters as $sortParameter) {
+                $sort[$sortParameter->getField()] = $sortParameter->isAscending() ? 1 : -1;
+            }
+        }
+        return $sort;
+    }
+
     public function checkParametersRule(
         $allowUnrecognised = true,
         $includePaths = array(),
