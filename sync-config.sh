@@ -23,6 +23,7 @@ do
 	fi
 done
 
+#检测没有问题后同步配置文件
 if [ $1 == "dev" ]
 then
 	syncconfig "conf/dev"
