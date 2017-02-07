@@ -1,60 +1,54 @@
 #!/bin/bash
-if [ $1x == "startx" ]
-then
-	docker-compose up -d
-elif [ $1x == "initialx" ]
-then
-	#导入测试库
-	cat database/test.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
-	cat database/database.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
-	echo 'test database initial success'
-	#导入正式库
-	cat ./database/test.sql | grep "CREATE DATABASE" | sed 's/_test//g' | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
-	sed '1 s/_test//g' ./database/database.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
-	echo 'database initial success'
-elif [ $1x == "stopx" ]
-then
-	docker-compose stop
-elif [ $1x == "upgradex" ]
-then
-	docker-compose stop
-	docker-compose pull
-	if [ $? -ne 0 ]
-	then 
-	docker-compose rm -f
-	fi
-	docker-compose up -d
-elif [ $1x == "cbfx" ]
-then
-	docker exec marmot-phpfpm vendor/bin/phpcbf
-elif [ $1x == "composerx" ]
-then
-	docker exec marmot-phpfpm composer update
-elif [ $1x == "csx" ]
-then
-	docker exec marmot-phpfpm vendor/bin/phpcs --report-full
-elif [ $1x == "cpdx" ]
-then
-	docker exec marmot-phpfpm vendor/bin/phpcpd Application
-elif [ $1x == "unitx" ]
-then
-	docker exec marmot-phpfpm vendor/bin/phpunit --stop-on-failure
-elif [ $1x == "unitFilex" ]
-then
-	docker exec marmot-phpfpm vendor/bin/phpunit --filter="$2"
-elif [ $1x == "unitCoverx" ]
-then
-	docker exec marmot-phpfpm phpdbg -qrr ./vendor/bin/phpunit --debug --stop-on-failure --coverage-html ./Docs/UnitTestCover
-else
-	echo "start: 启动服务"
-	echo "initial: 初始化 配置文件+数据库"
-	echo "composer: 更新扩展包服务"
-	echo "stop: 关闭服务"
-	echo "upgrade 更新环境"
-	echo "cbf: 修改代码格式"
-	echo "cs: 检测代码格式"
-	echo "cpd: 复制黏贴检测"
-	echo "unit: 单元测试"
-	echo "unitFile: 运行单个单元测试文件 unitFile xxxx(文件名,不用添加后缀.php)"
-	echo "unitCover: 单元测试覆盖率"
-fi
+
+#全局变量
+phpfpmContainerName='marmot-phpfpm'
+
+#加载公共smart函数库
+. ./smartfunc/smartfunc
+#加载mysql函数库
+. ./smartfunc/mysqlfunc
+#加载环境函数库
+. ./smartfunc/environmentfunc
+#加载phpfunc,php相关函数库
+. ./smartfunc/phpfunc
+
+case $1 in
+'initial') 
+	initialSystemDatabase
+	initialApplicationDatabase
+	;;
+'start')
+	environmentStart
+	;;
+'stop')
+	environmentStop
+	;;
+'upgrade')
+	environmentUpgrade
+	;;
+'cbf')
+	cbf $phpfpmContainerName
+	;;
+'composer')
+	composer $phpfpmContainerName
+	;;
+'cs')
+	cs $phpfpmContainerName
+	;;
+'cpd')
+	cpd $phpfpmContainerName
+	;;
+'unit')
+	unit $phpfpmContainerName
+	;;
+'unitFile')
+	unitFile $phpfpmContainerName $2
+	;;
+'unitCover')
+	unitCover $phpfpmContainerName
+	;;
+*)
+	menu
+esac
+
+

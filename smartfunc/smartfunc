@@ -1,0 +1,18 @@
+#!/bin/bash
+
+function menu {
+	echo 
+	echo -e "\t\t\tsmart command menu\n"
+	echo -e "\t\t使用方法: smart command. 如: ./smart start 启动服务\n"
+	echo -e "\t1. start: 启动服务\n"
+	echo -e "\t2. initial: 初始化 配置文件+数据库\n"
+	echo -e "\t3. composer: 更新扩展包服务\n"
+	echo -e "\t4. stop: 关闭服务\n"
+	echo -e "\t5. upgrade 更新环境\n"
+	echo -e "\t6. cbf: 修改代码格式\n"
+	echo -e "\t7. cs: 检测代码格式\n"
+	echo -e "\t8. cpd: 复制黏贴检测\n"
+	echo -e "\t9. unit: 单元测试\n"
+	echo -e "\t10. unitFile: 运行单个单元测试文件 unitFile xxxx(文件名,不用添加后缀.php)\n"
+	echo -e "\t11. unitCover: 单元测试覆盖率\n"
+}

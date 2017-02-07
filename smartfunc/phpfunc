@@ -1,0 +1,29 @@
+#!/bin/bash
+
+function cbf {
+	docker exec $1 vendor/bin/phpcbf
+}
+
+function cs {
+	docker exec $1 vendor/bin/phpcs --report-full
+}
+
+function composer {
+	docker exec $1 composer update
+}
+
+function cpd {
+	docker exec $1 vendor/bin/phpcpd Application
+}
+
+function unit {
+	docker exec $1 vendor/bin/phpunit --stop-on-failure
+}
+
+function unitFile {
+	docker exec $1 vendor/bin/phpunit --filter="$2"
+}
+
+function unitCover {
+	docker exec $1 phpdbg -qrr ./vendor/bin/phpunit --debug --stop-on-failure --coverage-html ./Docs/UnitTestCover
+}

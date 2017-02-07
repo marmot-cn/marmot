@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function initialSystemDatabase {
+	#导入测试库
+	cat database/test.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
+	cat database/database.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
+	echo 'test database initial success'
+}
+
+function initialApplicationDatabase {
+	#导入正式库
+	cat ./database/test.sql | grep "CREATE DATABASE" | sed 's/_test//g' | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
+	sed '1 s/_test//g' ./database/database.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
+	echo 'database initial success'
+}

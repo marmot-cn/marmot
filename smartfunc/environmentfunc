@@ -1,0 +1,21 @@
+#!/bin/bash
+
+function environmentStart {
+	docker-compose up -d
+}
+
+function environmentStop {
+	docker-compose stop
+}
+
+function environmentUpgrade {
+	environmentStop
+
+	docker-compose pull
+	if [ $? -ne 0 ]
+	then 
+	docker-compose rm -f
+	fi
+	
+	environmentStart
+}
