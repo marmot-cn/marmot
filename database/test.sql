@@ -1,5 +1,3 @@
-CREATE DATABASE marmot_test DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-
 use marmot_test;
 
 CREATE TABLE `pcore_system_test_a` (
@@ -13,6 +11,14 @@ CREATE TABLE `pcore_system_test_b` (
   `title` varchar(255) NOT NULL,
   `user` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统测试用表B';
+
+CREATE TABLE `pcore_system_test_tag` (
+  `id` int(10) NOT NULL,
+  `title_extra` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `pcore_system_test_tag`
+  ADD KEY `id` (`id`);
 
 ALTER TABLE `pcore_system_test_a`
   ADD PRIMARY KEY (`id`);
