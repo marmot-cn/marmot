@@ -5,9 +5,6 @@ use System\Classes\Controller;
 use Common\Controller\JsonApiController;
 use Marmot\Core;
 
-//use PhpAmqpLib\Connection\AMQPStreamConnection;
-//use PhpAmqpLib\Message\AMQPMessage;
-
 class IndexController extends Controller
 {
 
