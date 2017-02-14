@@ -1,15 +1,26 @@
 #!/bin/bash
 
-function initialSystemDatabase {
-	#导入测试库
-	cat database/test.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
-	cat database/database.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
+function createDatabase {
+	cat ./database/database.sql | docker exec -i $1 /usr/bin/mysql -uroot -p123456 2>/dev/null
+	echo 'create database success'
+}
+
+function initialTestDatabase {
+	#导入测试库,暂时还有中文注释乱码问题没解决
+	cat database/test.sql | docker exec -i $1 /usr/bin/mysql -uroot -p123456 2>/dev/null
+	for sqlfile in `ls ./database/*.execute.sql`; 
+	do 
+		sed '1 s/;/_test;/g' $sqlfile | docker exec -i $1 /usr/bin/mysql -uroot -p123456 2>/dev/null; 
+	done
 	echo 'test database initial success'
 }
 
-function initialApplicationDatabase {
-	#导入正式库
-	cat ./database/test.sql | grep "CREATE DATABASE" | sed 's/_test//g' | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
-	sed '1 s/_test//g' ./database/database.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456 2>/dev/null
+function initialDatabase {
+	#导入正式库,暂时还有中文注释乱码问题没解决
+	for sqlfile in `ls ./database/*.execute.sql`; 
+	do 
+		cat $sqlfile | docker exec -i $1 /usr/bin/mysql -uroot -p123456 2>/dev/null; 
+	done
+
 	echo 'database initial success'
 }
