@@ -17,7 +17,7 @@ abstract class Db implements DbLayer
     /**
      * @var string DB操作表名,不需要添加前缀
      */
-    protected $table;
+    protected $table = '';
 
     /**
      * @var string DB表的前缀
@@ -34,7 +34,7 @@ abstract class Db implements DbLayer
      */
     public function delete($whereSqlArr)
     {
-        return Core::$dbDriver->delete($this->tname($this->table), $whereSqlArr, $bind = "");
+        return Core::$dbDriver->delete($this->tname(), $whereSqlArr, $bind = "");
     }
     
     /**
@@ -44,7 +44,7 @@ abstract class Db implements DbLayer
      */
     public function insert($insertSqlArr, $returnLastInsertId = true) : int
     {
-        $rows = Core::$dbDriver->insert($this->tname($this->table), $insertSqlArr);
+        $rows = Core::$dbDriver->insert($this->tname(), $insertSqlArr);
         if (!$rows) {
             return false;
         }
@@ -62,7 +62,7 @@ abstract class Db implements DbLayer
     {
         $sql = $sql == '' ? '' : ' WHERE ' . $sql;
 
-        $sqlstr = 'SELECT ' . $select . ' FROM ' . $this->tname($this->table) . $useIndex . $sql;
+        $sqlstr = 'SELECT ' . $select . ' FROM ' . $this->tname() . $useIndex . $sql;
         return Core::$dbDriver->query($sqlstr);
     }
 
@@ -73,15 +73,44 @@ abstract class Db implements DbLayer
      */
     public function update(array $setSqlArr, $whereSqlArr) : bool
     {
-        return Core::$dbDriver->update($this->tname($this->table), $setSqlArr, $whereSqlArr);
+        return Core::$dbDriver->update($this->tname(), $setSqlArr, $whereSqlArr);
+    }
+
+    /**
+     * 添加联表查询功能
+     *
+     */
+    public function join(
+        DbLayer $db,
+        string $joinCondition,
+        string $sql,
+        string $select = '*',
+        string $joinDirection = 'I'
+    ) {
+
+        $sql = $sql == '' ? '' : ' WHERE ' . $sql;
+
+        $sqlstr = 'SELECT ' . $select . ' FROM ' . $this->tname();
+
+        if ($joinDirection == 'I') {
+            $sqlstr .= ' INNER JOIN ';
+        } elseif ($joinDirection == 'L') {
+            $sqlstr .= ' LEFT JOIN ';
+        } elseif ($joinDirection == 'R') {
+            $sqlstr .= ' RIGHT JOIN ';
+        }
+
+        $sqlstr .= $db->tname().' ON '.$joinCondition.$sql;
+ 
+        return Core::$dbDriver->query($sqlstr);
     }
 
     /**
      * 为表添加前缀
      */
-    private function tname($table) : string
+    public function tname() : string
     {
 
-        return $this->tablepre.$table;
+        return $this->tablepre.$this->table;
     }
 }

@@ -14,7 +14,11 @@ use Marmot\Core;
 class DbTest extends tests\GenericTestsDatabaseTestCase
 {
 
-    public $fixtures = array('pcore_system_test_a','pcore_system_test_b');
+    public $fixtures = array(
+        'pcore_system_test_a',
+        'pcore_system_test_b',
+        'pcore_system_test_tag'
+    );
 
     private $table = 'system_test_a';
 
@@ -112,12 +116,13 @@ class DbTest extends tests\GenericTestsDatabaseTestCase
 
         //通过MyPdo类检索数据
         // $results = $method->invokeArgs(null, array('SELECT * FROM pcore_system_test_a'));
-        $results = $this->stub->select('');
+        $results = $this->stub->select('id = 1');
 
-        $expectArray = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a');
+        $expectArray = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a WHERE id = 1');
 
         $this->assertEquals($expectArray, $results);
     }
+
     /**
      * 测试 Db::update()添加方法,返回影响的行数
      */
@@ -145,5 +150,85 @@ class DbTest extends tests\GenericTestsDatabaseTestCase
         $this->assertEquals(3, $results[2]['id']);
         $this->assertEquals('titleA0', $results[2]['title']);
         $this->assertEquals('userA2', $results[2]['user']);
+    }
+
+    /**
+     * 测试 Db::join()联表查询方法
+     */
+    public function testDbLeftjJoin()
+    {
+        $systemTagDb = new class extends Db {
+            public function __construct()
+            {
+                parent::__construct('system_test_tag');
+            }
+        };
+
+        $results = $this->stub->join(
+            $systemTagDb,
+            $this->stub->tname().'.id = '.$systemTagDb->tname().'.id',
+            'user = \'userA2\'',
+            '*',
+            'L'
+        );
+
+        $expectArray = Core::$dbDriver->query(
+            'SELECT * FROM pcore_system_test_a 
+             LEFT JOIN pcore_system_test_tag ON `pcore_system_test_a`.id = `pcore_system_test_tag`.id 
+             WHERE user=\'userA2\''
+        );
+
+        $this->assertEquals($expectArray, $results);
+    }
+
+    public function testDbRightjJoin()
+    {
+        $systemTagDb = new class extends Db {
+            public function __construct()
+            {
+                parent::__construct('system_test_tag');
+            }
+        };
+
+        $results = $this->stub->join(
+            $systemTagDb,
+            $this->stub->tname().'.id = '.$systemTagDb->tname().'.id',
+            'user = \'userA2\'',
+            '*',
+            'R'
+        );
+
+        $expectArray = Core::$dbDriver->query(
+            'SELECT * FROM pcore_system_test_a 
+             RIGHT JOIN pcore_system_test_tag ON `pcore_system_test_a`.id = `pcore_system_test_tag`.id 
+             WHERE user=\'userA2\''
+        );
+
+        $this->assertEquals($expectArray, $results);
+    }
+
+    public function testDbInnerjJoin()
+    {
+        $systemTagDb = new class extends Db {
+            public function __construct()
+            {
+                parent::__construct('system_test_tag');
+            }
+        };
+
+        $results = $this->stub->join(
+            $systemTagDb,
+            $this->stub->tname().'.id = '.$systemTagDb->tname().'.id',
+            'user = \'userA2\'',
+            '*'
+        );
+
+        $expectArray = Core::$dbDriver->query(
+            'SELECT * FROM pcore_system_test_a 
+             INNER JOIN pcore_system_test_tag ON `pcore_system_test_a`.id = `pcore_system_test_tag`.id 
+             WHERE user=\'userA2\''
+        );
+
+        $this->assertEquals($expectArray, $results);
     }
 }
