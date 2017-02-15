@@ -16,13 +16,13 @@ node {
     stage '单元测试'
     timeout(10) {
         waitUntil {
-            def r = sh script: 'sudo docker logs saas-product-mysql 2>/dev/null | grep \'Ready for start up\'', returnStatus: true
+            def r = sh script: 'sudo docker logs marmot-mysql 2>/dev/null | grep \'Ready for start up\'', returnStatus: true
             return (r == 0)
         }
     }
-    sh 'cat ./database/database.sql | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456'
-    sh 'cat database/test.sql | sudo docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456'
-    sh 'for sqlfile in `ls ./database/*.execute.sql`; do sed '1 s/;/_test;/g' $sqlfile | docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456; done'
+    sh 'cat ./database/database.sql | sudo docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456'
+    sh 'cat ./database/test.sql | sudo docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456'
+    sh 'for sqlfile in `ls ./database/*.execute.sql`; do sed \'1 s/;/_test;/g\' $sqlfile | sudo docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456; done'
     sh 'sudo docker exec marmot-phpfpm vendor/bin/phpunit'
     stage '发布候选版本'
     //
