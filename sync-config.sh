@@ -18,7 +18,6 @@ function pingConfigs {
 		if [ $? -ne 0 ]
 		then
 			echo "ping $url fail"
-			exit 1
 		else
 			echo "ping $url sucess"
 		fi
