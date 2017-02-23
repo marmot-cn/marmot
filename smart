@@ -40,6 +40,9 @@ case $1 in
 'cpd')
 	cpd $phpfpmContainerName
 	;;
+'md')
+	md $phpfpmContainerName
+	;;
 'unit')
 	unit $phpfpmContainerName
 	;;

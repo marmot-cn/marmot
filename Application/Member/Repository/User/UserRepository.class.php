@@ -75,7 +75,7 @@ class UserRepository
             return false;
         }
         //返回翻译过的对象
-        return $this->translator->arrayToObject($info);
+        return $this->translator->arrayToObject($info, new User());
     }
 
     /**
@@ -90,10 +90,66 @@ class UserRepository
         $userInfoList = $this->userRowCacheQuery->getList($ids);
         
         foreach ($userInfoList as $userInfo) {
-            $userList[] = $this->translator->arrayToObject($userInfo);
+            $userList[] = $this->translator->arrayToObject($userInfo, new User());
         }
         
         return $userList;
+    }
+
+    /**
+     * 格式化 filter 参数
+     * @return string
+     */
+    private function formatFilter(array $filter)
+    {
+
+        $condition = $conjection = '';
+
+        if (!empty($filter)) {
+            $user = new User();
+            //拼接filter变量
+            if (isset($filter['cellPhone'])) {
+                $user->setCellPhone($filter['cellPhone']);
+                $info = $this->translator->objectToArray($user, array('cellPhone'));
+                $condition .= $conjection.key($info).' = \''.current($info).'\'';
+                $conjection = ' AND ';
+            }
+            if (isset($filter['password'])) {
+                $user->setPassword($filter['password']);
+                $info = $this->translator->objectToArray($user, array('password'));
+                $condition .= $conjection.key($info).' = \''.current($info).'\'';
+                $conjection = ' AND ';
+            }
+            if (isset($filter['status'])) {
+                $user->setStatus($filter['status']);
+                $info = $this->translator->objectToArray($user, array('status'));
+                $condition .= $conjection.key($info).' = '.current($info);
+                $conjection = ' AND ';
+            }
+        }
+
+        return empty($condition) ? ' 1 ' : $condition ;
+    }
+
+    /**
+     * 格式化 sort 参数
+     * @return string
+     */
+    private function formatSort(array $sort)
+    {
+
+        $condition = '';
+        $conjection = ' ORDER BY ';
+
+        if (!empty($sort)) {
+            if (isset($sort['id'])) {
+                $info = $this->translator->objectToArray(new User(), array('id'));
+                $condition .= $conjection.key($info).' '.($sort['id'] == -1 ? 'DESC' : 'ASC');
+                $conjection = ',';
+            }
+        }
+
+        return $condition;
     }
 
     /**
@@ -106,29 +162,9 @@ class UserRepository
         int $size = 20
     ) {
 
-        $conjection = $condition = '';
+        $condition = $this->formatFilter($filter);
+        $condition .= $this->formatSort($sort);
 
-        $user = new User();
-
-        //拼接filter变量
-        if (isset($filter['cellPhone'])) {
-            $user->setCellPhone($filter['cellPhone']);
-            $info = $this->translator->objectToArray($user, array('cellPhone'));
-            $condition .= $conjection.key($info).' = \''.current($info).'\'';
-            $conjection = ' AND ';
-        }
-        if (isset($filter['password'])) {
-            $user->setPassword($filter['password']);
-            $info = $this->translator->objectToArray($user, array('password'));
-            $condition .= $conjection.key($info).' = \''.current($info).'\'';
-            $conjection = ' AND ';
-        }
-        if (isset($filter['status'])) {
-            $user->setStatus($filter['status']);
-            $info = $this->translator->objectToArray($user, array('status'));
-            $condition .= $conjection.key($info).' = '.current($info);
-            $conjection = ' AND ';
-        }
         //查询数据
         $list = $this->userRowCacheQuery->find($condition, $offset, $size);
         if (empty($list)) {
@@ -145,11 +181,9 @@ class UserRepository
         //如果返回数据总数超过每页的分页数,
         //我们需要查询总数,
         //否则我们返回该数量
-        $idsCount = sizeof($ids);
-        if (($idsCount) >= $size) {
+        $count = sizeof($ids);
+        if ($count  == $size || $offset > 0) {
             $count = $this->userRowCacheQuery->count($condition);
-        } else {
-            $count = $idsCount;
         }
 
         return array($this->getList($ids), $count);

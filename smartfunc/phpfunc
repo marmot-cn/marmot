@@ -27,3 +27,11 @@ function unitFile {
 function unitCover {
 	docker exec $1 phpdbg -qrr ./vendor/bin/phpunit --debug --stop-on-failure --coverage-html ./Docs/UnitTestCover
 }
+
+function md {
+	docker exec -i $1 vendor/bin/phpmd ./Application text ruleset.xml
+	if [ $? -eq 0 ]
+	then
+		echo 'check mess complete'
+	fi
+}

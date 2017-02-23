@@ -4,6 +4,7 @@ namespace Member\Translator;
 use tests\GenericTestsDatabaseTestCase;
 use Marmot\Core;
 use Member\Utils\UserUtils;
+use Member\Model\User;
 
 /**
  * Member\Translator\UserTranslator.class.php 测试文件
@@ -35,7 +36,8 @@ class UserTranslatorTest extends GenericTestsDatabaseTestCase
             'SELECT * FROM pcore_user WHERE 1 LIMIT 1'
         );
         $expectedArray = $expectedArray[0];
-        $user = $this->stub->arrayToObject($expectedArray);
+        $user = new User();
+        $this->stub->arrayToObject($expectedArray, $user);
         $this->assertInstanceof('Member\Model\User', $user);
         $this->compareArrayAndObject($expectedArray, $user);
     }
@@ -51,7 +53,8 @@ class UserTranslatorTest extends GenericTestsDatabaseTestCase
         );
         $dbData = $dbData[0];
 
-        $user = $this->stub->arrayToObject($dbData);
+        $user = new User();
+        $this->stub->arrayToObject($dbData, $user);
         $expectedArray = $this->stub->objectToArray($user);
         $this->assertInternalType('array', $expectedArray);
 

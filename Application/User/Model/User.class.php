@@ -43,17 +43,16 @@ abstract class User
 
     public function __construct(int $id = 0)
     {
-        global $_FWGLOBAL;
         $this->id = !empty($id) ? $id : 0;
         $this->cellPhone = '';
         $this->nickName = '';
         $this->userName = '';
         $this->password = '';
-        $this->createTime = $_FWGLOBAL['timestamp'];
-        $this->updateTime = $_FWGLOBAL['timestamp'];
+        $this->createTime = time();
+        $this->updateTime = time();
         $this->salt = '';
         $this->status = STATUS_NORMAL;
-        $this->statusTime = $_FWGLOBAL['timestamp'];
+        $this->statusTime = time();
     }
 
     public function __destruct()

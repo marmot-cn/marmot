@@ -107,13 +107,4 @@ class CoreTest extends \PHPUnit_Framework_TestCase
             Core::$cacheDriver instanceof \Doctrine\Common\Cache\MemcachedCache
         );
     }
-
-    /**
-     * 测试是否初始化了环境
-     */
-    public function testInitEnv()
-    {
-        global $_FWGLOBAL;
-        $this->assertGreaterThan(0, $_FWGLOBAL['timestamp']);//判断是否为大于0的数字
-    }
 }

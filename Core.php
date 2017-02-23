@@ -164,20 +164,11 @@ class Core
     /**
      * 初始化网站运行环境的一些全局变量
      *
-     * @global  int $_FWGLOBAL['timestamp'] 当前时间的时间戳
      * @author  chloroplast1983
      * @version 1.0.20131016
      */
     private function initEnv()
     {
-        global $_FWGLOBAL;
-        
-        $_FWGLOBAL = array();
-        
-        //设定框架全局时间戳,代替各自调时间函数
-        $mtime = explode(' ', microtime());
-        $_FWGLOBAL['timestamp'] = $mtime[1];//全局时间戳
-
         //加载应用配置文件
         include S_ROOT.'Application/config.php';
     }

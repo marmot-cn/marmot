@@ -33,7 +33,34 @@ trait JsonApiController
         return $factory->createQueryParametersParser()->parse($psr7request);
     }
 
-    public function getSort()
+    /**
+     * 格式化传递参数
+     * @return array(
+     *  $filter,
+     *  $sort,
+     *  $curpage,
+     *  $perpage
+     * )
+     */
+    public function formatParameters() : array
+    {
+        $parameters = $this->getParameters();
+        $page = $parameters->getPaginationParameters()['number'];
+        $size = $parameters->getPaginationParameters()['size'];
+        $perpage = isset($size) ? $size : 20;
+        $curpage = !empty($page) ? $page : 1;
+        
+        $filter = is_array($parameters->getFilteringParameters()) ? $filter : array();
+        
+        return array(
+            $filter,
+            $this->getSort(),
+            $curpage,
+            $perpage
+        );
+    }
+
+    private function getSort()
     {
         $sort = array();
         $sortParameters = $this->getParameters()->getSortParameters();
@@ -44,34 +71,5 @@ trait JsonApiController
             }
         }
         return $sort;
-    }
-
-    public function checkParametersRule(
-        $allowUnrecognised = true,
-        $includePaths = array(),
-        $fieldSetTypes = array(),
-        $sortParameters = array(),
-        $pagingParameters = array(),
-        $filteringParameters = array()
-    ) {
-        $factory = new Factory();
-        $this->parametersChecker = $factory->createQueryChecker(
-            $allowUnrecognised,
-            $includePaths,
-            $fieldSetTypes,
-            $sortParameters,
-            $pagingParameters,
-            $filteringParameters
-        );
-    }
-
-    public function checkParameters($parameters)
-    {
-        try {
-            $this->parametersChecker->checkQuery($parameters);
-        } catch (JsonApiException $expection) {
-            // var_dump($expection->getErrors());
-            return false;
-        }
     }
 }

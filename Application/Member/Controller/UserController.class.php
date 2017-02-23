@@ -44,47 +44,39 @@ class UserController extends Controller
                     $this->render(new UserView($user));
                     return true;
                 }
-            } else {
-                //批量获取
-                $userList = $repository->getList(explode(',', $ids));
-                if (!empty($userList)) {
-                    $this->render(new UserView($userList));
-                    return true;
-                }
             }
-        } else {
-            //查询
-            $parameters = $this->getParameters();
-            $filter = $parameters->getFilteringParameters();
-            $sort = $parameters->getSortParameters();
-            //构建分页
-            $page = $parameters->getPaginationParameters()['number'];
-            $size = $parameters->getPaginationParameters()['size'];
-            $perpage = isset($size) ? $size : 20;
-            $curpage = !empty($page) ? $page : 1;
-            $start = ($curpage-1)*$perpage;
-            //过滤参数
-            list($userList, $count) = $repository->filter(
-                is_array($filter) ? $filter : array(),
-                is_array($sort) ? $sort : array(),
-                $start,
-                $perpage
-            );
 
-            if ($count > 0) {
-                //获取多条数据 repository->filter 返回 list 和 count
-                $view = new UserView($userList);
-                $this->render(
-                    $view->pagination(
-                        $url = 'users',
-                        $conditions = $this->getRequest()->get(),
-                        $num = $count,
-                        $perpage = $perpage,
-                        $curpage = $curpage
-                    )
-                );
+            //批量获取
+            $userList = $repository->getList(explode(',', $ids));
+            if (!empty($userList)) {
+                $this->render(new UserView($userList));
                 return true;
             }
+        }
+
+        list($filter, $sort, $curpage, $perpage) = $this->formatParameters();
+
+        //过滤参数
+        list($userList, $count) = $repository->filter(
+            $filter,
+            $sort,
+            ($curpage-1)*$perpage,
+            $perpage
+        );
+
+        if ($count > 0) {
+            //获取多条数据 repository->filter 返回 list 和 count
+            $view = new UserView($userList);
+            $this->render(
+                $view->pagination(
+                    'users',
+                    $this->getRequest()->get(),
+                    $count,
+                    $perpage,
+                    $curpage
+                )
+            );
+            return true;
         }
 
         $this->getResponse()->setStatusCode(204);
@@ -112,8 +104,8 @@ class UserController extends Controller
 
             if (!empty($data['attributes']['cellPhone']) && !empty($data['attributes']['password'])) {
                 $command = new SignUpUserCommand(
-                    $cellPhone = $data['attributes']['cellPhone'],
-                    $password = $data['attributes']['password']
+                    $data['attributes']['cellPhone'],
+                    $data['attributes']['password']
                 );
             }
 
@@ -206,9 +198,9 @@ class UserController extends Controller
             if (!empty($data['attributes']['oldPassword']) && !empty($data['attributes']['password'])) {
                 $commandBus = new CommandBus(new UserCommandHandlerFactory());
                 if ($commandBus->send(new UpdatePasswordUserCommand(
-                    $oldPassword = $data['attributes']['oldPassword'],
-                    $password = $data['attributes']['password'],
-                    $uid = $id
+                    $data['attributes']['oldPassword'],
+                    $data['attributes']['password'],
+                    $id
                 ))
                 ) {
                     $repository = Core::$container->get('Member\Repository\User\UserRepository');
@@ -218,7 +210,6 @@ class UserController extends Controller
                         $this->render(new UserView($user));
                         return true;
                     }
-                    return true;
                 }
             }
         }
