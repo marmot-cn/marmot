@@ -28,7 +28,7 @@ service:
     io.rancher.sidekicks: phpfpm,datacontainer
     io.rancher.scheduler.affinity:host_label: type=code
   tty: true
-  image: registry-internal.cn-hangzhou.aliyuncs.com/marmot/nginx-phpfpm-saas:1.0
+  image: registry-internal.cn-hangzhou.aliyuncs.com/marmot/nginx-phpfpm-saas:1.2
   volumes:
   - /log/nginx/marmot:/var/log/nginx
   volumes_from:

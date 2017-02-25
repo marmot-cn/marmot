@@ -26,7 +26,7 @@ trait JsonApiController
         return $psr7request;
     }
 
-    public function getParameters()
+    private function getParameters()
     {
         $psr7request = $this->getPsr7Request($this->getRequest());
         $factory = new Factory();

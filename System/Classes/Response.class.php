@@ -234,9 +234,19 @@ class Response
      */
     public function send()
     {
+        $this->checkCache();
         $this->prepare();
         $this->sendHeaders();
         $this->sendContent();
+    }
+
+    public function checkCache()
+    {
+        $request = new Request();
+        $etag = $request->getHeader('if-none-match', '');
+        if ($etag == md5(serialize($this->data))) {
+            $this->setStatusCode(304);
+        }
     }
 
     /**
@@ -245,7 +255,6 @@ class Response
      */
     public function prepare()
     {
-
         if (isset($this->formatters[$this->format])) {
             $formatter = $this->formatters[$this->format];
         }
@@ -256,6 +265,7 @@ class Response
         if ($formatter instanceof ResponseFormatterInterface) {
             $formatter->format($this);
         }
+        $this->addHeader('ETag', '"'.md5(serialize($this->data)).'"');
         //如果都不符合情况输出exception
     }
 

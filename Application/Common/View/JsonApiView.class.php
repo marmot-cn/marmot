@@ -6,6 +6,8 @@ use Neomerx\JsonApi\Encoder\EncoderOptions;
 use Neomerx\JsonApi\Encoder\Parameters\EncodingParameters;
 use \Neomerx\JsonApi\Document\Link;
 
+use System\Classes\Request;
+
 /**
  * @codeCoverageIgnore
  */
@@ -30,22 +32,22 @@ trait JsonApiView
 
         $this->links  = [
                 Link::FIRST => new Link(
-                    $_SERVER['HTTP_HOST'].'/'.$url.'page[number]=1&page[size]='.$perpage,
+                    $this->getHttpHost().'/'.$url.'page[number]=1&page[size]='.$perpage,
                     null,
                     true
                 ),
                 Link::LAST  => new Link(
-                    $_SERVER['HTTP_HOST'].'/'.$url.'page[number]='.$pages.'&page[size]='.$perpage,
+                    $this->getHttpHost().'/'.$url.'page[number]='.$pages.'&page[size]='.$perpage,
                     null,
                     true
                 ),
                 Link::PREV  => new Link(
-                    $_SERVER['HTTP_HOST'].'/'.$url.'page[number]='.$prev.'&page[size]='.$perpage,
+                    $this->getHttpHost().'/'.$url.'page[number]='.$prev.'&page[size]='.$perpage,
                     null,
                     true
                 ),
                 Link::NEXT  => new Link(
-                    $_SERVER['HTTP_HOST'].'/'.$url.'page[number]='.$next.'&page[size]='.$perpage,
+                    $this->getHttpHost().'/'.$url.'page[number]='.$next.'&page[size]='.$perpage,
                     null,
                     true
                 ),
@@ -59,9 +61,15 @@ trait JsonApiView
 
         $encoder = Encoder::instance(
             $objectsSchema,
-            new EncoderOptions(JSON_PRETTY_PRINT, $_SERVER['HTTP_HOST'])
+            new EncoderOptions(JSON_PRETTY_PRINT, $this->getHttpHost())
         );
 
         return $encoder->withLinks($this->links)->withMeta($this->meta)->encodeData($object);
+    }
+
+    private function getHttpHost() : string
+    {
+        $request = new Request();
+        return $request->getHeader('host');
     }
 }

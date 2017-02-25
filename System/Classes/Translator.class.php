@@ -16,6 +16,7 @@ abstract class Translator
         foreach ($keys as $key) {
             $setter='set'.$key;
             if (method_exists($object, $setter)) {
+                //@todo 添加对值对象支持
                 $object->$setter($expression[$map[$key]]);
             }
         }

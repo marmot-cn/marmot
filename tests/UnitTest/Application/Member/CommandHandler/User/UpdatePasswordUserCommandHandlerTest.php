@@ -67,7 +67,7 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
         $this->assertFalse($result);
     }
 
-    public function testExecuteNotCorrectOldPassword()
+    public function testExecuteInCorrectOldPassword()
     {
         $faker = \Faker\Factory::create('zh_CN');
         $faker->seed($seed);//设置seed,放置和生成数据相同
