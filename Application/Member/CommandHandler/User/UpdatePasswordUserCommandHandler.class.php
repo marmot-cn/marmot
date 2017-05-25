@@ -19,18 +19,19 @@ class UpdatePasswordUserCommandHandler implements ICommandHandler
         $user = $repository->getOne($command->uid);
         //确认用户是否存在
         if (!$user instanceof User) {
+            Core::setLastError(RESOURCE_NOT_EXIST);
             return false;
         }
+
         //检查旧密码是否正确
         $oldEncryptedPassword = $user->getPassword();
         $user->encryptPassword($command->oldPassword, $user->getSalt());
         if ($oldEncryptedPassword != $user->getPassword()) {
+            Core::setLastError(USER_OLD_PASSWORD_NOT_CORRECT);
             return false;
         }
         
-        //设置新的密码和生成新的盐
-        $user->encryptPassword($command->password);
-        if ($user->updatePassword()) {
+        if ($user->updatePassword($command->password)) {
             //发布领域事件
             return true;
         }

@@ -12,6 +12,7 @@ return [
     'System\Classes\Request' => S_ROOT.'System/Classes/Request.class.php',
     'System\Classes\Response' => S_ROOT.'System/Classes/Response.class.php',
     'System\Classes\Translator' => S_ROOT.'System/Classes/Translator.class.php',
+    'System\Classes\Error' => S_ROOT.'System/Classes/Error.class.php',
     
     //interfaces
     'System\Interfaces\Command' => S_ROOT.'System/Interfaces/Command.class.php',
@@ -47,4 +48,5 @@ return [
     //view
     'System\View\JsonApiResponseFormatter' => S_ROOT.'System/View/JsonApiResponseFormatter.class.php',
     'System\View\EmptyView' => S_ROOT.'System/View/EmptyView.class.php',
+    'System\View\ErrorView' => S_ROOT.'System/View/ErrorView.class.php'
 ];

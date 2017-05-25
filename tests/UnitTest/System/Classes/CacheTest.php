@@ -2,7 +2,7 @@
 namespace System\Classes;
 
 use Marmot\Core;
-use tests;
+use tests\GenericTestCase;
 
 /**
  * 因为cache是一个抽象类,所以我们需要mock一个仿件对象出来用于我们实际的测试.
@@ -16,7 +16,7 @@ use tests;
  * @author chloroplast
  * @version 1.0.20160218
  */
-class CacheTest extends tests\GenericTestCase
+class CacheTest extends GenericTestCase
 {
 
     private $stub;

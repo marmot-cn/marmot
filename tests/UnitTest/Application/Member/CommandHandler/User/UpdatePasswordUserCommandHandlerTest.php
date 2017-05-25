@@ -25,7 +25,7 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
     public function setUp()
     {
         //这里不构建初始数据,只是在最后清理数据
-        $this->stub = new UpdatePasswordUserCommandHandler();
+        $this->commandHandler = new UpdatePasswordUserCommandHandler();
     }
 
     public function tearDown()
@@ -38,7 +38,7 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
     {
         $this->assertInstanceOf(
             'System\Interfaces\ICommandHandler',
-            $this->stub
+            $this->commandHandler
         );
     }
 
@@ -49,7 +49,7 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
     {
         $command = new class implements ICommand {
         };
-        $this->stub->execute($command);
+        $this->commandHandler->execute($command);
     }
 
     public function testExecuteNotExistUser()
@@ -63,11 +63,12 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
             1
         );
 
-        $result = $this->stub->execute($command);
+        $result = $this->commandHandler->execute($command);
         $this->assertFalse($result);
+        $this->assertEquals(RESOURCE_NOT_EXIST, Core::getLastError()->getId());
     }
 
-    public function testExecuteInCorrectOldPassword()
+    public function testExecuteIncorrectOldPassword()
     {
         $faker = \Faker\Factory::create('zh_CN');
         $faker->seed($seed);//设置seed,放置和生成数据相同
@@ -84,8 +85,9 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
             $user->getId()
         );
 
-        $result = $this->stub->execute($command);
+        $result = $this->commandHandler->execute($command);
         $this->assertFalse($result);
+        $this->assertEquals(USER_OLD_PASSWORD_NOT_CORRECT, Core::getLastError()->getId());
     }
 
     public function testExecute()
@@ -105,7 +107,7 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
             $user->getId()
         );
 
-        $result = $this->stub->execute($command);
+        $result = $this->commandHandler->execute($command);
         $this->assertTrue($result);
         //检查密码是否修改正确
         $user = $repository->getOne($user->getId());

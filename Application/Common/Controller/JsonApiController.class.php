@@ -4,6 +4,10 @@ namespace Common\Controller;
 use Neomerx\JsonApi\Http\Request;
 use Neomerx\JsonApi\Factories\Factory;
 use Neomerx\JsonApi\Exceptions\JsonApiException;
+use Neomerx\JsonApi\Encoder\Encoder;
+
+use System\View\ErrorView;
+use Marmot\Core;
 
 /**
  * @codeCoverageIgnore
@@ -26,41 +30,14 @@ trait JsonApiController
         return $psr7request;
     }
 
-    private function getParameters()
+    public function getParameters()
     {
         $psr7request = $this->getPsr7Request($this->getRequest());
         $factory = new Factory();
         return $factory->createQueryParametersParser()->parse($psr7request);
     }
 
-    /**
-     * 格式化传递参数
-     * @return array(
-     *  $filter,
-     *  $sort,
-     *  $curpage,
-     *  $perpage
-     * )
-     */
-    public function formatParameters() : array
-    {
-        $parameters = $this->getParameters();
-        $page = $parameters->getPaginationParameters()['number'];
-        $size = $parameters->getPaginationParameters()['size'];
-        $perpage = isset($size) ? $size : 20;
-        $curpage = !empty($page) ? $page : 1;
-        
-        $filter = is_array($parameters->getFilteringParameters()) ? $filter : array();
-        
-        return array(
-            $filter,
-            $this->getSort(),
-            $curpage,
-            $perpage
-        );
-    }
-
-    private function getSort()
+    public function getSort()
     {
         $sort = array();
         $sortParameters = $this->getParameters()->getSortParameters();
@@ -71,5 +48,16 @@ trait JsonApiController
             }
         }
         return $sort;
+    }
+
+    public function getIncludePaths()
+    {
+        return $this->getParameters()->getIncludePaths();
+    }
+
+    public function displayError()
+    {
+        $this->getResponse()->setStatusCode(Core::getLastError()->getStatus());
+        $this->render(new ErrorView());
     }
 }

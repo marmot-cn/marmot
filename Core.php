@@ -10,13 +10,10 @@ namespace Marmot;
 
 //默认访问程序路径,请勿修改
 define('S_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
-//通用文件夹目录路径,可以手动修改,需要相对地址
-define('G_ROOT', S_ROOT.'Global'.DIRECTORY_SEPARATOR);
 //内核部分文件夹路径
 define('SYS_ROOT', S_ROOT.'System'.DIRECTORY_SEPARATOR);
 //开发环境
 define('D_BUG', 1);
-
 
 /**
  * 文件核心类
@@ -43,6 +40,9 @@ class Core
 
     //核心文件映射关系数组
     private $classMaps;
+
+    //上一次错误
+    private static $lastError;
     
     /**
      * 使用单例封装全局函数的core调用
@@ -68,6 +68,7 @@ class Core
         self::initEnv();//初始化环境
         self::initDb();//初始化mysql
         // self::initMongo();
+        self::initError();
         self::initInput();
         self::initOutput();
     }
@@ -90,6 +91,7 @@ class Core
         self::initCache();//初始化缓存使用
         self::initDb();//初始化mysql
         // self::initMongo();
+        self::initError();
     }
     
     /**
@@ -109,6 +111,7 @@ class Core
         self::initCache();//初始化缓存使用
         self::initDb();//初始化mysql
         // self::initMongo();
+        self::initError();
     }
     
     /**
@@ -185,8 +188,49 @@ class Core
     }
 
     /**
+     * 初始化错误信息
+     */
+    private function initError()
+    {
+        include S_ROOT.'Application/commonErrorConfig.php';
+        include S_ROOT.'Application/errorConfig.php';
+
+        self::setLastError(ERROR_NOT_DEFINED);
+    }
+
+    public static function setLastError(int $errorCode = 0)
+    {
+
+        if ($errorCode <= COMMON_ERROR_LIMIT) {
+            $errorDescriptions = include 'Application/commonErrorDescriptionConfig.php';
+        } else {
+            $errorDescriptions = include 'Application/errorDescriptionConfig.php';
+        }
+
+        if (!isset($errorDescriptions[$errorCode])) {
+            return false;
+        }
+
+        self::$lastError  = new \System\Classes\Error(
+            $errorCode,
+            $errorDescriptions[$errorCode]['link'],
+            $errorDescriptions[$errorCode]['status'],
+            $errorDescriptions[$errorCode]['code'],
+            $errorDescriptions[$errorCode]['title'],
+            $errorDescriptions[$errorCode]['detail'],
+            $errorDescriptions[$errorCode]['source'],
+            $errorDescriptions[$errorCode]['meta']
+        );
+    }
+
+    public static function getLastError() : \System\Classes\Error
+    {
+        return self::$lastError ;
+    }
+
+    /**
      * 创建容器
-  *
+     *
      * @author  chloroplast1983
      * @version 1.0.20160215
      */
@@ -217,9 +261,8 @@ class Core
      */
     private function initInput()
     {
-        
         //创建路由规则,如果对外提供接口考虑token用于验证
-        $dispatcher = \FastRoute\simpleDispatcher(
+        $dispatcher = \FastRoute\cachedDispatcher(
             function (\FastRoute\RouteCollector $r) {
                 //添加默认首页路由 -- 开始
                 $r->addRoute('GET', '/', ['Home\Controller\IndexController','index']);
@@ -229,37 +272,34 @@ class Core
                 foreach ($routeRules as $route) {
                     $r->addRoute($route['method'], $route['rule'], $route['controller']);
                 }
-            }
+            },
+            [
+                'cacheFile' => S_ROOT. '/route.cache', /* required */
+                'cacheDisabled' => false,     /* optional, enabled by default */
+            ]
         );
 
         $httpMethod = $_SERVER['REQUEST_METHOD'];
         $uri = rawurldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 
+        $controller = ['Home\Controller\IndexController','error'];
+        $parameters = [];
+
         switch ($routeInfo[0]) {
             case \FastRoute\Dispatcher::NOT_FOUND:
-                // ... 404 Not Found
-                //header:404
-                echo '404';
+                self::setLastError(ROUTE_NOT_EXIST);
                 break;
             case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                $allowedMethods = $routeInfo[1];
-                // ... 405 Method Not Allowed
-                //header:405
-                echo '405';
+                // $allowedMethods = $routeInfo[1];
+                self::setLastError(METHOD_NOT_ALLOWED);
                 break;
             case \FastRoute\Dispatcher::FOUND:
                 $controller = $routeInfo[1];
                 $parameters = $routeInfo[2];
-                //安全过滤 -- 开始
-                // foreach ($parameters as $key => $value) {
-                //  $parameters[$key] = System\Class\String::htmlFilter($value);
-                // }
-                //安全过滤 -- 结束
-                // ... call $handler with $vars
-                self::$container->call($controller, $parameters);
                 break;
         }
+        self::$container->call($controller, $parameters);
     }
     
     private function initOutput()

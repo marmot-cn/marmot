@@ -21,11 +21,11 @@ abstract class RowCacheQuery
 
     use RowQueryFindable;
 
-    private $primaryKey;//查询键值在数据库中的命名,行缓存和数据库的交互使用键值
+    protected $primaryKey;//查询键值在数据库中的命名,行缓存和数据库的交互使用键值
 
-    private $cacheLayer;//缓存层
+    protected $cacheLayer;//缓存层
 
-    private $dbLayer;//数据层
+    protected $dbLayer;//数据层
 
     public function __construct(string $primaryKey, Interfaces\CacheLayer $cacheLayer, Interfaces\DbLayer $dbLayer)
     {

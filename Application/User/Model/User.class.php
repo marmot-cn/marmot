@@ -221,5 +221,5 @@ abstract class User
     /**
      * 修改密码
      */
-    abstract public function updatePassword() : bool;
+    abstract public function updatePassword(string $password) : bool;
 }

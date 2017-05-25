@@ -66,15 +66,21 @@ class User extends AbstractUser
     public function signUp() : bool
     {
         $repository = Core::$container->get('Member\Repository\User\UserRepository');
-        return $repository->add($this);
+        if (!$repository->add($this)) {
+            Core::setLastError(USER_IDENTIFY_DUPLICATE);
+            return false;
+        }
+        return true;
     }
 
     /**
      * 更新密码
      * @return bool 是否登陆成功
      */
-    public function updatePassword() : bool
+    public function updatePassword(string $password) : bool
     {
+        $this->encryptPassword($password);
+        
         $repository = Core::$container->get('Member\Repository\User\UserRepository');
         return $repository->update($this, array(
                     'updateTime',

@@ -18,4 +18,10 @@ class IndexController extends Controller
         var_dump("Hello World marmot");
         return true;
     }
+
+    public function error()
+    {
+        $this->displayError();
+        return false;
+    }
 }

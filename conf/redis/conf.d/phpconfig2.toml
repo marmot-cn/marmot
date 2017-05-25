@@ -1,0 +1,7 @@
+[template]
+src = "./php2.conf.tmpl"
+dest = "/var/www/html/configredistest2.php"
+keys = [
+    "/test/db",
+    "/test/db/password"
+]

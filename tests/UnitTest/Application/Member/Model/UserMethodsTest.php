@@ -41,6 +41,22 @@ class UserMtehodsTest extends GenericTestsDatabaseTestCase
         $this->compareArrayAndObject($expectedArray, $user);
     }
 
+    public function testSignUpDuplicateCellphone()
+    {
+        $user = ObjectGenerate::generateUser(0, 0);
+        $result = $user->signUp();
+        $this->assertTrue($result);
+
+        $user = ObjectGenerate::generateUser(
+            1,
+            1,
+            array('cellPhone'=>$user->getCellphone())
+        );
+        $result = $user->signUp();
+        $this->assertFalse($result);
+        $this->assertEquals(USER_IDENTIFY_DUPLICATE, Core::getLastError()->getId());
+    }
+
     public function testUpdatePassword()
     {
         $user = ObjectGenerate::generateUser();
@@ -53,7 +69,7 @@ class UserMtehodsTest extends GenericTestsDatabaseTestCase
         $this->assertNotEquals($oldSalt, $user->getSalt());
         $this->assertNotEquals($oldEncryptedPassword, $user->getPassword());
 
-        $result = $user->updatePassword();
+        $result = $user->updatePassword('111111');
         $this->assertTrue($result);
 
         //查询数据库,确认数据插入成功

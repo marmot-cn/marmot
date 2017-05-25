@@ -25,9 +25,9 @@ class UserRepository
      */
     private $translator;
 
-    public function __construct(UserRowCacheQuery $userRowCacheQuery)
+    public function __construct()
     {
-        $this->userRowCacheQuery = $userRowCacheQuery;
+        $this->userRowCacheQuery = new UserRowCacheQuery();
         $this->translator = new UserTranslator();
     }
 

@@ -1,0 +1,78 @@
+<?php return array (
+  0 => 
+  array (
+    'GET' => 
+    array (
+      '/' => 
+      array (
+        0 => 'Home\\Controller\\IndexController',
+        1 => 'index',
+      ),
+      '/users' => 
+      array (
+        0 => 'Member\\Controller\\UserController',
+        1 => 'get',
+      ),
+    ),
+    'POST' => 
+    array (
+      '/users' => 
+      array (
+        0 => 'Member\\Controller\\UserController',
+        1 => 'signUp',
+      ),
+      '/users/signIn' => 
+      array (
+        0 => 'Member\\Controller\\UserController',
+        1 => 'signIn',
+      ),
+    ),
+  ),
+  1 => 
+  array (
+    'GET' => 
+    array (
+      0 => 
+      array (
+        'regex' => '~^(?|/users/([\\d,]+))$~',
+        'routeMap' => 
+        array (
+          2 => 
+          array (
+            0 => 
+            array (
+              0 => 'Member\\Controller\\UserController',
+              1 => 'get',
+            ),
+            1 => 
+            array (
+              'ids' => 'ids',
+            ),
+          ),
+        ),
+      ),
+    ),
+    'PUT' => 
+    array (
+      0 => 
+      array (
+        'regex' => '~^(?|/users/(\\d+)/updatePassword)$~',
+        'routeMap' => 
+        array (
+          2 => 
+          array (
+            0 => 
+            array (
+              0 => 'Member\\Controller\\UserController',
+              1 => 'updatePassword',
+            ),
+            1 => 
+            array (
+              'id' => 'id',
+            ),
+          ),
+        ),
+      ),
+    ),
+  ),
+);

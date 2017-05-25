@@ -1,12 +1,13 @@
-#MARMOT微服务框架说明文档
+# MARMOT微服务框架说明文档
 
-###版本
+### 版本
 
 * 2.0
 	* [2.1.0](./Docs/Version/2.1.md "2.1")
 	* [2.2.0](./Docs/Version/2.2.md "2.2")
+	* [2.3.0](./Docs/Version/2.3.md "2.3")`开发中`
 
-###目录
+### 目录
 
 * [框架简介](#abstract) 
 * [环境搭建](#environment)
@@ -18,7 +19,7 @@
 * [规范](#rule)
 * [更新记录](./changelog.md "change log")
 
-###[框架简介](id:abstract)
+### [框架简介](id:abstract)
 
 
 该框架主要是基于`DDD`,`CQRS`的思路去架构.基于`DDD`领域驱动的`微服务`架构,我们可以更好的和用户方来分析项目需求(可以配合使用`四色原型`),大家可以使用通用的领域语言来讨论领域对象.使用`composer`做第三方`package`管理.`phpunit`做单元测试.开发环境是基于PHP7.0.3做的开发.
@@ -45,7 +46,7 @@
 
 `Command` -> `CommandBus` -> `CommandHandler` -> `Event`
 
-###[环境搭建](id:environment)
+### [环境搭建](id:environment)
 
 **下载docker**
 
@@ -79,9 +80,9 @@
 		
 启动我们的开发环境,如果没有镜像会自动拉去的
 
-###[composer](id:composer)
+### [composer](id:composer)
 
-####命令
+#### 命令
 
 **生产环境**
 
@@ -95,9 +96,9 @@
 
 		composer install
 
-####dev 开发中使用
+#### dev 开发中使用
 
-#####phploc/phploc
+##### phploc/phploc
 
 衡量我们项目大小的工具
 
@@ -112,13 +113,13 @@
 		Size
 		...
 
-#####phpmd/phpmd
+##### phpmd/phpmd
 
 wait...
 
 [https://phpmd.org](https://phpmd.org "https://phpmd.org")
 
-#####sebastian/phpcpd
+##### sebastian/phpcpd
 
 Copy/Paste Detector
 
@@ -133,20 +134,20 @@ Copy/Paste Detector
 		
 		Time: 935 ms, Memory: 6.00MB
 		
-#####pdepend/pdepend
+##### pdepend/pdepend
 
 wait...
 
 [https://pdepend.org](https://pdepend.org "https://pdepend.org")
 
-#####phpmd/phpm
+##### phpmd/phpm
 
 [https://phpmd.org/](https://phpmd.org "https://phpmd.org")
 
 		vendor/bin/phpmd ./Application text ruleset.xml
 
 		
-#####phpunit/phpunit phpunit/dbunit
+##### phpunit/phpunit phpunit/dbunit
 
 单元测试
 
@@ -169,7 +170,7 @@ wait...
 
 		phpdbg -qrr ./vendor/bin/phpunit --coverage-html ./Docs/xxx
 
-#####squizlabs/php_codesniffer
+##### squizlabs/php_codesniffer
 
 代码风格检测
 
@@ -183,7 +184,7 @@ wait...
 		
 		Time: 3.97 secs; Memory: 8Mb
 		
-#####fzaninotto/faker
+##### fzaninotto/faker
 
 数据生成器,主要用于生成我们在测试文件的数据.以及生成我们数据库的`xml`文件.
 
@@ -214,9 +215,9 @@ wait...
 * `时间`: `$faker->unixTime()`
 * `银行卡号`: `$faker->creditCardNumber`
 
-####通用
+#### 通用
 
-#####mongodb/mongodb
+##### mongodb/mongodb
 
 [github](https://github.com/mongodb/mongo-php-library "https://github.com/mongodb/mongo-php-library")
 
@@ -251,7 +252,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 
 
 
-###[HelloWorld](id:helloworld)
+### [HelloWorld](id:helloworld)
 
 1. 下载代码
 2. 下载并运行镜像
@@ -266,9 +267,9 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 
 		输出 Hello World
 
-###[框架目录](id:framework)
+### [框架目录](id:framework)
 
-####Application
+#### Application
 
 应用目录,我们构建的代码都会放在该目录.
 
@@ -358,7 +359,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 * `/xxx/{id:\d+}`
 	* xxx/com/xxx/id 
 
-####System
+#### System
 
 框架核心文件存放位置,文件路径为:
 
@@ -400,7 +401,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 **Classes**
 
 
-####tests
+#### tests
 
 测试文件夹,文件路径为
 
@@ -444,7 +445,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 
 生成测试数据库文件,我们这里主要通过`Faker`生成测试数据到数据表内.过去我们需要手动添加测试数据较为麻烦.并且数据较为不规范,我们现在选用`php`文件生成.
 
-###[自动化](id:automatic)
+### [自动化](id:automatic)
 
 我们使用`git`的`提交钩子`来触发自动化提交.
 
@@ -458,7 +459,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 * 代码复制黏贴检测
 * 单元测试
 
-####deployment 部署使用的脚本
+#### deployment 部署使用的脚本
 
 **`deployment/sandbox`**
 
@@ -472,7 +473,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 
 测试环境部署脚本文件,做`CI`集时候部署的脚本文件
 
-####database 持续集成的数据库脚本
+#### database 持续集成的数据库脚本
 
 **`database/database.sql`**
 
@@ -482,15 +483,15 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 
 测试数据库加载系统测试表结构文件
 
-####Jenkinsfile
+#### Jenkinsfile
 
 jenkins 系统使用的部署脚本文件
 
-####VERSION
+#### VERSION
 
 我们每次开发前制定的版本号,如果测试通过会自动读取该文件的版本号并推送到版本仓库内
 
-####conf 配置文件模板
+#### conf 配置文件模板
 
 基于`配置隔离`思想,我们把代码和我们的配置信息分隔开.使用的工具是`confd`
 
@@ -502,11 +503,11 @@ jenkins 系统使用的部署脚本文件
 
 沙箱配置模板文件
 
-####Dockerfile.dev
+#### Dockerfile.dev
 
 制作数据卷容器的脚本文件
 
-###[marmot.php](id:marmot.php)
+### [marmot.php](id:marmot.php)
 
 脚手架工具.
 
@@ -529,9 +530,9 @@ jenkins 系统使用的部署脚本文件
 
 		
 
-###[规范](id:rule)
+### [规范](id:rule)
 
-####命名规范
+#### 命名规范
 
 1. 变量命名为`驼峰`.
 2. 类的命名规则为第`一`个字母`大写`.
@@ -540,11 +541,11 @@ jenkins 系统使用的部署脚本文件
 5. Persistence命名规范: `名称`+`Db|Cache`
 6. Query命名规范: `名称`+`FragmentCacheQuery|RowCacheQuery|RowQuery|SearchQuery|VectorQuery`
 
-####注释规范
+#### 注释规范
 
 参考[phpdoc](https://www.phpdoc.org// "phpdoc")
 
-####接口版本
+#### 接口版本
 
 `MAJOR.MINOR.PATCH`
 

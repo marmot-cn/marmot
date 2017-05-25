@@ -1,15 +1,15 @@
 <?php
 namespace Member\Controller;
 
-use Member\Model\User;
 use System\Classes\Controller;
-use Common\Controller\JsonApiController;
-use Member\View\UserView;
 use System\View\EmptyView;
 use System\Classes\CommandBus;
 use System\Interfaces\ICommand;
+use Common\Controller\JsonApiController;
 use Marmot\Core;
 
+use Member\Model\User;
+use Member\View\UserView;
 use Member\Command\User\SignUpUserCommand;
 use Member\Command\User\UpdatePasswordUserCommand;
 use Member\CommandHandler\User\UserCommandHandlerFactory;
@@ -29,6 +29,7 @@ class UserController extends Controller
      * 示例: /users/1,2,3 获取用户id为1的信息
      * /users?page[number]=5&page[size]=20 从第5页开始取数据,每页取20条
      *
+     * @codeCoverageIgnore
      * @param int $id 用户id
      * @return jsonApi
      */
@@ -79,7 +80,7 @@ class UserController extends Controller
             return true;
         }
 
-        $this->getResponse()->setStatusCode(204);
+        $this->getResponse()->setStatusCode(404);
         $this->render(new EmptyView());
         return false;
     }
@@ -93,6 +94,7 @@ class UserController extends Controller
      *                                                        )
      *                                    )
      *                      )
+     * @codeCoverageIgnore
      * @return jsonApi
      */
     public function signUp()
@@ -124,8 +126,7 @@ class UserController extends Controller
             }
         }
 
-        $this->getResponse()->setStatusCode(409);
-        $this->render(new EmptyView());
+        $this->displayError();
         return false;
     }
 
@@ -138,6 +139,7 @@ class UserController extends Controller
      *                                                        )
      *                                   )
      *                         )
+     * @codeCoverageIgnore
      * @return jsonApi
      */
     public function signIn()
@@ -173,8 +175,7 @@ class UserController extends Controller
             }
         }
 
-        $this->getResponse()->setStatusCode(404);
-        $this->render(new EmptyView());
+        $this->displayError();
         return false;
     }
 
@@ -188,6 +189,7 @@ class UserController extends Controller
      *                                                       )
      *                                   )
      *                         )
+     * @codeCoverageIgnore
      * @return jsonApi
      */
     public function updatePassword($id)
@@ -214,8 +216,7 @@ class UserController extends Controller
             }
         }
 
-        $this->getResponse()->setStatusCode(404);
-        $this->render(new EmptyView());
+        $this->displayError();
         return false;
     }
 }
