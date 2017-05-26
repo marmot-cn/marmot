@@ -3,3 +3,4 @@ config.php
 !Application/config.php
 .DS_Store
 Docs/UnitTestCover
+route.cache
