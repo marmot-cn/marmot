@@ -28,3 +28,17 @@ ALTER TABLE `pcore_system_test_a`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `pcore_system_test_b`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+CREATE TABLE `pcore_event_store` (
+          `event_id` int(10) NOT NULL COMMENT '事件主键id',
+          `source` varchar(255) NOT NULL COMMENT '来源对象',
+          `source_id` int(10) NOT NULL COMMENT '来源id',
+          `event_name` varchar(255) NOT NULL COMMENT '事件名称',
+          `create_time` int(10) NOT NULL COMMENT '事件发生时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='事件仓库';
+
+ALTER TABLE `pcore_event_store`
+  ADD PRIMARY KEY (`event_id`);
+
+ALTER TABLE `pcore_event_store`
+  MODIFY `event_id` int(10) NOT NULL AUTO_INCREMENT COMMENT '事件主键id', AUTO_INCREMENT=1;

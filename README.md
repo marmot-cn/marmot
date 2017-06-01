@@ -14,7 +14,7 @@
 * [composer](#composer)
 * [Hello World](#helloworld)
 * [框架目录](#framework)
-* [marmot.php](#marmot.php)
+* [marmot](#marmot)
 * [自动化](#automatic)
 * [规范](#rule)
 * [更新记录](./changelog.md "change log")
@@ -507,11 +507,15 @@ jenkins 系统使用的部署脚本文件
 
 制作数据卷容器的脚本文件
 
-### [marmot.php](id:marmot.php)
+#### sync-config.sh
+
+同步配置文件脚本
+
+### [marmot](id:marmot)
 
 脚手架工具.
 
-		root@0967b4c11e7e:/var/www/html# php marmot.php
+		root@0967b4c11e7e:/var/www/html# marmot
 		Usage: php marmot.php COMMAND [arg...]
 		       php marmot.php [help | -h | -v | version]
 		Commands:
@@ -552,7 +556,3 @@ jenkins 系统使用的部署脚本文件
 * `MAJOR`: 改变意味着其中包含向后不兼容的修改.
 * `MINOR`: 改变意味这有新功能的增加,但应该是向后兼容的.
 * `PATCH`: 改变代表对已有功能的缺陷修复.
-
-
-		
-		

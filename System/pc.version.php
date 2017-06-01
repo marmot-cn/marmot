@@ -1,3 +1,3 @@
 <?php
 //全局版本变量
-define('MARMOT_VERSION', 'v1.0');
+define('MARMOT_VERSION', '2.3.0');

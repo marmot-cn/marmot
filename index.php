@@ -2,4 +2,4 @@
 require './Core.php';
 
 $core = Marmot\Core::getInstance();
-$core -> init();
+$core-> init();

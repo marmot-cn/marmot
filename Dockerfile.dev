@@ -4,3 +4,4 @@ COPY composer.json /var/www/html/
 RUN composer install 
 RUN composer dump-autoload --optimize
 COPY . /var/www/html/
+RUN chown -R www-data:www-data ./

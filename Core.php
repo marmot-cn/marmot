@@ -69,7 +69,7 @@ class Core
         self::initDb();//初始化mysql
         // self::initMongo();
         self::initError();
-        self::initInput();
+        self::initRoute();
         self::initOutput();
     }
 
@@ -259,7 +259,7 @@ class Core
      *
      * @version 1.0.20160204
      */
-    private function initInput()
+    private function initRoute()
     {
         //创建路由规则,如果对外提供接口考虑token用于验证
         $dispatcher = \FastRoute\cachedDispatcher(
@@ -302,10 +302,6 @@ class Core
         self::$container->call($controller, $parameters);
     }
     
-    private function initOutput()
-    {
-    }
-    
     /**
      * 初始化数据库
      * DBW 标记为数据库写操作,假设操作为单库读写.
@@ -335,7 +331,7 @@ class Core
         $mongoHost = self::$container->get('mongo.host');
 
         if (!empty($mongoHost)) {
-            self::$mongoDriver = new \MongoDB\Client('mongodb://'.$mongoHost.':27017');
+            self::$mongoDriver = new \MongoDB\Client($mongoHost);
         }
     }
 
@@ -362,8 +358,6 @@ class Core
      */
     private function initCache()
     {
-        global $memCacheDriver;
-
         //初始化memcached缓存 -- 开始
         $memcached = new \Memcached();
         $memcached->addServers(self::$container->get('memcached.serevice'));
