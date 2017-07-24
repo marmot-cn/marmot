@@ -6,6 +6,8 @@ use Neomerx\JsonApi\Encoder\EncoderOptions;
 use Neomerx\JsonApi\Encoder\Parameters\EncodingParameters;
 use Neomerx\JsonApi\Document\Link;
 
+use System\Classes\Server;
+
 /**
  * @codeCoverageIgnore
  */
@@ -28,28 +30,43 @@ trait JsonApiView
         $prev = ($curpage > 1) ? $curpage - 1 : $curpage;
         $next = ($curpage < $pages) ? $curpage + 1 : $curpage;
 
+        $this->formatLinks($url, $perpage, $curpage, $pages, $prev, $next);
+        $this->formatMeta($curpage, $pages, $prev, $next, $num);
+
+        return $this;
+    }
+    
+    /**
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function formatLinks(string $url, int $perpage, int $curpage, int $pages, int $prev, int $next)
+    {
         $this->links  = [
                 Link::FIRST => $pages > 1 ? new Link(
-                    $_SERVER['HTTP_HOST'].'/'.$url.'page[number]=1&page[size]='.$perpage,
+                    Server::host.'/'.$url.'page[number]=1&page[size]='.$perpage,
                     null,
                     true
                 ) : null,
                 Link::LAST  => $pages > 1 ? new Link(
-                    $_SERVER['HTTP_HOST'].'/'.$url.'page[number]='.$pages.'&page[size]='.$perpage,
+                    Server::host.'/'.$url.'page[number]='.$pages.'&page[size]='.$perpage,
                     null,
                     true
                 ) : null,
                 Link::PREV  => ($pages > 1 && $curpage > 1) ? new Link(
-                    $_SERVER['HTTP_HOST'].'/'.$url.'page[number]='.$prev.'&page[size]='.$perpage,
+                    Server::host.'/'.$url.'page[number]='.$prev.'&page[size]='.$perpage,
                     null,
                     true
                 ) : null,
                 Link::NEXT  => ($pages > 1 && $curpage < $pages) ? new Link(
-                    $_SERVER['HTTP_HOST'].'/'.$url.'page[number]='.$next.'&page[size]='.$perpage,
+                    Server::host.'/'.$url.'page[number]='.$next.'&page[size]='.$perpage,
                     null,
                     true
                 ) : null,
         ];
+    }
+
+    private function formatMeta(int $curpage, int $pages, int $prev, int $next, int $num)
+    {
         $this->meta['count'] = $num;
 
         $this->meta['links']['first'] = null;
@@ -69,8 +86,6 @@ trait JsonApiView
                 $this->meta['links']['next'] = $next;
             }
         }
-        
-        return $this;
     }
 
     public function jsonApiFormat($object, array $objectsSchema, EncodingParameters $encodeParameters = null)
@@ -78,7 +93,7 @@ trait JsonApiView
 
         $encoder = Encoder::instance(
             $objectsSchema,
-            new EncoderOptions(JSON_PRETTY_PRINT, $_SERVER['HTTP_HOST'])
+            new EncoderOptions(JSON_PRETTY_PRINT, Server::host)
         );
 
         return $encoder->withLinks($this->links)

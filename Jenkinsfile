@@ -22,7 +22,7 @@ node {
     }
     sh 'cat ./database/database.sql | sudo docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456'
     sh 'cat ./database/test.sql | sudo docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456'
-    sh 'for sqlfile in `ls ./database/*.execute.sql`; do sed \'1 s/;/_test;/g\' $sqlfile | sudo docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456; done'
+    sh 'for sqlfile in `ls ./database/*.execute.sql | sort -V`; do sed \'1 s/;/_test;/g\' $sqlfile | sudo docker exec -i marmot-mysql /usr/bin/mysql -uroot -p123456; done'
     sh 'sudo docker exec marmot-phpfpm vendor/bin/phpunit'
     stage '发布候选版本'
     //

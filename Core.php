@@ -70,7 +70,6 @@ class Core
         // self::initMongo();
         self::initError();
         self::initRoute();
-        self::initOutput();
     }
 
     /**
