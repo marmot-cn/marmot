@@ -66,20 +66,27 @@ class UserRepositoryTest extends GenericTestsDatabaseTestCase
         //确认主键id赋值成功
         $this->assertGreaterThan(0, $user->getId());
 
-        $expectedArray = array();
+        $expectedList = array();
         //查询数据库,确认数据插入成功
-        $expectedArray = Core::$dbDriver->query('SELECT * FROM pcore_user WHERE user_id='.$user->getId());
-        $expectedArray = $expectedArray[0];
+        $expectedList = Core::$dbDriver->query('SELECT * FROM pcore_user WHERE user_id='.$user->getId());
+        $expectedList = $expectedList[0];
 
-        $this->compareArrayAndObject($expectedArray, $user);
+        $this->compareArrayAndObject($expectedList, $user);
     }
 
+    public function testRepositoryUpdateDuplicate()
+    {
+        $user = ObjectGenerate::generateUser();
+        $result = $this->stub->add($user);
+        $this->assertTrue($result);
+
+        $this->assertFalse($this->stub->update($user));
+    }
     /**
      * 测试仓库save
      */
     public function testRepositoryUpdate()
     {
-
         $faker = \Faker\Factory::create('zh_CN');
         $faker->seed(1001);//设置seed,放置和生成数据相同
 
@@ -99,7 +106,7 @@ class UserRepositoryTest extends GenericTestsDatabaseTestCase
         $user->setUserName($faker->userName);
 
         //随机生成新的status,剔除旧的status
-        $statusArray = array(STATUS_NORMAL, STATUS_DELETE);
+        $statusArray = array(User::STATUS_NORMAL, User::STATUS_DELETE);
         $key = array_search($oldArray['status'], $statusArray);
         unset($statusArray[$key]);
         $user->setStatus($faker->randomElement($statusArray));
@@ -127,10 +134,10 @@ class UserRepositoryTest extends GenericTestsDatabaseTestCase
         $this->assertTrue($result);
 
          //查询数据库,确认数据修改成功
-        $expectedArray = Core::$dbDriver->query('SELECT * FROM pcore_user WHERE user_id='.$testUserId);
-        $expectedArray = $expectedArray[0];
+        $expectedList = Core::$dbDriver->query('SELECT * FROM pcore_user WHERE user_id='.$testUserId);
+        $expectedList = $expectedList[0];
 
-        $this->compareArrayAndObject($expectedArray, $user);
+        $this->compareArrayAndObject($expectedList, $user);
     }
 
     /**
@@ -143,16 +150,16 @@ class UserRepositoryTest extends GenericTestsDatabaseTestCase
         $testId = 1;
 
         //期待数组
-        $expectedArray = Core::$dbDriver->query(
+        $expectedList = Core::$dbDriver->query(
             'SELECT * FROM pcore_user WHERE user_id='.$testId
         );
-        $expectedArray = $expectedArray[0];
+        $expectedList = $expectedList[0];
 
         $user = $this->stub->getOne($testId);
 
         $this->assertInstanceOf('Member\Model\User', $user);
 
-        $this->compareArrayAndObject($expectedArray, $user);
+        $this->compareArrayAndObject($expectedList, $user);
     }
 
     /**
@@ -164,33 +171,49 @@ class UserRepositoryTest extends GenericTestsDatabaseTestCase
         //测试询价id
         $testIds = array(1, 2, 3);
 
-        $expectedArrayList = Core::$dbDriver->query(
+        $expectedListList = Core::$dbDriver->query(
             'SELECT * FROM pcore_user WHERE user_id IN ('.implode(',', $testIds).')'
         );
         
         $objectList = $this->stub->getList($testIds);
   
-        foreach ($expectedArrayList as $key => $expectedArray) {
-            $this->compareArrayAndObject($expectedArray, $objectList[$key]);
+        foreach ($expectedListList as $key => $expectedList) {
+            $this->compareArrayAndObject($expectedList, $objectList[$key]);
         }
     }
 
     //testFilter
     public function testRepositoryFilterCellPhone()
     {
+        $stub = $this->getMockBuilder(UserRepository::class)
+            ->setMethods(['getList'])
+            ->getMock();
+        $stub->method('getList')
+            ->will($this->returnArgument(0));
+
         //手机号是唯一的
-        $expectedArray = Core::$dbDriver->query(
+        $expectedList = Core::$dbDriver->query(
             'SELECT * FROM pcore_user WHERE user_id =1'
         );
-        $expectedArray = $expectedArray[0];
 
-        list($userList, $count) = $this->stub->filter(array('cellPhone'=>$expectedArray['cellphone']));
+        $ids = array();
+        foreach ($expectedList as $each) {
+            $ids[] = $each['user_id'];
+        }
+
+        list($userList, $count) = $stub->filter(array('cellPhone'=>$expectedList[0]['cellphone']));
         $this->assertEquals(1, $count);
-        $this->compareArrayAndObject($expectedArray, $userList[0]);
+        $this->assertEquals($ids, $userList);
     }
 
     public function testRepositoryFilterPassword()
     {
+        $stub = $this->getMockBuilder(UserRepository::class)
+            ->setMethods(['getList'])
+            ->getMock();
+        $stub->method('getList')
+            ->will($this->returnArgument(0));
+
         //添加一个用户
         $faker = \Faker\Factory::create('zh_CN');
         $user = ObjectGenerate::generateUser(0, 0, array('password'=>$faker->password));
@@ -200,29 +223,87 @@ class UserRepositoryTest extends GenericTestsDatabaseTestCase
             'SELECT * FROM pcore_user WHERE password = \''.$user->getPassword().'\''
         );
 
-        list($userList, $count) = $this->stub->filter(array('password'=>$user->getPassword()));
+        $ids = array();
+        foreach ($expectedList as $each) {
+            $ids[] = $each['user_id'];
+        }
+
+        list($userList, $count) = $stub->filter(array('password'=>$user->getPassword()));
         $this->assertEquals(sizeof($expectedList), $count);
 
-        foreach ($expectedList as $key => $expected) {
-            $this->compareArrayAndObject($expected, $userList[$key]);
-        }
+        $this->assertEquals($ids, $userList);
     }
 
     public function testRepositoryFilterStatus()
     {
+        $stub = $this->getMockBuilder(UserRepository::class)
+            ->setMethods(['getList'])
+            ->getMock();
+        $stub->method('getList')
+            ->will($this->returnArgument(0));
+
         $expectedList = Core::$dbDriver->query(
-            'SELECT * FROM pcore_user WHERE status = '.STATUS_DELETE
+            'SELECT * FROM pcore_user WHERE status = '.User::STATUS_DELETE
         );
 
+        $ids = array();
+        foreach ($expectedList as $each) {
+            $ids[] = $each['user_id'];
+        }
+        
         //确认检索出来的又数据
         $this->assertGreaterThan(0, sizeof($expectedList));
 
-        list($userList, $count) = $this->stub->filter(array('status'=>STATUS_DELETE));
+        list($userList, $count) = $stub->filter(array('status'=>User::STATUS_DELETE));
         $this->assertEquals(sizeof($expectedList), $count);
 
-        foreach ($expectedList as $key => $expected) {
-            $this->compareArrayAndObject($expected, $userList[$key]);
+        $this->assertEquals($ids, $userList);
+    }
+
+    public function testRepositorySortIdDesc()
+    {
+        $stub = $this->getMockBuilder(UserRepository::class)
+            ->setMethods(['getList'])
+            ->getMock();
+        $stub->method('getList')
+            ->will($this->returnArgument(0));
+
+        $expectedList = Core::$dbDriver->query(
+            'SELECT * FROM pcore_user ORDER BY user_id DESC'
+        );
+
+        $ids = array();
+        foreach ($expectedList as $each) {
+            $ids[] = $each['user_id'];
         }
+
+        list($userList, $count) = $stub->filter(array(), array('id'=>-1));
+
+        $this->assertEquals(sizeof($ids), $count);
+        $this->assertEquals($ids, $userList);
+    }
+
+    public function testRepositorySortIdAsc()
+    {
+        $stub = $this->getMockBuilder(UserRepository::class)
+            ->setMethods(['getList'])
+            ->getMock();
+        $stub->method('getList')
+            ->will($this->returnArgument(0));
+
+        $expectedList = Core::$dbDriver->query(
+            'SELECT * FROM pcore_user ORDER BY user_id ASC'
+        );
+
+        $ids = array();
+        foreach ($expectedList as $each) {
+            $ids[] = $each['user_id'];
+        }
+
+        list($userList, $count) = $stub->filter(array(), array('id'=>1));
+
+        $this->assertEquals(sizeof($ids), $count);
+        $this->assertEquals($ids, $userList);
     }
 
     /**
@@ -230,33 +311,48 @@ class UserRepositoryTest extends GenericTestsDatabaseTestCase
      */
     public function testRepositoryFilter()
     {
+        $stub = $this->getMockBuilder(UserRepository::class)
+            ->setMethods(['getList'])
+            ->getMock();
+        $stub->method('getList')
+            ->will($this->returnArgument(0));
+        
         //添加一个用户,方便于我们检索
         $faker = \Faker\Factory::create('zh_CN');
         $user = ObjectGenerate::generateUser(0, 0, array(
             'password'=>$faker->password,
-            'status'=>STATUS_NORMAL,
+            'status'=>User::STATUS_NORMAL,
             'cellPhone'=>$faker->phoneNumber
             ));
         $this->stub->add($user);
 
         $expectedList = Core::$dbDriver->query(
-            'SELECT * FROM pcore_user WHERE status = '.STATUS_NORMAL.
+            'SELECT * FROM pcore_user WHERE status = '.User::STATUS_NORMAL.
             ' AND cellphone = \''.$user->getCellPhone().
-            '\' AND password=\''.$user->getPassword().'\''
+            '\' AND password=\''.$user->getPassword().'\''.
+            ' ORDER BY user_id DESC'
         );
+
+        $ids = array();
+        foreach ($expectedList as $each) {
+            $ids[] = $each['user_id'];
+        }
 
         //确认检索出来的又数据
         $this->assertGreaterThan(0, sizeof($expectedList));
 
-        list($userList, $count) = $this->stub->filter(array(
-                'status'=>STATUS_NORMAL,
+        list($userList, $count) = $stub->filter(
+            array(
+                'status'=>User::STATUS_NORMAL,
                 'password'=>$user->getPassword(),
                 'cellPhone'=>$user->getCellPhone()
-            ));
+            ),
+            array(
+                'id'=>-1
+            )
+        );
         $this->assertEquals(sizeof($expectedList), $count);
-
-        foreach ($expectedList as $key => $expected) {
-            $this->compareArrayAndObject($expected, $userList[$key]);
-        }
+        
+        $this->assertEquals($ids, $userList);
     }
 }

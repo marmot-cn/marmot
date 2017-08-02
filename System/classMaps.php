@@ -14,7 +14,7 @@ return [
     'System\Classes\Translator' => S_ROOT.'System/Classes/Translator.class.php',
     'System\Classes\Error' => S_ROOT.'System/Classes/Error.class.php',
     'System\Classes\Event' => S_ROOT.'System/Classes/Event.class.php',
-    'System\Classes\Server' => S_ROOT.'System\Classes\Server.class.php',
+    'System\Classes\Server' => S_ROOT.'System/Classes/Server.class.php',
     
     //interfaces
     'System\Interfaces\Command' => S_ROOT.'System/Interfaces/Command.class.php',

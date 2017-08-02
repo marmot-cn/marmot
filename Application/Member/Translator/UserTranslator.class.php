@@ -27,17 +27,17 @@ class UserTranslator extends Translator
     protected function getKeys() : array
     {
         return array(
-                        'id',
-                        'cellPhone',
-                        'updateTime',
-                        'createTime',
-                        'statusTime',
-                        'status',
-                        'nickName',
-                        'userName',
-                        'password',
-                        'salt',
-                        'realName'
+            'id',
+            'cellPhone',
+            'updateTime',
+            'createTime',
+            'statusTime',
+            'status',
+            'nickName',
+            'userName',
+            'password',
+            'salt',
+            'realName'
         );
     }
 

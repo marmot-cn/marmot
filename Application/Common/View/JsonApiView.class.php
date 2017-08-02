@@ -43,22 +43,22 @@ trait JsonApiView
     {
         $this->links  = [
                 Link::FIRST => $pages > 1 ? new Link(
-                    Server::host.'/'.$url.'page[number]=1&page[size]='.$perpage,
+                    Server::host().'/'.$url.'page[number]=1&page[size]='.$perpage,
                     null,
                     true
                 ) : null,
                 Link::LAST  => $pages > 1 ? new Link(
-                    Server::host.'/'.$url.'page[number]='.$pages.'&page[size]='.$perpage,
+                    Server::host().'/'.$url.'page[number]='.$pages.'&page[size]='.$perpage,
                     null,
                     true
                 ) : null,
                 Link::PREV  => ($pages > 1 && $curpage > 1) ? new Link(
-                    Server::host.'/'.$url.'page[number]='.$prev.'&page[size]='.$perpage,
+                    Server::host().'/'.$url.'page[number]='.$prev.'&page[size]='.$perpage,
                     null,
                     true
                 ) : null,
                 Link::NEXT  => ($pages > 1 && $curpage < $pages) ? new Link(
-                    Server::host.'/'.$url.'page[number]='.$next.'&page[size]='.$perpage,
+                    Server::host().'/'.$url.'page[number]='.$next.'&page[size]='.$perpage,
                     null,
                     true
                 ) : null,
@@ -93,7 +93,7 @@ trait JsonApiView
 
         $encoder = Encoder::instance(
             $objectsSchema,
-            new EncoderOptions(JSON_PRETTY_PRINT, Server::host)
+            new EncoderOptions(JSON_PRETTY_PRINT, Server::host())
         );
 
         return $encoder->withLinks($this->links)

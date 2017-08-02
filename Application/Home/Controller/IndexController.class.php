@@ -19,6 +19,9 @@ class IndexController extends Controller
         return true;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function error()
     {
         $this->displayError();

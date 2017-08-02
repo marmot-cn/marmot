@@ -1,9 +1,15 @@
 #!/bin/sh
 
-if [ $(expr `cat VERSION` \> $(ls Docs/version/*.md | awk -F '\/' '{print $3}' | sed -n 's/.md//p' | sort -r | sed -n 1p)) -ne 0 ]
+if [ $(expr `cat VERSION` \> $(ls Docs/version/*.md | sort -rn | awk -F '\/' '{print $3}' | sed -n '1 s/.md//p')) -ne 0 ]
 then
 	echo 'push fail, VERSION file different with latest version log'
 	exit 1
-else
-	echo 'push check version ok'
 fi
+
+if [ $(expr `cat VERSION` \< $(ls Docs/version/*.md | sort -rn | awk -F '\/' '{print $3}' | sed -n '1 s/.md//p')) -ne 0 ]
+then
+	echo 'push fail, VERSION file different with latest version log'
+	exit 1
+fi
+
+echo 'push check version ok'

@@ -13,16 +13,16 @@ use tests\GenericTestCase;
 class UserTest extends GenericTestCase
 {
 
-    private $stub;
+    private $user;
 
     public function setUp()
     {
-        $this->stub = new User();
+        $this->user = new User();
     }
 
     public function tearDown()
     {
-        unset($this->stub);
+        unset($this->user);
         parent::tearDown();
     }
 
@@ -33,10 +33,12 @@ class UserTest extends GenericTestCase
     {
         //测试初始化用户状态
         $statusParameter = $this->getPrivateProperty('Member\Model\User', 'status');
-        $this->assertEquals(STATUS_NORMAL, $statusParameter->getValue($this->stub));
+        $this->assertEquals(User::STATUS_NORMAL, $statusParameter->getValue($this->user));
+        $this->assertEquals(User::STATUS_NORMAL, $this->user->getStatus());
 
         $realNameParameter = $this->getPrivateProperty('Member\Model\User', 'realName');
-        $this->assertEquals('', $realNameParameter->getValue($this->stub));
+        $this->assertEquals('', $realNameParameter->getValue($this->user));
+        $this->assertEquals('', $this->user->getRealName());
     }
 
     /**
@@ -44,7 +46,7 @@ class UserTest extends GenericTestCase
      */
     public function testCorrectExtendsUser()
     {
-        $this->assertInstanceof('Member\Model\User', $this->stub);
+        $this->assertInstanceof('Member\Model\User', $this->user);
     }
 
     //realName 测试 ---------------------------------------------------- start
@@ -53,8 +55,8 @@ class UserTest extends GenericTestCase
      */
     public function testSetRealNameCorrectType()
     {
-        $this->stub->setRealName('string');
-        $this->assertEquals('string', $this->stub->getRealName());
+        $this->user->setRealName('string');
+        $this->assertEquals('string', $this->user->getRealName());
     }
 
     /**
@@ -64,7 +66,7 @@ class UserTest extends GenericTestCase
      */
     public function testSetRealNameWrongType()
     {
-        $this->stub->setRealName(array(1,2,3));
+        $this->user->setRealName(array(1,2,3));
     }
     //realName 测试 ----------------------------------------------------   end
 
@@ -76,8 +78,8 @@ class UserTest extends GenericTestCase
      */
     public function testSetStatus($actual, $expected)
     {
-        $this->stub->setStatus($actual);
-        $this->assertEquals($expected, $this->stub->getStatus());
+        $this->user->setStatus($actual);
+        $this->assertEquals($expected, $this->user->getStatus());
     }
 
     /**
@@ -86,9 +88,9 @@ class UserTest extends GenericTestCase
     public function statusProvider()
     {
         return array(
-            array(STATUS_NORMAL,STATUS_NORMAL),
-            array(STATUS_DELETE,STATUS_DELETE),
-            array(999,STATUS_NORMAL),
+            array(User::STATUS_NORMAL,User::STATUS_NORMAL),
+            array(User::STATUS_DELETE,User::STATUS_DELETE),
+            array(999,User::STATUS_NORMAL),
         );
     }
 
@@ -99,7 +101,21 @@ class UserTest extends GenericTestCase
      */
     public function testSetStatusWrongType()
     {
-        $this->stub->setStatus('string');
+        $this->user->setStatus('string');
     }
     //status 测试 ------------------------------------------------------   end
+    
+    public function testIsNormal()
+    {
+        $this->user->setStatus(User::STATUS_NORMAL);
+        $this->assertTrue($this->user->isNormal());
+        $this->assertFalse($this->user->isDelete());
+    }
+
+    public function testIsDelete()
+    {
+        $this->user->setStatus(User::STATUS_DELETE);
+        $this->assertTrue($this->user->isDelete());
+        $this->assertFalse($this->user->isNormal());
+    }
 }

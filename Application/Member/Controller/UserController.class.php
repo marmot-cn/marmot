@@ -53,6 +53,10 @@ class UserController extends Controller
                 $this->render(new UserView($userList));
                 return true;
             }
+
+            $this->getResponse()->setStatusCode(404);
+            $this->render(new EmptyView());
+            return false;
         }
 
         list($filter, $sort, $curpage, $perpage) = $this->formatParameters();

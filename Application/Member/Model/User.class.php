@@ -12,6 +12,8 @@ use User\Model\User as AbstractUser;
 
 class User extends AbstractUser
 {
+    const STATUS_NORMAL = 0;
+    const STATUS_DELETE = -2;
 
     /**
      * @var string $realName 微信realName
@@ -22,6 +24,7 @@ class User extends AbstractUser
     {
         parent::__construct($id);
         $this->realName = '';
+        $this->status  = self::STATUS_NORMAL;
     }
 
     public function __destruct()
@@ -36,9 +39,13 @@ class User extends AbstractUser
      */
     public function setStatus(int $status)
     {
-        $this->status= in_array($status, array(
-            STATUS_NORMAL,
-            STATUS_DELETE)) ? $status : STATUS_NORMAL;
+        $this->status= in_array(
+            $status,
+            array(
+                self::STATUS_NORMAL,
+                self::STATUS_DELETE
+            )
+        ) ? $status : self::STATUS_NORMAL;
     }
 
     /**
@@ -57,6 +64,16 @@ class User extends AbstractUser
     public function getRealName() : string
     {
         return $this->realName;
+    }
+   
+    public function isNormal() : bool
+    {
+        return $this->getStatus() == self::STATUS_NORMAL;
+    }
+
+    public function isDelete() : bool
+    {
+        return $this->getStatus() == self::STATUS_DELETE;
     }
 
     /**
@@ -87,5 +104,18 @@ class User extends AbstractUser
                     'password',
                     'salt',
                 ));
+    }
+
+    public function verifyPassword(string $oldPassword) : bool
+    {
+        //检查旧密码是否正确
+        $oldEncryptedPassword = $this->getPassword();
+        $this->encryptPassword($oldPassword, $this->getSalt());
+        if ($oldEncryptedPassword != $this->getPassword()) {
+            Core::setLastError(USER_OLD_PASSWORD_NOT_CORRECT);
+            return false;
+        }
+
+        return true;
     }
 }

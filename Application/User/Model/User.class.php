@@ -2,6 +2,7 @@
 namespace User\Model;
 
 use Marmot\Common\Model\Object;
+use Marmot\Common\Model\IObject;
 use Shop\Model\Shop;
 
 /**
@@ -10,8 +11,12 @@ use Shop\Model\Shop;
  * @version 1.0.0: 20160222
  */
 
-abstract class User
+abstract class User implements IObject
 {
+
+    const SALT_LENGTH = 4;
+    const SALT_BASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
+
     /**
      * @var Object 对象性状
      */
@@ -49,10 +54,10 @@ abstract class User
         $this->userName = '';
         $this->password = '';
         $this->createTime = time();
-        $this->updateTime = time();
+        $this->updateTime = 0;
         $this->salt = '';
         $this->status = STATUS_NORMAL;
-        $this->statusTime = time();
+        $this->statusTime = 0;
     }
 
     public function __destruct()
@@ -71,9 +76,9 @@ abstract class User
     
     /**
      * 设置用户id
-     * @param int $id
+     * @param $id
      */
-    public function setId(int $id)
+    public function setId($id)
     {
         $this->id = $id;
     }
@@ -81,9 +86,9 @@ abstract class User
     /**
      * 获取 id.
      *
-     * @return int $id 用户uid
+     * @return $id 用户uid
      */
-    public function getId() : int
+    public function getId()
     {
         return $this->id;
     }
@@ -139,11 +144,10 @@ abstract class User
     private function generateSalt() : string
     {
         $salt = '';
-        $strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
-        $max = strlen($strPol)-1;
-
-        for ($i=0; $i<SALT_LENGTH; $i++) {
-            $salt.=$strPol[rand(0, $max)];//rand($min,$max)生成介于min和max两个数之间的一个随机整数
+        $max = strlen(self::SALT_BASE)-1;
+        
+        for ($i=0; $i<self::SALT_LENGTH; $i++) {
+            $salt.=self::SALT_BASE[rand(0, $max)];
         }
         return $salt;
     }

@@ -17,11 +17,10 @@ class RowQueryTest extends tests\GenericTestsDatabaseTestCase
 
     private $dbStub;
 
-    private $rowCacheQuery;
+    private $rowQuery;
 
     private $primaryKey = 'id';
     private $table = 'system_test_a';
-    private $cacheKeyPrefix = 'pcore';
 
     public function setUp()
     {
@@ -54,19 +53,132 @@ class RowQueryTest extends tests\GenericTestsDatabaseTestCase
         $this->assertEquals('id', $this->rowQuery->getPrimaryKey());
     }
 
+    /**
+     * 测试 add() 方法
+     * $lasetInsertId 方法为 false
+     */
+    public function testRowQueryAddWithoutLastInsertId()
+    {
+        
+        $lastId = Core::$dbDriver->query('SELECT id FROM pcore_system_test_a ORDER BY id DESC LIMIT 1');
+        $lastId = $lastId[0]['id'];
+
+        $result = $this->rowQuery->add(
+            array(
+                'title'=>'titleA4',
+                'user'=>'userA4',
+            ),
+            false
+        );
+
+        //测试影响了一行
+        $this->assertEquals(1, $result);
+
+        //获取新添加的数据,检查是否添加成功
+        //在旧的lastId+1
+        $lastId++;
+
+        $expectArray = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a WHERE id='.$lastId);
+        $expectArray = $expectArray[0];
+
+        $this->assertEquals($expectArray['id'], $lastId);
+        $this->assertEquals($expectArray['title'], 'titleA4');
+        $this->assertEquals($expectArray['user'], 'userA4');
+    }
+
+    /**
+     * 测试 add() 方法
+     * $lasetInsertId 方法为 true
+     */
+    public function testRowQueryAddWithLastInsertId()
+    {
+
+        $lastId = Core::$dbDriver->query('SELECT id FROM pcore_system_test_a ORDER BY id DESC LIMIT 1');
+        $lastId = $lastId[0]['id'];
+
+        $result = $this->rowQuery->add(
+            array(
+                'title'=>'titleA4',
+                'user'=>'userA4',
+            ),
+            true
+        );
+
+        $lastId++;
+        //测试影响了一行
+        $this->assertEquals($lastId, $result);
+
+        //获取新添加的数据,检查是否添加成功
+        //在旧的lastId+1
+        
+        $expectArray = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a WHERE id='.$lastId);
+        $expectArray = $expectArray[0];
+
+        $this->assertEquals($expectArray['id'], $lastId);
+        $this->assertEquals($expectArray['title'], 'titleA4');
+        $this->assertEquals($expectArray['user'], 'userA4');
+    }
+
+    /**
+     * 测试 update() 方法
+     */
+    public function testRowQueryUpdate()
+    {
+        //生成缓存数据
+        $testId = 1;
+        $oldArray = $this->rowQuery->getOne($testId);
+
+        $updateArray = array(
+                            'title'=>'titleA4',
+                            'user'=>'userA4'
+                            );
+
+        $result = $this->rowQuery->update($updateArray, array('id'=>$testId));
+
+        $this->assertTrue($result);
+
+        $expectArray = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a WHERE id='.$testId);
+        $expectArray = $expectArray[0];
+
+        $this->assertEquals($expectArray['id'], 1);
+        $this->assertEquals($expectArray['title'], $updateArray['title']);
+        $this->assertEquals($expectArray['user'], $updateArray['user']);
+    }
+
+    /**
+     * 测试 update() 方法
+     * 更新相同数据,返回false
+     */
+    public function testRowQueryUpdateSameData()
+    {
+        //生成缓存数据
+        $testId = 1;
+        $oldArray = $this->rowQuery->getOne($testId);
+
+        $updateArray = array(
+                            'title'=>$oldArray['title'],
+                            'user'=>$oldArray['user'],
+                            );
+
+        $result = $this->rowQuery->update($updateArray, array('id'=>$testId));
+
+        $this->assertFalse($result);
+    }
+
     //通过rowCache读取数据,数据库有数据,测试返回数据成功,且缓存已经被正确赋值
     public function testRowQueryGetOne()
     {
 
         $testId = 1;
         //获取第一条数据
-        $dbResult = $this->dbStub->select($this->primaryKey.'='.$testId);
+        $expectArray = $this->dbStub->select($this->primaryKey.'='.$testId);
+        $expectArray = $expectArray[0];
 
         //用RowQuery获取第一条数据
         $rowQuerResut = $this->rowQuery->getOne($testId);
 
         //确认返回数据正确
-        $this->assertEquals($dbResult, $rowQuerResut);
+        $this->assertEquals($expectArray, $rowQuerResut);
     }
 
     /**

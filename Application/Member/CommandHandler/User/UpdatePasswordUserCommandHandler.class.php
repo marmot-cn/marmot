@@ -23,15 +23,8 @@ class UpdatePasswordUserCommandHandler implements ICommandHandler
             return false;
         }
 
-        //检查旧密码是否正确
-        $oldEncryptedPassword = $user->getPassword();
-        $user->encryptPassword($command->oldPassword, $user->getSalt());
-        if ($oldEncryptedPassword != $user->getPassword()) {
-            Core::setLastError(USER_OLD_PASSWORD_NOT_CORRECT);
-            return false;
-        }
-        
-        if ($user->updatePassword($command->password)) {
+        if ($user->verifyPassword($command->oldPassword)
+            &&$user->updatePassword($command->password)) {
             //发布领域事件
             return true;
         }

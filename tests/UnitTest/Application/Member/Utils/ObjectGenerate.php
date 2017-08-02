@@ -4,7 +4,6 @@ namespace Member\Utils;
 use Member\Model\User;
 use Member\Model\Crew;
 use Member\Model\Account;
-use Shop\Model\Shop;
 
 class ObjectGenerate
 {
@@ -31,8 +30,8 @@ class ObjectGenerate
         //status
         $status = isset($value['status']) ? $value['status'] : $faker->randomElement(
             $array = array(
-                            STATUS_NORMAL,
-                            STATUS_DELETE
+                            User::STATUS_NORMAL,
+                            User::STATUS_DELETE
                         )
         );
         $user->setStatus($status);

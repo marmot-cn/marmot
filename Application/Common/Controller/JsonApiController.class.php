@@ -37,6 +37,34 @@ trait JsonApiController
         return $factory->createQueryParametersParser()->parse($psr7request);
     }
 
+    /**
+     * 格式化传递参数
+     * @return array(
+     *   $filter,
+     *   $sort,
+     *   $curpage,
+     *   $perpage
+     * )
+     **/
+    public function formatParameters() : array
+    {
+        $parameters = $this->getParameters();
+        $page = $parameters->getPaginationParameters()['number'];
+        $size = $parameters->getPaginationParameters()['size'];
+        $perpage = isset($size) ? $size : 20;
+        $curpage = !empty($page) ? $page : 1;
+
+        $filter = is_array($parameters->getFilteringParameters()) ?
+        $parameters->getFilteringParameters() : array();
+
+        return array(
+            $filter,
+            $this->getSort(),
+            $curpage,
+            $perpage
+        );
+    }
+
     public function getSort()
     {
         $sort = array();

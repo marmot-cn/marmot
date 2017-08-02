@@ -1,9 +1,10 @@
 <?php
+namespace System\Classes;
 
 class Server
 {
     public static function host() : string
     {
-        return $_SERVER['HTTP_HOST'];
+        return isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
     }
 }

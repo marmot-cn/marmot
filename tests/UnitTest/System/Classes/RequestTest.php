@@ -1,7 +1,7 @@
 <?php
 namespace System\Classes;
 
-use tests;
+use tests\GenericTestCase;
 use Marmot\Core;
 use System\Classes\Request;
 
@@ -10,7 +10,7 @@ use System\Classes\Request;
  * 1. 判断HTTP METHOD正确性
  * 2. 接收传参正确性
  */
-class RequestTest extends tests\GenericTestCase
+class RequestTest extends GenericTestCase
 {
 
     private $stub;
