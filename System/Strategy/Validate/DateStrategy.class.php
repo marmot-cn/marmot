@@ -12,4 +12,19 @@ class DateStrategy implements IValidateStrategy
     {
         return strtotime($this->getVerifyValue()) != false;
     }
+
+    public function minRule($minDate) : bool
+    {
+        return $this->timeStamp($this->getVerifyValue()) >= $this->timeStamp($minDate);
+    }
+
+    public function maxRule($minDate) : bool
+    {
+        return $this->timeStamp($this->getVerifyValue()) <= $this->timeStamp($minDate);
+    }
+
+    private function timeStamp($time)
+    {
+        return strtotime($time) ? strtotime($time) :false;
+    }
 }
