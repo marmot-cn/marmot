@@ -133,14 +133,10 @@ Copy/Paste Detector
 		0.00% duplicated lines out of 4319 total lines of code.
 		
 		Time: 935 ms, Memory: 6.00MB
-		
-##### pdepend/pdepend
-
-wait...
 
 [https://pdepend.org](https://pdepend.org "https://pdepend.org")
 
-##### phpmd/phpm
+##### phpmd/phpmd
 
 [https://phpmd.org/](https://phpmd.org "https://phpmd.org")
 

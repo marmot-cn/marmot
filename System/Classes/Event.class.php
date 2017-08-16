@@ -4,10 +4,12 @@ namespace System\Classes;
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+
 use Marmot\Core;
+use Marmot\Common\IObject;
 
 /**
- * 存储事件源
+ * 事件源
  */
 class Event
 {
@@ -15,14 +17,36 @@ class Event
     private $sourceName;
     private $eventName;
 
-    public function __construct(string $sourceName, $source, string $eventName)
+    public function __construct(string $sourceName, IObject $source, string $eventName)
     {
         $this->source = $source;
         $this->sourceName = $sourceName;
         $this->eventName = $eventName;
     }
 
+    public function __destruct()
+    {
+        unset($this->source);
+        unset($this->sourceName);
+        unset($this->eventName);
+    }
+
     public function save()
+    {
+        return $this->saveDb($this->formatSaveEventData());
+    }
+
+    private function formatSaveEventData() : array
+    {
+        return array(
+            'source' => $this->sourceName,
+            'source_id' => $this->source->getId(),
+            'event_name' => $this->eventName,
+            'create_time' => time()
+        );
+    }
+
+    private function saveDb(array $eventData) : bool
     {
         $eventDb = new class extends Db {
             public function __construct()
@@ -30,24 +54,23 @@ class Event
                 parent::__construct('event_store');
             }
         };
-        $lastetEventId = $eventDb->insert(
-            array(
-                'source' => $this->sourceName,
-                'source_id' => $this->source->getId(),
-                'event_name' => $this->eventName,
-                'create_time' => time()
-            ),
-            true
-        );
 
-        if (!$lastetEventId) {
-            return false;
-        }
+        $lastetEventId = $eventDb->insert($eventData, true);
 
-        return true;
+        return $lastetEventId == 0;
     }
 
-    public function notify()
+    public function notify() : bool
+    {
+        return $this->publish($this->formatPublishEventData());
+    }
+
+    private function formatPublishEventData() : string
+    {
+        return $this->sourceName.':'.$this->source->getId().':'.$this->eventName;
+    }
+
+    private function publish(string $eventData) : bool
     {
         //获取配置信息
         $url = Core::$container->get('rabbitmq.url');
@@ -59,11 +82,10 @@ class Event
         $channel = $connection->channel();
 
         $channel->exchange_declare('event', 'fanout', false, false, false);
+        
+        $message = new AMQPMessage($eventData, array('delivery_mode' => 2));
 
-        $data = $this->sourceName.':'.$this->source->getId().':'.$this->eventName;
-        $msg = new AMQPMessage($data, array('delivery_mode' => 2));
-
-        $channel->basic_publish($msg, 'event');
+        $channel->basic_publish($message, 'event');
         $channel->close();
         $connection->close();
 

@@ -42,7 +42,7 @@ abstract class Controller
     /**
      * 获取 request 对象
      */
-    public function getRequest()
+    public function getRequest() : Request
     {
         return $this->request;
     }
@@ -50,7 +50,7 @@ abstract class Controller
     /**
      * 获取 response 对象
      */
-    public function getResponse()
+    public function getResponse() : Response
     {
         return $this->response;
     }
@@ -63,5 +63,55 @@ abstract class Controller
     {
         $this->getResponse()->data = $iview->display();
         return $this->getResponse()->send();
+    }
+
+    /**
+     * 验证应用服务层参数
+     * @return bool
+     */
+    protected function validate(array $rules) : bool
+    {
+        foreach ($rules as $verifyValue => $rule) {
+            list($stragetyName, $options, $errorCode) = $rule;
+            $strategyName = ucfirst($strategyName);
+            
+            if (!$this->isStrategyExist($strategyName)) {
+                return false;
+            }
+
+            $strategy = new $strategyName();
+            if (!$strategy->verify($verifyValue, $options, $errorCode)) {
+                return false;
+            }
+            return true;
+        }
+
+        return true;
+    }
+
+    private function isStrategyExist(string $strategy) : bool
+    {
+        return $this->isSystemStrategyExist($strategy)
+                && $this->isApplicationStrategyExist($strategy);
+    }
+
+    private function isSystemStrategyExist(string $strategy) : bool
+    {
+        if (!class_exists($strategy)) {
+            //错误code
+            return false;
+        }
+
+        return true;
+    }
+
+    private function isApplicationStrategyExist(string $strategy) : bool
+    {
+        if (!class_exists('Application/Strategy/'.$stragety)) {
+            //错误code
+            return false;
+        }
+
+        return true;
     }
 }

@@ -15,7 +15,15 @@ return [
     'System\Classes\Error' => S_ROOT.'System/Classes/Error.class.php',
     'System\Classes\Event' => S_ROOT.'System/Classes/Event.class.php',
     'System\Classes\Server' => S_ROOT.'System/Classes/Server.class.php',
-    
+    'System\Classes\ValidateStrategy' => S_ROOT.'System/Classes/ValidateStrategy.class.php',
+
+    //strategy
+    'System\Strategy\Validate\IntStrategy' => S_ROOT.'System/Strategy/Validate/IntStrategy.class.php',
+    'System\Strategy\Validate\FloatStrategy' => S_ROOT.'System/Strategy/Validate/FloatStrategy.class.php',
+    'System\Strategy\Validate\StringStrategy' => S_ROOT.'System/Strategy/Validate/StringStrategy.class.php',
+    'System\Strategy\Validate\DateStrategy' => S_ROOT.'System/Strategy/Validate/DateStrategy.class.php',
+    'System\Strategy\Validate\EmailStrategy' => S_ROOT.'System/Strategy/Validate/EmailStrategy.class.php',
+
     //interfaces
     'System\Interfaces\Command' => S_ROOT.'System/Interfaces/Command.class.php',
     'System\Interfaces\Observer' => S_ROOT.'System/Interfaces/Observer.class.php',
@@ -27,7 +35,8 @@ return [
     'System\Interfaces\ICommand' => S_ROOT.'System/Interfaces/ICommand.class.php',
     'System\Interfaces\ICommandHandler' => S_ROOT.'System/Interfaces/ICommandHandler.class.php',
     'System\Interfaces\ICommandHandlerFactory' => S_ROOT.'System/Interfaces/ICommandHandlerFactory.class.php',
-    'System\Interfaces\ResponseFormatterInterface' => S_ROOT.'System/Interfaces/ResponseFormatterInterface.class.php',
+    'System\Interfaces\IResponseFormatter' => S_ROOT.'System/Interfaces/IResponseFormatter.class.php',
+    'System\Interfaces\IValidateStrategy' => S_ROOT.'System/Interfaces/IValidateStrategy.class.php',
 
     //command
     'System\Command\Cache\SaveCacheCommand' => S_ROOT.'System/Command/Cache/SaveCacheCommand.class.php',

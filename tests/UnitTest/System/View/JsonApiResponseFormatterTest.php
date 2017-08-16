@@ -2,7 +2,9 @@
 namespace System\View;
 
 use tests;
+
 use Marmot\Core;
+use System\Classes\Response;
 
 class JsonApiResponseFormatterTest extends tests\GenericTestCase
 {
@@ -20,12 +22,12 @@ class JsonApiResponseFormatterTest extends tests\GenericTestCase
 
     public function testCorrectImplementResponseFormatter()
     {
-        $this->assertInstanceof('System\Interfaces\ResponseFormatterInterface', $this->stub);
+        $this->assertInstanceof('System\Interfaces\IResponseFormatter', $this->stub);
     }
 
     public function testFormat()
     {
-        $response = new \System\Classes\Response();
+        $response = new Response();
         $response->data = array('key'=>'value');
 
         $this->stub->format($response);

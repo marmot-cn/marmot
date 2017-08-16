@@ -13,6 +13,8 @@ node {
     sh 'sudo docker exec marmot-phpfpm vendor/bin/phpcs'
     stage '代码复制黏贴检测'
     sh 'sudo docker exec marmot-phpfpm vendor/bin/phpcpd ./Application'
+    stage '代码复杂度检测'
+    sh 'sudo docker exec marmot-phpfpm vendor/bin/phpmd ./Application text ruleset.xml
     stage '单元测试'
     timeout(10) {
         waitUntil {

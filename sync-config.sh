@@ -9,21 +9,21 @@ function syncConfig {
 	confd -confdir="$1" -onetime -backend etcd -node http://etcd.etcd-ha:2379
 }
 
-function pingConfigs {
-	for item in `sed -n "/@ping/{n; s/[',]//g; p;}" config.php | awk -F '=>' '{print $2}'`
-	do
-		local url=`echo $item | sed "{s/http://g; s/\///g;}"`
-		echo "ping $url test"
-		ping -c 2 -t 2 $url > /dev/null 2>&1
-		if [ $? -ne 0 ]
-		then
-			echo "ping $url fail"
-		else
-			echo "ping $url sucess"
-		fi
-	done
-
-}
+#function pingConfigs {
+#	for item in `sed -n "/@ping/{n; s/[',]//g; p;}" config.php | awk -F '=>' '{print $2}'`
+#	do
+#		local url=`echo $item | sed "{s/http://g; s/\///g;}"`
+#		echo "ping $url test"
+#		ping -c 2 -t 2 $url > /dev/null 2>&1
+#		if [ $? -ne 0 ]
+#		then
+#			echo "ping $url fail"
+#		else
+#			echo "ping $url sucess"
+#		fi
+#	done
+#
+#}
 
 #尝试5次
 checkTimes=0

@@ -14,7 +14,7 @@ class Subject implements Interfaces\Subject
     
     public function __construct()
     {
-        $this->_observers = array();
+        $this->observers = array();
     }
  
     /**
@@ -23,7 +23,7 @@ class Subject implements Interfaces\Subject
      */
     public function attach(Interfaces\Observer $observer)
     {
-        return array_push($this->_observers, $observer);
+        return array_push($this->observers, $observer);
     }
  
     /**
@@ -32,12 +32,12 @@ class Subject implements Interfaces\Subject
      */
     public function detach(Interfaces\Observer $observer) : bool
     {
-        $index = array_search($observer, $this->_observers);
-        if ($index === false || ! array_key_exists($index, $this->_observers)) {
+        $index = array_search($observer, $this->observers);
+        if ($index === false || ! array_key_exists($index, $this->observers)) {
             return false;
         }
  
-        unset($this->_observers[$index]);
+        unset($this->observers[$index]);
         return true;
     }
  
@@ -46,11 +46,11 @@ class Subject implements Interfaces\Subject
      */
     public function notifyObserver() : bool
     {
-        if (!is_array($this->_observers)) {
+        if (!is_array($this->observers)) {
             return false;
         }
  
-        foreach ($this->_observers as $observer) {
+        foreach ($this->observers as $observer) {
             $observer->update();
         }
 

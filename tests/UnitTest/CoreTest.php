@@ -26,6 +26,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
                                S_ROOT.'/System/Observer/',
                                S_ROOT.'/System/Query/',
                                S_ROOT.'/System/View/',
+                               S_ROOT.'/System/Strategy/Validate/',
                               );
         //准备系统文件的文件夹,用于统计系统文件总数 -- 结束
         //计算文件总数 -- 开始

@@ -2,9 +2,9 @@
 //powered by chloroplast
 namespace System\View;
 
-use System\Interfaces\ResponseFormatterInterface;
+use System\Interfaces\IResponseFormatter;
 
-class JsonApiResponseFormatter implements ResponseFormatterInterface
+class JsonApiResponseFormatter implements IResponseFormatter
 {
 
     public function format($response)
