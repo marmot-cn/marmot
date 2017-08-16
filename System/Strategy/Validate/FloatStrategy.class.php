@@ -19,7 +19,7 @@ class FloatStrategy implements IValidateStrategy
     /**
      * 检测是大于最小数 min:xxx
      */
-    private function minRule(float $minNumber)
+    private function minRule(float $minNumber) : bool
     {
         return $this->getVerifyValue() >= $minNumber;
     }
@@ -27,7 +27,7 @@ class FloatStrategy implements IValidateStrategy
     /**
      * 检测是小于最大数 max:xxx
      */
-    private function maxRule(float $maxNumber)
+    private function maxRule(float $maxNumber) : bool
     {
         return $this->getVerifyValue() <= $maxNumber;
     }
@@ -35,7 +35,7 @@ class FloatStrategy implements IValidateStrategy
     /**
      * 检测数字是否属于一个区间 between:min,max
      */
-    private function betweenRule(float $min, float $max)
+    private function betweenRule(float $min, float $max) : bool
     {
         return $this->minRule($min) && $this->maxRule($max);
     }
@@ -43,7 +43,7 @@ class FloatStrategy implements IValidateStrategy
     /**
      * 检测数字是否属于一个范围 range:1,2,3,4...
      */
-    private function rangeRule(float ...$numbers)
+    private function rangeRule(float ...$numbers) : bool
     {
         return in_array($this->getVerifyValue(), $numbers);
     }

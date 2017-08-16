@@ -34,4 +34,9 @@ class StringStrategyTest extends GenericTestCase
         $result = $this->strategy->validate('string');
         $this->assertTrue($result);
     }
+
+    //min 最小字节, 需要考虑字符串传参utf-8, 使用mb_strlen
+    //max 最大字节, mb_len
+    //between 字节数
+    //range in_array(一堆字符串)
 }

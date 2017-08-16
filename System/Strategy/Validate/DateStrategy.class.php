@@ -10,5 +10,6 @@ class DateStrategy implements IValidateStrategy
 
     public function typeRule() : bool
     {
+        return strtotime($this->getVerifyValue()) != false;
     }
 }

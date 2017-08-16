@@ -10,5 +10,6 @@ class EmailStrategy implements IValidateStrategy
 
     public function typeRule() : bool
     {
+        return filter_var($this->getVerifyValue(), FILTER_VALIDATE_EMAIL);
     }
 }
