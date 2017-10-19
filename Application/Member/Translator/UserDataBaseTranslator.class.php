@@ -23,6 +23,10 @@ class UserDataBaseTranslator implements ITranslator
         return $user;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     public function objectToArray($user, array $keys = array())
     {
         if (!$user instanceof User) {
