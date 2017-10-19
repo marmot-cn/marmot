@@ -2,7 +2,7 @@
 //powered by chloroplast
 namespace System\Classes;
 
-use System\Interfaces\ResponseFormatterInterface;
+use System\Interfaces\IResponseFormatter;
 use Marmot\Core;
 
 /**
@@ -152,11 +152,8 @@ class Response
         $this->headers = array();
 
         if ($this->version === null) {
-            if (isset($SERVER['SERVER_PROTOCOL']) && $SERVER['SERVER_PROTOCOL'] === 'HTTP/1.0') {
-                $this->version = '1.0';
-            } else {
-                $this->version = '1.1';
-            }
+            $this->version = (isset($_SERVER['SERVER_PROTOCOL']) && $_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.0')
+                              ? '1.0' : '1.1';
         }
 
         $this->formatters = array_merge($this->defaultFormatters(), $this->formatters);
@@ -262,7 +259,8 @@ class Response
         if (!is_object($formatter)) {
             $this->formatters[$this->format] = $formatter = Core::$container->get($formatter);
         }
-        if ($formatter instanceof ResponseFormatterInterface) {
+
+        if ($formatter instanceof IResponseFormatter) {
             $formatter->format($this);
         }
         $this->addHeader('ETag', '"'.md5(serialize($this->data)).'"');

@@ -48,7 +48,7 @@
 
 ### [环境搭建](id:environment)
 
-**下载docker**
+#### 下载docker
 
 [https://docs.docker.com](https://docs.docker.com ,"https://docs.docker.com")
 
@@ -56,7 +56,7 @@
 
 还没使用过`docker for windows`,可以考虑使用虚拟机来进行开发.
 
-**下载docker-compose**
+#### 下载docker-compose
 
 		curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 		
@@ -65,9 +65,9 @@
 		$ docker-compose --version
 		docker-compose version: 1.8.0
 
-**使用docker-compose安装开发环境**
+#### 使用docker-compose安装开发环境
 
-这里使用的PHP 7.0.3 镜像,已经编译进`mongo`,`redis`,`memcached`,`pthreads`等一些常用的扩展.
+这里使用自己编译的后端镜像,已经编译进`mongo`,`redis`,`memcached`等一些常用的扩展.
 
 端口:
 
@@ -78,7 +78,70 @@
 
 		docker-compose up -d 
 		
-启动我们的开发环境,如果没有镜像会自动拉去的
+启动我们的开发环境,如果没有镜像会自动拉取
+
+#### 其他环境
+
+##### `mongo` and `rockmongo`
+
+`rockmongo`的访问地址是`127.0.0.1:10082`.用户名:`admin`, 密码`admin`
+
+```shell
+mongo:
+  image: "registry.cn-hangzhou.aliyuncs.com/marmot/mongo-3.2"
+  volumes:
+   - ./:/data/db
+  container_name: mongo.api.saas.com-mongo
+
+rockmongo:
+  image: "registry.cn-hangzhou.aliyuncs.com/marmot/rockmongo"
+  links:
+   - "mongo:db"
+  ports:
+   - "10082:80"
+  container_name: mongo.api.saas.com-rockmongo
+```
+
+##### `mysql` and `phpmyadmin`
+
+用户名:`root`, 密码`123456`. `phpmyadmin`的访问地址是`127.0.0.1:10081`
+
+```shell
+mysql:
+  image: "registry.cn-hangzhou.aliyuncs.com/marmot/mysql-5.6"
+  volumes:
+  - ~/data/mysql/:/var/lib/mysql
+  environment:
+   - MYSQL_ROOT_PASSWORD=123456
+  container_name: mysql-master
+
+phpmyadmin:
+  image: "registry.cn-hangzhou.aliyuncs.com/marmot/phpmyadmin"
+  links:
+    - "mysql:mysql"
+  ports:
+   - "10081:80"
+  environment:
+   - UPLOAD_SIZE=1G
+  container_name: phpmyadmin
+```
+
+##### `rabbitmq`
+
+默认用户名是`root`, 密码是`test`, 端口号是`5672`
+
+```shell
+rabbitmq:
+  image: registry.cn-hangzhou.aliyuncs.com/marmot/rabbitmq3
+  environment:
+    RABBITMQ_DEFAULT_USER: root
+    RABBITMQ_DEFAULT_PASS: test
+  stdin_open: true
+  volumes:
+  - ./:/var/lib/rabbitmq
+  tty: true
+  container_name: rabbitmq
+```
 
 ### [composer](id:composer)
 
@@ -88,13 +151,13 @@
 
 不需要安装开发包:
 
-		composer install --no-dev
+		composer install --no-dev && composer dump-autoload --optimize
 		
 **开发环境**
 
 默认安装所有包
 
-		composer install
+		composer install && composer dump-autoload --optimize
 
 #### dev 开发中使用
 
@@ -524,13 +587,31 @@ jenkins 系统使用的部署脚本文件
 		
 		root@0967b4c11e7e:/var/www/html# php marmot.php cacheClear
 		memcached                                                         [  ok  ]
-		apcu                                                              [  ok  ]
 
-**生成模型文件**
-
-		
+**生成模型文件**	
 
 ### [规范](id:rule)
+
+#### 接口请求规范
+
+##### 客户端
+
+1. 必须发送`json api`格式数据并且携带头`Content-Type: application/vnd.api+json`, 且不能有任何其他媒体类型参数(media type parameters).
+2. 必须在`accpet`header中声明媒体类型`application/vnd.api+json`至少一次.
+
+##### 服务端
+
+1. 服务端必须在返回`jsonapi`数据时携带头`Content-Type: application/vnd.api+json`且没有其他媒体类型参数(media type parameters).
+2. 服务端必须响应`415 Unsupported Media Type`状态码如果一个请求包含了头`Content-Type: application/vnd.api+json`且还带有媒体类型参数(media type parameters).
+3. 服务端必须响应`406 Not Acceptable`状态码如果一个请求包含`Accept:application/vnd.api+json`且还带有媒体类型参数(media type parameters).
+
+###### media type parameters
+
+A media type is composed of a type, a subtype, and optional parameters.
+
+`top-level type name / subtype name [ ; parameters ]`
+
+`top-level type name / [ tree. ] subtype name [ +suffix ] [ ; parameters ]`
 
 #### 命名规范
 

@@ -69,12 +69,12 @@ abstract class RowQuery
     public function getOne($id)
     {
         $mysqlData = $this->dbLayer->select($this->primaryKey.'='.$id, '*');
-        $mysqlData = $mysqlData[0];
-
         //如果数据为空,返回false
-        if (empty($mysqlData)) {
+        if (empty($mysqlData) || !isset($mysqlData[0])) {
             return false;
         }
+        $mysqlData = $mysqlData[0];
+
         //返回数据
         return $mysqlData;
     }

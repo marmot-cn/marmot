@@ -4,6 +4,7 @@ namespace System\Classes;
 use tests\GenericTestCase;
 use Marmot\Core;
 use System\Classes\Request;
+use System\Interfaces\IMediaTypeStrategy;
 
 /**
  * 用于测试Request类接收不同方式的传参正确性
@@ -13,16 +14,16 @@ use System\Classes\Request;
 class RequestTest extends GenericTestCase
 {
 
-    private $stub;
+    private $request;
 
     public function setUp()
     {
-        $this->stub = new Request();
+        $this->request = new Request();
     }
 
     public function tearDown()
     {
-        unset($this->stub);
+        unset($this->request);
         unset($_SERVER['REQUEST_METHOD']);
         unset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE']);
         unset($_POST);
@@ -34,7 +35,7 @@ class RequestTest extends GenericTestCase
      */
     public function testGetMethodDefault()
     {
-        $method = $this->stub->getMethod();
+        $method = $this->request->getMethod();
         $this->assertEquals('GET', $method);
     }
 
@@ -44,7 +45,7 @@ class RequestTest extends GenericTestCase
     public function testGetMethodRequestMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $method = $this->stub->getMethod();
+        $method = $this->request->getMethod();
         $this->assertEquals('POST', $method);
     }
 
@@ -54,7 +55,7 @@ class RequestTest extends GenericTestCase
     public function testGetMethodXHttpMethodOverride()
     {
         $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] = 'POST';
-        $method = $this->stub->getMethod();
+        $method = $this->request->getMethod();
         $this->assertEquals('POST', $method);
     }
 
@@ -66,134 +67,134 @@ class RequestTest extends GenericTestCase
     {
         $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] = 'PUT';
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $method = $this->stub->getMethod();
+        $method = $this->request->getMethod();
         $this->assertEquals('PUT', $method);
     }
 
     /**
      * 测试正确GET方法,期望返回true
      */
-    public function testGetIsGetWithGetMethod()
+    public function testIsGetMethodWithGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $this->assertTrue($this->stub->getIsGet());
+        $this->assertTrue($this->request->isGetMethod());
     }
 
     /**
      * 测试非GET方法,期望返回false
      */
-    public function testGetIsGetWithNotGetMethod()
+    public function testIsGetMethodWithNotGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $this->assertFalse($this->stub->getIsGet());
+        $this->assertFalse($this->request->isGetMethod());
     }
 
     /**
      * 测试正确OPTIONS方法,期望返回true
      */
-    public function testGetIsOptionsWithGetMethod()
+    public function testIsOptionsMethodWithGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
-        $this->assertTrue($this->stub->getIsOptions());
+        $this->assertTrue($this->request->isOptionsMethod());
     }
 
     /**
      * 测试非OPTIONS方法,期望返回false
      */
-    public function testGetIsOptionsWithNotGetMethod()
+    public function testIsOptionsMethodWithNotGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $this->assertFalse($this->stub->getIsOptions());
+        $this->assertFalse($this->request->isOptionsMethod());
     }
 
     /**
      * 测试正确POST方法,期望返回true
      */
-    public function testGetIsHeadWithGetMethod()
+    public function testIsHeadMethodWithGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'HEAD';
-        $this->assertTrue($this->stub->getIsHead());
+        $this->assertTrue($this->request->isHeadMethod());
     }
 
     /**
      * 测试非HEAD方法,期望返回false
      */
-    public function testGetIsHeadWithNotGetMethod()
+    public function testIsHeadMethodWithNotGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $this->assertFalse($this->stub->getIsHead());
+        $this->assertFalse($this->request->isHeadMethod());
     }
 
     /**
      * 测试正确POST方法,期望返回true
      */
-    public function testGetIsPostWithGetMethod()
+    public function testIsPostMethodWithGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $this->assertTrue($this->stub->getIsPost());
+        $this->assertTrue($this->request->isPostMethod());
     }
 
     /**
      * 测试非POST方法,期望返回false
      */
-    public function testGetIsPostWithNotGetMethod()
+    public function testIsPostMethodWithNotGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $this->assertFalse($this->stub->getIsPost());
+        $this->assertFalse($this->request->isPostMethod());
     }
 
     /**
      * 测试正确DELETE方法,期望返回true
      */
-    public function testGetIsDeleteWithGetMethod()
+    public function testIsDeleteMethodWithGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'DELETE';
-        $this->assertTrue($this->stub->getIsDelete());
+        $this->assertTrue($this->request->isDeleteMethod());
     }
 
     /**
      * 测试非DELETE方法,期望返回false
      */
-    public function testGetIsDeleteWithNotGetMethod()
+    public function testIsDeleteMethodWithNotGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $this->assertFalse($this->stub->getIsDelete());
+        $this->assertFalse($this->request->isDeleteMethod());
     }
 
     /**
      * 测试正确PUT方法,期望返回true
      */
-    public function testGetIsPutWithGetMethod()
+    public function testIsPutMethodWithGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'PUT';
-        $this->assertTrue($this->stub->getIsPut());
+        $this->assertTrue($this->request->isPutMethod());
     }
 
     /**
      * 测试非PUT方法,期望返回false
      */
-    public function testGetIsPutWithNotGetMethod()
+    public function testIsPutMethodWithNotGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $this->assertFalse($this->stub->getIsPut());
+        $this->assertFalse($this->request->isPutMethod());
     }
 
     /**
      * 测试正确PATCH方法,期望返回true
      */
-    public function testGetIsPatchWithGetMethod()
+    public function testIsPatchMethodWithGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'PATCH';
-        $this->assertTrue($this->stub->getIsPatch());
+        $this->assertTrue($this->request->isPatchMethod());
     }
 
     /**
      * 测试非PATCH方法,期望返回false
      */
-    public function testGetIsPatchWithNotGetMethod()
+    public function testIsPatchMethodWithNotGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $this->assertFalse($this->stub->getIsPatch());
+        $this->assertFalse($this->request->isPatchMethod());
     }
 
     /**
@@ -202,9 +203,9 @@ class RequestTest extends GenericTestCase
      */
     public function testGetRawBody()
     {
-        $this->stub->setRawBody('test');
+        $this->request->setRawBody('test');
 
-        $rawBody = $this->stub->getRawBody();
+        $rawBody = $this->request->getRawBody();
 
         $this->assertEquals('test', $rawBody);
     }
@@ -214,8 +215,8 @@ class RequestTest extends GenericTestCase
      */
     public function testGetQueryParamsWithSetQueryParams()
     {
-        $this->stub->setQueryParams(array('key'=>'value'));
-        $queryParams = $this->stub->getQueryParams();
+        $this->request->setQueryParams(array('key'=>'value'));
+        $queryParams = $this->request->getQueryParams();
         $this->assertEquals(array('key'=>'value'), $queryParams);
     }
 
@@ -225,7 +226,7 @@ class RequestTest extends GenericTestCase
     public function testGetQueryParamsWithoutSetQueryParams()
     {
         $_GET['key'] = 'value';
-        $queryParams = $this->stub->getQueryParams();
+        $queryParams = $this->request->getQueryParams();
         $this->assertEquals(array('key'=>'value'), $queryParams);
     }
 
@@ -235,7 +236,7 @@ class RequestTest extends GenericTestCase
     public function testGetQueryParamWithExistKey()
     {
         $_GET['key'] = 'value';
-        $queryParam = $this->stub->getQueryParam('key');
+        $queryParam = $this->request->getQueryParam('key');
         $this->assertEquals('value', $queryParam);
     }
 
@@ -245,7 +246,7 @@ class RequestTest extends GenericTestCase
     public function testGetQueryParamWithExistKeyAndDefaultValue()
     {
         $_GET['key'] = 'value';
-        $queryParam = $this->stub->getQueryParam('key', 'value2');
+        $queryParam = $this->request->getQueryParam('key', 'value2');
         $this->assertEquals('value', $queryParam);
     }
 
@@ -255,7 +256,7 @@ class RequestTest extends GenericTestCase
     public function testGetQueryParamWithoutExistKey()
     {
         $_GET['key'] = 'value';
-        $queryParam = $this->stub->getQueryParam('key1');
+        $queryParam = $this->request->getQueryParam('key1');
         $this->assertNull($queryParam);
     }
 
@@ -265,7 +266,7 @@ class RequestTest extends GenericTestCase
     public function testGetQueryParamWithoutExistKeyAndDefaultValue()
     {
         $_GET['key'] = 'value';
-        $queryParam = $this->stub->getQueryParam('key1', 'value1');
+        $queryParam = $this->request->getQueryParam('key1', 'value1');
         $this->assertEquals('value1', $queryParam);
     }
 
@@ -274,8 +275,8 @@ class RequestTest extends GenericTestCase
      */
     public function testSetBodyParams()
     {
-        $this->stub->setBodyParams(array('key'=>'value'));
-        $this->assertEquals(array('key'=>'value'), $this->stub->getBodyParams());
+        $this->request->setBodyParams(array('key'=>'value'));
+        $this->assertEquals(array('key'=>'value'), $this->request->getBodyParams());
     }
 
     /**
@@ -286,7 +287,7 @@ class RequestTest extends GenericTestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         //通过$_POST传值
         $_POST['key'] = 'value';
-        $this->assertEquals($_POST, $this->stub->getBodyParams());
+        $this->assertEquals($_POST, $this->request->getBodyParams());
     }
 
     /**
@@ -296,8 +297,8 @@ class RequestTest extends GenericTestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         //通过setBodyParams传值
-        $this->stub->setRawBody(json_encode(array('key1'=>'value1')));
-        $this->assertEquals(array('key1'=>'value1'), $this->stub->getBodyParams());
+        $this->request->setRawBody(json_encode(array('key1'=>'value1')));
+        $this->assertEquals(array('key1'=>'value1'), $this->request->getBodyParams());
     }
 
     /**
@@ -308,7 +309,7 @@ class RequestTest extends GenericTestCase
         $_SERVER['REQUEST_METHOD'] = 'PUT';
         //通过$_POST传值
         $_POST['key'] = 'value';
-        $this->assertEquals($_POST, $this->stub->getBodyParams());
+        $this->assertEquals($_POST, $this->request->getBodyParams());
     }
 
     /**
@@ -318,8 +319,8 @@ class RequestTest extends GenericTestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'PUT';
         //通过setBodyParams传值
-        $this->stub->setRawBody(json_encode(array('key1'=>'value1')));
-        $this->assertEquals(array('key1'=>'value1'), $this->stub->getBodyParams());
+        $this->request->setRawBody(json_encode(array('key1'=>'value1')));
+        $this->assertEquals(array('key1'=>'value1'), $this->request->getBodyParams());
     }
 
     /**
@@ -328,8 +329,8 @@ class RequestTest extends GenericTestCase
     public function testGetBodyParamsWithoutPostAndPutMethod()
     {
         //通过$_POST传值
-        $this->stub->setRawBody('key=value');
-        $this->assertEquals(array('key'=>'value'), $this->stub->getBodyParams());
+        $this->request->setRawBody('key=value');
+        $this->assertEquals(array('key'=>'value'), $this->request->getBodyParams());
     }
 
     /**
@@ -339,7 +340,7 @@ class RequestTest extends GenericTestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['key'] = 'value';
-        $bodyParam = $this->stub->getBodyParam('key');
+        $bodyParam = $this->request->getBodyParam('key');
         $this->assertEquals('value', $bodyParam);
     }
 
@@ -350,7 +351,7 @@ class RequestTest extends GenericTestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['key'] = 'value';
-        $bodyParam = $this->stub->getBodyParam('key', 'value2');
+        $bodyParam = $this->request->getBodyParam('key', 'value2');
         $this->assertEquals('value', $bodyParam);
     }
 
@@ -361,7 +362,7 @@ class RequestTest extends GenericTestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['key'] = 'value';
-        $bodyParam = $this->stub->getBodyParam('key1');
+        $bodyParam = $this->request->getBodyParam('key1');
         $this->assertNull($bodyParam);
     }
 
@@ -372,7 +373,34 @@ class RequestTest extends GenericTestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['key'] = 'value';
-        $bodyParam = $this->stub->getBodyParam('key1', 'value1');
+        $bodyParam = $this->request->getBodyParam('key1', 'value1');
         $this->assertEquals('value1', $bodyParam);
+    }
+
+    /**
+     * 测试 setMediaTypeStrategy 媒体类型策略类
+     * @expectedException TypeError
+     */
+    public function testSetMediaTypeStrategyIncorrectType()
+    {
+        $this->request->setMediaTypeStrategy('mediaTypeStrqtegy');
+    }
+
+    public function testSetMediaTypeStrategyCorrectType()
+    {
+        $testMediaTypeStrategy = new class() implements IMediaTypeStrategy {
+            public function validate(Request $request) : bool
+            {
+                return true;
+            }
+
+            public function decode($rawData)
+            {
+                return $rawData;
+            }
+        };
+
+        $this->request->setMediaTypeStrategy($testMediaTypeStrategy);
+        $this->assertSame($testMediaTypeStrategy, $this->request->getMediaTypeStrategy());
     }
 }

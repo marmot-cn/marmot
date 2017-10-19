@@ -34,13 +34,12 @@ abstract class Db implements DbLayer
      */
     public function delete($whereSqlArr)
     {
-        return Core::$dbDriver->delete($this->tname(), $whereSqlArr, $bind = "");
+        return Core::$dbDriver->delete($this->tname(), $whereSqlArr);
     }
     
     /**
      * 插入数据操作,给表里插入一条数据
      * @param array $insertSqlArr 需要插入数据库的数据数组
-     * @param bool $returnLastInsertId 是否返回最新插入的id
      */
     public function insert($insertSqlArr, $returnLastInsertId = true) : int
     {
@@ -51,7 +50,7 @@ abstract class Db implements DbLayer
         
         return $returnLastInsertId ? Core::$dbDriver->lastInertId() : $rows;
     }
-    
+
     /**
      * 查询数据
      * @param stirng $sql condition 查询条件
@@ -81,7 +80,7 @@ abstract class Db implements DbLayer
      *
      */
     public function join(
-        DbLayer $db,
+        DbLayer $dbLayer,
         string $joinCondition,
         string $sql,
         string $select = '*',
@@ -100,7 +99,7 @@ abstract class Db implements DbLayer
             $sqlstr .= ' RIGHT JOIN ';
         }
 
-        $sqlstr .= $db->tname().' ON '.$joinCondition.$sql;
+        $sqlstr .= $dbLayer->tname().' ON '.$joinCondition.$sql;
  
         return Core::$dbDriver->query($sqlstr);
     }

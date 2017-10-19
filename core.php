@@ -62,7 +62,6 @@ class Core
     {
         //autoload
         self::initAutoload();
-        self::initVersion();//初始化网站版本
         self::initContainer();//引入容器
         self::initCache();//初始化缓存使用
         self::initEnv();//初始化环境
@@ -84,7 +83,6 @@ class Core
     {
 
         self::initAutoload();//autoload
-        self::initVersion();//初始化网站版本
         self::initEnv();//初始化环境
         self::initContainer('test');//引入容器
         self::initCache();//初始化缓存使用
@@ -176,17 +174,6 @@ class Core
     }
 
     /**
-     * 初始化网站版本,主要用于更新每次版本更新后js文件缓存
-  *
-     * @author  chloroplast1983
-     * @version 1.0.20131016
-     */
-    private function initVersion()
-    {
-        include S_ROOT .'System/pc.version.php';
-    }
-
-    /**
      * 初始化错误信息
      */
     private function initError()
@@ -240,12 +227,11 @@ class Core
         //这里我们需要使用annotation,所以开启了此功能
         $containerBuilder->useAnnotations(true);
         //为容器设置缓存
-        //@todo 开发模式不缓存
-        if (!D_BUG) {
-            $containerCache = new \Doctrine\Common\Cache\ApcuCache();
-            $containerCache->setNamespace('phpcore');
-            $containerBuilder->setDefinitionCache($containerCache);
-        }
+        $containerCache = new \Doctrine\Common\Cache\ArrayCache();
+        $containerCache->setNamespace('phpcore');
+        $containerBuilder->setDefinitionCache($containerCache);
+
+        $containerBuilder->writeProxiesToFile(true, S_ROOT.'cache/proxies');
         //为容器设置配置文件
         $containerBuilder->addDefinitions(S_ROOT.'config'.$env.'.php');
         //创建容器
@@ -273,7 +259,7 @@ class Core
                 }
             },
             [
-                'cacheFile' => S_ROOT. '/route.cache', /* required */
+                'cacheFile' => S_ROOT. 'cache/route.cache', /* required */
                 'cacheDisabled' => false,     /* optional, enabled by default */
             ]
         );

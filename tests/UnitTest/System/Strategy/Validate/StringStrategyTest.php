@@ -113,9 +113,4 @@ class StringStrategyTest extends GenericTestCase
         $result = $this->strategy->validate('71444', 'regular:/^1[1-9][0-9]{9}$/');
         $this->assertFalse($result);
     }
-
-    //min 最小字节, 需要考虑字符串传参utf-8, 使用mb_strlen
-    //max 最大字节, mb_len
-    //between 字节数
-    //range in_array(一堆字符串)
 }

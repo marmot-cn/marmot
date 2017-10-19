@@ -91,11 +91,11 @@ abstract class RowCacheQuery
 
         //如果没有数据,去数据库查询根据primaryKey 和 id
         $mysqlData = $this->dbLayer->select($this->primaryKey.'='.$id, '*');
-        $mysqlData = $mysqlData[0];
         //如果数据为空,返回false
-        if (empty($mysqlData)) {
+        if (empty($mysqlData) || !isset($mysqlData[0])) {
             return false;
         }
+        $mysqlData = $mysqlData[0];
         //数据存入缓存
         $this->cacheLayer->save($id, $mysqlData);
         //返回数据
@@ -107,11 +107,9 @@ abstract class RowCacheQuery
      */
     public function getList($ids)
     {
-
         if (empty($ids) || !is_array($ids)) {
             return false;
         }
-
 
         list($hits, $miss) = $this->cacheLayer->getList($ids);
 

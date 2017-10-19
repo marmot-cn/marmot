@@ -74,9 +74,4 @@ class DateStrategyTest extends GenericTestCase
         $result = $this->strategy->validate('20170816', 'max:2017-08-15');
         $this->assertFalse($result);
     }
-
-//min 测试是否大于等于给定日期
-    //日期格式需要兼容
-//max 测试是否小于等于给定日期
-    //日期格式需要兼容
 }

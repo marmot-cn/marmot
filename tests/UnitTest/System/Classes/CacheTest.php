@@ -48,6 +48,11 @@ class CacheTest extends GenericTestCase
         Core::$cacheDriver->flushAll();
     }
 
+    public function testTrue()
+    {
+        $this->assertTrue(true);
+    }
+
     /**
      * 我们需要测试添加数据,且能正常获取数据.
      * 测试 Cache::add()
@@ -128,7 +133,7 @@ class CacheTest extends GenericTestCase
         //循环保存数据
         //因为在cache层,有前缀
         //所以这里需要拼接cacheKeyPrefix
-        $keys = '';
+        $keys = array();
         foreach ($this->data as $key => $value) {
             $this->assertTrue(Core::$cacheDriver->save($this->cacheKeyPrefix.'_'.$key, $value), ' save fails');
             $keys[] = $key;

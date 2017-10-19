@@ -12,12 +12,12 @@ use Marmot\Core;
 class UserCacheTest extends GenericTestCase
 {
 
-    private $stub;
+    private $cache;
     private $tablepre = 'pcore_';
 
     public function setUp()
     {
-        $this->stub = new UserCache();
+        $this->cache = new UserCache();
     }
 
     /**
@@ -25,7 +25,7 @@ class UserCacheTest extends GenericTestCase
      */
     public function testCorrectInstanceExtendsCache()
     {
-        $this->assertInstanceof('System\Classes\Cache', $this->stub);
+        $this->assertInstanceof('System\Classes\Cache', $this->cache);
     }
 
     /**
@@ -34,12 +34,8 @@ class UserCacheTest extends GenericTestCase
     public function testUserCacheCorrectKey()
     {
         $key = $this->getPrivateProperty('Member\Persistence\UserCache', 'key');
-        $tableName = $key->getValue($this->stub);
+        $tableName = $key->getValue($this->cache);
         //判断key赋值设想一致
         $this->assertEquals('user', $tableName);
-        //检查是否有相同的表名
-        //查询出表名
-        $results = Core::$dbDriver->query('SHOW TABLES LIKE \''.$this->tablepre.$tableName.'\'');
-        $this->assertNotEmpty($results);//期望检索出表名
     }
 }

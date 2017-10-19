@@ -16,6 +16,7 @@ abstract class User implements IObject
 
     const SALT_LENGTH = 4;
     const SALT_BASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
+    const STATUS = array('NORMAL'=>0);
 
     /**
      * @var Object 对象性状
@@ -56,7 +57,7 @@ abstract class User implements IObject
         $this->createTime = time();
         $this->updateTime = 0;
         $this->salt = '';
-        $this->status = STATUS_NORMAL;
+        $this->status = self::STATUS['NORMAL'];
         $this->statusTime = 0;
     }
 

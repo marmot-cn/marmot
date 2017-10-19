@@ -27,6 +27,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
                                S_ROOT.'/System/Query/',
                                S_ROOT.'/System/View/',
                                S_ROOT.'/System/Strategy/Validate/',
+                               S_ROOT.'/System/Strategy/MediaTypes',
                               );
         //准备系统文件的文件夹,用于统计系统文件总数 -- 结束
         //计算文件总数 -- 开始
@@ -71,14 +72,6 @@ class CoreTest extends \PHPUnit_Framework_TestCase
         }
         closedir($handle);
         return $i;
-    }
-
-    /**
-     * 测试是否初始化了Version
-     */
-    public function testInitVersion()
-    {
-        $this->assertTrue(defined('MARMOT_VERSION'), 'version not init');
     }
 
     /**

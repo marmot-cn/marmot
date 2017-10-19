@@ -11,10 +11,9 @@ class Filter
             foreach ($string as $key => $val) {
                 $string[$key] = Filter::addslashesPlus($val);
             }
-        } else {
-            $string = addslashes($string);
+            return $string;
         }
-        return $string;
+        return addslashes($string);
     }
     
     //trim加强版
@@ -24,10 +23,9 @@ class Filter
             foreach ($string as $key => $val) {
                 $string[$key] = Filter::trimPlus($val);
             }
-        } else {
-            $string = trim($string);
+            return $string;
         }
-        return $string;
+        return trim($string);
     }
     
     //代码转义（Array加强版）
@@ -37,10 +35,9 @@ class Filter
             foreach ($string as $key => $val) {
                 $string[$key] = Filter::stripslashesPlus($val);
             }
-        } else {
-            $string = stripslashes($string);
+            return $string;
         }
-        return $string;
+        return stripslashes($string);
     }
     
     //取消HTML代码（Array加强版）
@@ -50,14 +47,14 @@ class Filter
             foreach ($string as $key => $val) {
                 $string[$key] = Filter::htmlspecialcharsPlus($val);
             }
-        } else {
-            $string = preg_replace(
-                '/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4})|[a-zA-Z][a-z0-9]{2,5});)/',
-                '&\\1',
-                str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string)
-            );
+
+            return $string;
         }
-        return $string;
+        return preg_replace(
+            '/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4})|[a-zA-Z][a-z0-9]{2,5});)/',
+            '&\\1',
+            str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string)
+        );
     }
 
     public static function dhtmlspecialchars($string, $flags = false)
@@ -78,7 +75,7 @@ class Filter
         }
         return $string;
     }
-    
+
     /**
      * 清除标签
      * @param string $string
@@ -86,7 +83,7 @@ class Filter
      * @param string $allowattributes
      * @return mixed
      */
-    public function stripTagsAttributes($string, $allowtags = null, $allowattributes = null)
+    public static function stripTagsAttributes($string, $allowtags = null, $allowattributes = null)
     {
 
         $string = strip_tags($string, $allowtags);
@@ -121,10 +118,9 @@ class Filter
             foreach ($string as $key => $val) {
                 $string[$key] = Filter::stripTagsAttributesPlus($val, $allowtags, $allowattributes);
             }
-        } else {
-            $string = Filter::stripTagsAttributes($string, $allowtags, $allowattributes);
+            return $string;
         }
-        return $string;
+        return Filter::stripTagsAttributes($string, $allowtags, $allowattributes);
     }
 
     //html过滤器（去掉，转义，部分）

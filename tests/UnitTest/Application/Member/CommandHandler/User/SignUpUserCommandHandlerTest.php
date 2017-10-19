@@ -55,7 +55,7 @@ class SignUpUserCommandHandlerTest extends GenericTestsDatabaseTestCase
     public function testExecute()
     {
         $faker = \Faker\Factory::create('zh_CN');
-        $faker->seed($seed);//设置seed,放置和生成数据相同
+        $faker->seed(0);//设置seed,放置和生成数据相同
 
         $command = new SignUpUserCommand(
             $faker->phoneNumber,

@@ -10,7 +10,6 @@ use System\Classes\Cache;
  */
 class UserCache extends Cache
 {
-
     /**
      * 构造函数初始化key和表名一致
      */

@@ -29,12 +29,8 @@ trait ValidateStrategy
                 return false;
             }
 
-            if (isset($parameters)&&!empty($parameters)) {
-                $parameters = explode(',', $parameters);
-                $result = call_user_func_array(array($this, $method), $parameters);
-            } else {
-                $result = $this->$method();
-            }
+            $parameters = explode(',', $parameters);
+            $result = call_user_func_array(array($this, $method), $parameters);
 
             if (!$result) {
                 Core::setLastError($errorCode);

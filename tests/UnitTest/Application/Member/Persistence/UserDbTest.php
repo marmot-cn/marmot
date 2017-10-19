@@ -12,12 +12,11 @@ use Marmot\Core;
 class UserDbTest extends GenericTestCase
 {
 
-    private $stub;
-    private $tablepre = 'pcore_';
+    private $db;
 
     public function setUp()
     {
-        $this->stub = new UserDb();
+        $this->db = new UserDb();
     }
 
     /**
@@ -25,7 +24,7 @@ class UserDbTest extends GenericTestCase
      */
     public function testCorrectInstanceExtendsDb()
     {
-        $this->assertInstanceof('System\Classes\Db', $this->stub);
+        $this->assertInstanceof('System\Classes\Db', $this->db);
     }
 
     /**
@@ -34,12 +33,8 @@ class UserDbTest extends GenericTestCase
     public function testUserDbCorrectKey()
     {
         $table = $this->getPrivateProperty('Member\Persistence\UserDb', 'table');
-        $tableName = $table->getValue($this->stub);
+        $tableName = $table->getValue($this->db);
         //判断key赋值设想一致
         $this->assertEquals('user', $tableName);
-        //检查是否有相同的表名
-        //查询出表名
-        $results = Core::$dbDriver->query('SHOW TABLES LIKE \''.$this->tablepre.$tableName.'\'');
-        $this->assertNotEmpty($results);//期望检索出表名
     }
 }

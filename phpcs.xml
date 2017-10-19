@@ -8,7 +8,7 @@
   <!-- 核心文件 -->
   <file>Core.php</file>
   <!-- 路由文件 -->
-  <file>index.php</file>
+  <file>public/index.php</file>
   <!-- 单元测试文件 -->
   <file>tests</file>
 

@@ -21,6 +21,18 @@ define('ROUTE_NOT_EXIST', 2);
  */
 define('METHOD_NOT_ALLOWED', 3);
 /**
+ * 不支持的媒体协议
+ */
+define('UNSUPPORTED_MEDIA_TYPE', 4);
+/**
+ * 无法使用请求内容来响应
+ */
+define('NOT_ACCEPTABLE_MEDIA_TYPE', 5);
+/**
+ * 请求数据格式错误
+ */
+define('INCORRECT_RAW_BODY', 6);
+/**
  * 资源不存在
  */
 define('RESOURCE_NOT_EXIST', 10);

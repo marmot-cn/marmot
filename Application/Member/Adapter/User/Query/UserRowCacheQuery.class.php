@@ -1,5 +1,5 @@
 <?php
-namespace Member\Repository\User\Query;
+namespace Member\Adapter\User\Query;
 
 use System\Query\RowCacheQuery;
 

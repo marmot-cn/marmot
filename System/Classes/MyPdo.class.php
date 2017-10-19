@@ -11,15 +11,10 @@ class MyPdo
 
     private $pdo = null;
     public $statement = null;
-    private $is_addsla = false;
+    private $isAddsla = false;
     public $options = array(
         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES ",
     );
-
-    /**
-     * @Inject("database.tablepre")
-     */
-    private $tablepre;
 
     /**
      * @Inject({"database.host","database.user","database.passwod","database.dbname"})
@@ -43,13 +38,10 @@ class MyPdo
             foreach ($param as $key => $val) {
                 $this->pdo->setAttribute($key, $val);
             }
-        } else {
-            if ($val!='') {
-                $this->pdo->setAttribute($param, $val);
-            } else {
-                return false;
-            }
+            return true;
         }
+
+        return $this->pdo->setAttribute($param, $val);
     }
 
     /**
@@ -128,21 +120,19 @@ class MyPdo
             try {
                 return $this->statement->execute($param);
             } catch (Exception $e) {
-                //return $this->errorInfo();
-                return $e->getMessage();
+                return $this->errorInfo();
             }
-        } else {
-            try {
-                return $this->statement->execute();
-            } catch (Exception $e) {
+        }
+        try {
+            return $this->statement->execute();
+        } catch (Exception $e) {
                 /* 返回的错误信息格式
                 [0] => 42S22
                 [1] => 1054
                 [2] => Unknown column 'col' in 'field list'
                 return $this->errorInfo();
-                */
-                return $e->getMessage();
-            }
+                 */
+            return $this->errorInfo();
         }
     }
      
@@ -155,9 +145,9 @@ class MyPdo
     * PDO::FETCH_LAZY     对象 会附带queryString查询SQL语句
     * PDO::FETCH_BOUND    如果设置了bindColumn，则使用该参数
     */
-    // private function fetch($fetch_style=PDO::FETCH_ASSOC){
+    // private function fetch($fetchStyle=PDO::FETCH_ASSOC){
     //     if(is_object($this->statement)){
-    //         return $this->statement->fetch($fetch_style);
+    //         return $this->statement->fetch($fetchStyle);
     //     }else{
     //         return false;
     //     }
@@ -175,13 +165,12 @@ class MyPdo
     * 参数2说明：
     * 给定要处理这个结果的类或函数
     */
-    private function fetchAll($fetch_style = PDO::FETCH_ASSOC, $handle = '')
+    private function fetchAll($fetchStyle = PDO::FETCH_ASSOC, $handle = '')
     {
         if ($handle!='') {
-            return $this->statement->fetchAll($fetch_style, $handle);
-        } else {
-            return $this->statement->fetchAll($fetch_style);
+            return $this->statement->fetchAll($fetchStyle, $handle);
         }
+        return $this->statement->fetchAll($fetchStyle);
     }
     /**
     * 以对象形式返回 结果 跟fetch(PDO::FETCH_OBJ)一样
@@ -207,9 +196,9 @@ class MyPdo
      * 以引用的方式绑定变量到占位符(可以只执行一次prepare,
      * 执行多次bindParam达到重复使用的效果)
      */
-    public function bindParam($parameter, $variable, $data_type = PDO::PARAM_STR, $length = 6)
+    public function bindParam($parameter, $variable, $dataType = PDO::PARAM_STR, $length = 6)
     {
-        return $this->statement->bindParam($parameter, $variable, $data_type, $length);
+        return $this->statement->bindParam($parameter, $variable, $dataType, $length);
     }
      
     /**
@@ -315,7 +304,7 @@ class MyPdo
      
     private function addsla($data)
     {
-        if ($this->is_addsla) {
+        if ($this->isAddsla) {
             return trim(addslashes($data));
         }
         return $data;

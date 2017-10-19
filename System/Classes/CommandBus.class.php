@@ -16,6 +16,8 @@ use System\Interfaces\ICommand;
 class CommandBus
 {
     
+    //transaction
+    
     private $commandHandlerFactory;
 
     public function __construct(ICommandHandlerFactory $commandHandlerFactory)
@@ -23,15 +25,24 @@ class CommandBus
         $this->commandHandlerFactory = $commandHandlerFactory;
     }
 
+    private function getCommandHandlerFactory() : ICommandHandlerFactory
+    {
+        return $this->commandHandlerFactory;
+    }
+
     public function send(ICommand $command)
     {
-        $handler = $this->commandHandlerFactory->getHandler($command);
-
+        $handler = $this->getCommandHandlerFactory()->getHandler($command);
+        
+        //transaction start
         if ($handler != null) {
             return $handler->execute($command);
-        } else {
-            //@todo
-            //exception
         }
+        //truansaction end
+        
+        //log
+        
+        //error
+        return false;
     }
 }

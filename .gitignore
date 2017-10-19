@@ -4,3 +4,4 @@ config.php
 .DS_Store
 Docs/UnitTestCover
 route.cache
+debug

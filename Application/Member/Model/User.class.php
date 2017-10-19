@@ -3,6 +3,7 @@ namespace Member\Model;
 
 use Marmot\Core;
 use User\Model\User as AbstractUser;
+use Member\Repository\User\UserRepository;
 
 /**
  * 用户领域对象
@@ -20,11 +21,14 @@ class User extends AbstractUser
      */
     private $realName;
 
+    private $userRepository;
+
     public function __construct(int $id = 0)
     {
         parent::__construct($id);
         $this->realName = '';
         $this->status  = self::STATUS_NORMAL;
+        $this->userRepository = Core::$container->get('Member\Repository\User\UserRepository');
     }
 
     public function __destruct()
@@ -76,14 +80,23 @@ class User extends AbstractUser
         return $this->getStatus() == self::STATUS_DELETE;
     }
 
+    public function setUserRepository(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    private function getUserRepository() : UserRepository
+    {
+        return $this->userRepository;
+    }
+
     /**
      * 注册
      * @return bool 是否注册成功
      */
     public function signUp() : bool
     {
-        $repository = Core::$container->get('Member\Repository\User\UserRepository');
-        if (!$repository->add($this)) {
+        if (!$this->getUserRepository()->add($this)) {
             Core::setLastError(USER_IDENTIFY_DUPLICATE);
             return false;
         }
@@ -98,8 +111,7 @@ class User extends AbstractUser
     {
         $this->encryptPassword($password);
         
-        $repository = Core::$container->get('Member\Repository\User\UserRepository');
-        return $repository->update($this, array(
+        return $this->getUserRepository()->update($this, array(
                     'updateTime',
                     'password',
                     'salt',

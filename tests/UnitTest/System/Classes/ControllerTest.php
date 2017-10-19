@@ -45,9 +45,9 @@ class ControllerTest extends tests\GenericTestCase
         $ivew = $this->getMock('System\Interfaces\IView');
         $ivew->expects($this->any())
              ->method('display')
-             ->will($this->returnValue(array('key'=>'value')));
+             ->will($this->returnValue(json_encode(array('key'=>'value'))));
 
         $this->stub->render($ivew);
-        $this->expectOutputString(array('key'=>'value'));
+        $this->expectOutputString(json_encode(array('key'=>'value')));
     }
 }

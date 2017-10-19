@@ -11,7 +11,6 @@ return [
     'System\Classes\Filter' => S_ROOT.'System/Classes/Filter.class.php',
     'System\Classes\Request' => S_ROOT.'System/Classes/Request.class.php',
     'System\Classes\Response' => S_ROOT.'System/Classes/Response.class.php',
-    'System\Classes\Translator' => S_ROOT.'System/Classes/Translator.class.php',
     'System\Classes\Error' => S_ROOT.'System/Classes/Error.class.php',
     'System\Classes\Event' => S_ROOT.'System/Classes/Event.class.php',
     'System\Classes\Server' => S_ROOT.'System/Classes/Server.class.php',
@@ -23,6 +22,7 @@ return [
     'System\Strategy\Validate\StringStrategy' => S_ROOT.'System/Strategy/Validate/StringStrategy.class.php',
     'System\Strategy\Validate\DateStrategy' => S_ROOT.'System/Strategy/Validate/DateStrategy.class.php',
     'System\Strategy\Validate\EmailStrategy' => S_ROOT.'System/Strategy/Validate/EmailStrategy.class.php',
+    'System\Strategy\MediaTypes\JsonapiStrategy' => S_ROOT.'System/Strategy/MediaTypes/JsonApiStrategy.class.php',
 
     //interfaces
     'System\Interfaces\Command' => S_ROOT.'System/Interfaces/Command.class.php',
@@ -37,6 +37,8 @@ return [
     'System\Interfaces\ICommandHandlerFactory' => S_ROOT.'System/Interfaces/ICommandHandlerFactory.class.php',
     'System\Interfaces\IResponseFormatter' => S_ROOT.'System/Interfaces/IResponseFormatter.class.php',
     'System\Interfaces\IValidateStrategy' => S_ROOT.'System/Interfaces/IValidateStrategy.class.php',
+    'System\Interfaces\IMediaTypeStrategy' => S_ROOT.'System/Interfaces/IMediaTypeStrategy.class.php',
+    'System\Interfaces\ITranslator' => S_ROOT.'System/Interfaces/ITranslator.class.php',
 
     //command
     'System\Command\Cache\SaveCacheCommand' => S_ROOT.'System/Command/Cache/SaveCacheCommand.class.php',

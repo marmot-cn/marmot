@@ -55,7 +55,7 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
     public function testExecuteNotExistUser()
     {
         $faker = \Faker\Factory::create('zh_CN');
-        $faker->seed($seed);//设置seed,放置和生成数据相同
+        $faker->seed(0);//设置seed,放置和生成数据相同
 
         $command = new UpdatePasswordUserCommand(
             $faker->password,
@@ -71,7 +71,7 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
     public function testExecuteIncorrectOldPassword()
     {
         $faker = \Faker\Factory::create('zh_CN');
-        $faker->seed($seed);//设置seed,放置和生成数据相同
+        $faker->seed(0);//设置seed,放置和生成数据相同
         $oldPassword = '123456';
         $repository = Core::$container->get('Member\Repository\User\UserRepository');
         

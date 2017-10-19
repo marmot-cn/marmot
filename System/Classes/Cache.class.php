@@ -2,7 +2,8 @@
 //powered by kevin
 namespace System\Classes;
 
-use System\Command\Cache;
+use System\Command\Cache\DelCacheCommand;
+use System\Command\Cache\SaveCacheCommand;
 use System\Interfaces\CacheLayer;
 use Marmot\Core;
 
@@ -26,7 +27,7 @@ abstract class Cache implements CacheLayer
      */
     public function save($id, $data, $time = 0) : bool
     {
-        $command = new Cache\SaveCacheCommand($this->key.'_'.$id, $data, $time);
+        $command = new SaveCacheCommand($this->key.'_'.$id, $data, $time);
         return $command -> execute();
     }
     
@@ -36,7 +37,7 @@ abstract class Cache implements CacheLayer
      */
     public function del($id) : bool
     {
-        $command = new Cache\DelCacheCommand($this->key.'_'.$id);
+        $command = new DelCacheCommand($this->key.'_'.$id);
         return $command -> execute();
     }
     
@@ -62,8 +63,8 @@ abstract class Cache implements CacheLayer
 
         $hits = $misses = array();
 
-        foreach ($idList as $key => $val) {
-            $keys[$val] = $this->key.'_'.$val;
+        foreach ($idList as $id) {
+            $keys[$id] = $this->key.'_'.$id;
         }
         
         $flipKey = array_flip($keys);
