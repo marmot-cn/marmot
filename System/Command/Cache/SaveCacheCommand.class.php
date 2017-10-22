@@ -2,8 +2,8 @@
 namespace System\Command\Cache;
 
 use System\Interfaces;
-use System\Observer;
-use System\Classes;
+use System\Observer\CacheObserver;
+use System\Classes\Transaction;
 use Marmot\Core;
 
 /**
@@ -13,7 +13,6 @@ use Marmot\Core;
 
 class SaveCacheCommand implements Interfaces\Command
 {
-    
     private $key;
     private $data;
     private $time;
@@ -24,9 +23,23 @@ class SaveCacheCommand implements Interfaces\Command
         $this->data = $data;
         $this->time = $time;
         
-        if (Classes\Transaction::inTransaction()) {
-            Classes\Transaction::$transactionSubject -> attach(new Observer\CacheObserver($this));
+        $this->attachedByObserver();
+    }
+
+    public function __destruct()
+    {
+        unset($this->key);
+        unset($this->data);
+        unset($this->time);
+    }
+
+    private function attachedByObserver() : bool
+    {
+        $transaction = Transaction::getInstance();
+        if ($transaction->inTransaction()) {
+            return $transaction->attachRollBackObserver(new CacheObserver($this));
         }
+        return false;
     }
 
     public function execute() : bool

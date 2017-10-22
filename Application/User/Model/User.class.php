@@ -219,12 +219,19 @@ abstract class User implements IObject
     }
 
     /**
+     * 修改密码
+     */
+    public function changePassowd(string $oldPassword, string $newPassword) : bool
+    {
+        return $this->verifyPassword($oldPassword) && $this->updatePassword($newPassword);
+    }
+
+    /**
      * 注册
      */
     abstract public function signUp() : bool;
 
-    /**
-     * 修改密码
-     */
-    abstract public function updatePassword(string $password) : bool;
+    abstract protected function verifyPassword(string $oldPassword) : bool;
+
+    abstract protected function updatePassword(string $newPassword) : bool;
 }

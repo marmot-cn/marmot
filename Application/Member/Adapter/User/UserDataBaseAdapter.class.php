@@ -3,6 +3,7 @@ namespace Member\Adapter\User;
 
 use Member\Translator\UserDataBaseTranslator;
 use Member\Model\User;
+use Member\Model\NullUser;
 use Member\Adapter\User\Query\UserRowCacheQuery;
 
 class UserDataBaseAdapter implements IUserAdapter
@@ -22,22 +23,12 @@ class UserDataBaseAdapter implements IUserAdapter
         unset($this->userRowCacheQuery);
     }
     
-    public function setUserDataBaseTranslator(UserDataBaseTranslator $userDataBaseTranslator)
-    {
-        $this->userDataBaseTranslator = $userDataBaseTranslator;
-    }
-
-    private function getUserDataBaseTranslator() : UserDataBaseTranslator
+    protected function getUserDataBaseTranslator() : UserDataBaseTranslator
     {
         return $this->userDataBaseTranslator;
     }
 
-    public function setUserRowCacheQuery(UserRowCacheQuery $userRowCacheQuery)
-    {
-        $this->userRowCacheQuery = $userRowCacheQuery;
-    }
-
-    private function getUserRowCacheQuery() : UserRowCacheQuery
+    protected function getUserRowCacheQuery() : UserRowCacheQuery
     {
         return $this->userRowCacheQuery;
     }
@@ -46,6 +37,10 @@ class UserDataBaseAdapter implements IUserAdapter
     {
         $info = array();
 
+        //翻译器 对象翻译成db 数组
+        //数组插入数据库
+        //插入成功返回true
+        //插入失败返回false
         $info = $this->getUserDataBaseTranslator()->objectToArray($user);
         $id = $this->getUserRowCacheQuery()->add($info);
         if (!$id) {
@@ -72,34 +67,35 @@ class UserDataBaseAdapter implements IUserAdapter
         return true;
     }
 
-    public function getOne($id)
+    public function getOne($id) : User
     {
         $info = array();
 
         $info = $this->getUserRowCacheQuery()->getOne($id);
         if (empty($info)) {
-            return false;
+            return NullUser::getInstance();
         }
 
         return $this->getUserDataBaseTranslator()->arrayToObject($info);
     }
 
-    public function getList(array $ids)
+    public function getList(array $ids) : array
     {
         $userList = array();
         
         $userInfoList = $this->getUserRowCacheQuery()->getList($ids);
         if (empty($userInfoList)) {
-            return false;
+            return array();
         }
 
+        $translator = $this->getUserDataBaseTranslator();
         foreach ($userInfoList as $userInfo) {
-            $userList[] = $this->getUserDataBaseTranslator()->arrayToObject($userInfo);
+            $userList[] = $translator->arrayToObject($userInfo);
         }
         return $userList;
     }
 
-    private function formatFilter(array $filter)
+    private function formatFilter(array $filter) : string
     {
         $condition = $conjection = '';
 
@@ -129,7 +125,7 @@ class UserDataBaseAdapter implements IUserAdapter
         return empty($condition) ? ' 1 ' : $condition ;
     }
 
-    private function formatSort(array $sort)
+    private function formatSort(array $sort) : string
     {
         $condition = '';
         $conjection = ' ORDER BY ';
@@ -150,25 +146,27 @@ class UserDataBaseAdapter implements IUserAdapter
         array $sort = array(),
         int $offset = 0,
         int $size = 20
-    ) {
+    ) :array {
         $condition = $this->formatFilter($filter);
         $condition .= $this->formatSort($sort);
 
-        $list = $this->userRowCacheQuery->find($condition, $offset, $size);
+        $userRowCacheQuery = $this->getUserRowCacheQuery();
+        $list = $userRowCacheQuery->find($condition, $offset, $size);
         if (empty($list)) {
-            return false;
+            return array();
         }
 
         $ids = array();
+        $primaryKey = $userRowCacheQuery->getPrimaryKey();
         foreach ($list as $info) {
-            $ids[] = $info[$this->userRowCacheQuery->getPrimaryKey()];
+            $ids[] = $info[$primaryKey];
         }
 
         $count = 0;
 
         $count = sizeof($ids);
         if ($count  == $size || $offset > 0) {
-            $count = $this->userRowCacheQuery->count($condition);
+            $count = $userRowCacheQuery->count($condition);
         }
 
         return array($this->getList($ids), $count);

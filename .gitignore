@@ -5,3 +5,4 @@ config.php
 Docs/UnitTestCover
 route.cache
 debug
+cache/proxies

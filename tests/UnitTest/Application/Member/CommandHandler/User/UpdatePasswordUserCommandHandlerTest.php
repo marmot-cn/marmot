@@ -6,8 +6,11 @@ use System\Interfaces\ICommand;
 use Marmot\Core;
 
 use Member\Model\User;
+use Member\Repository\User\UserRepository;
 use Member\Utils\ObjectGenerate;
 use Member\Command\User\UpdatePasswordUserCommand;
+
+use Prophecy\Argument;
 
 /**
  * Member/CommandHandler/User/UpdatePasswordUserCommandHandler.class.php 测试文件
@@ -28,17 +31,23 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
         $this->commandHandler = new UpdatePasswordUserCommandHandler();
     }
 
-    public function tearDown()
-    {
-        Core::$cacheDriver->flushAll();
-        parent::tearDown();
-    }
-
     public function testCorrectImplementsICommandHandler()
     {
         $this->assertInstanceOf(
             'System\Interfaces\ICommandHandler',
             $this->commandHandler
+        );
+    }
+
+    public function testConstructor()
+    {
+        $userRepositoryParameter = $this->getPrivateProperty(
+            'Member\CommandHandler\User\UpdatePasswordUserCommandHandler',
+            'userRepository'
+        );
+        $this->assertInstanceOf(
+            'Member\Repository\User\UserRepository',
+            $userRepositoryParameter->getValue($this->commandHandler)
         );
     }
 
@@ -52,68 +61,45 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
         $this->commandHandler->execute($command);
     }
 
-    public function testExecuteNotExistUser()
+    public function testExecuteFailure()
     {
         $faker = \Faker\Factory::create('zh_CN');
-        $faker->seed(0);//设置seed,放置和生成数据相同
+        $faker->seed(0);
 
-        $command = new UpdatePasswordUserCommand(
-            $faker->password,
-            $faker->password,
-            1
-        );
-
-        $result = $this->commandHandler->execute($command);
-        $this->assertFalse($result);
-        $this->assertEquals(RESOURCE_NOT_EXIST, Core::getLastError()->getId());
-    }
-
-    public function testExecuteIncorrectOldPassword()
-    {
-        $faker = \Faker\Factory::create('zh_CN');
-        $faker->seed(0);//设置seed,放置和生成数据相同
-        $oldPassword = '123456';
-        $repository = Core::$container->get('Member\Repository\User\UserRepository');
-        
-        //构建一个用户密码为$oldPassword
-        $user = ObjectGenerate::generateUser(0, 0, array('password'=> $oldPassword));
-        $repository->add($user);
-
-        $command = new UpdatePasswordUserCommand(
-            $oldPassword.'different',
-            $faker->password,
-            $user->getId()
-        );
-
-        $result = $this->commandHandler->execute($command);
-        $this->assertFalse($result);
-        $this->assertEquals(USER_OLD_PASSWORD_NOT_CORRECT, Core::getLastError()->getId());
-    }
-
-    public function testExecute()
-    {
-        $faker = \Faker\Factory::create('zh_CN');
-        $oldPassword = '123456';
         $newPassword = $faker->password;
-        $repository = Core::$container->get('Member\Repository\User\UserRepository');
-
-        //构建一个用户密码为$oldPassword
-        $user = ObjectGenerate::generateUser(0, 0, array('password'=> $oldPassword));
-        $repository->add($user);
+        $oldPassword = 'oldPassword';
+        $uid = $faker->randomNumber(3);
 
         $command = new UpdatePasswordUserCommand(
             $oldPassword,
             $newPassword,
-            $user->getId()
+            $uid
         );
 
+        $user = $this->prophesize(User::class);
+        $user->changePassowd(
+            Argument::exact($oldPassword),
+            Argument::exact($newPassword)
+        )->shouldBeCalledTimes(1)
+        ->willReturn(false);
+
+        $repository = $this->prophesize(UserRepository::class);
+        $repository->getOne(Argument::exact($uid))
+                   ->shouldBeCalledTimes(1)
+                   ->willReturn($user);
+
+        $this->commandHandler = $this->getMockBuilder(UpdatePasswordUserCommandHandler::class)
+                                     ->setMethods(['getUserRepository'])
+                                     ->getMock();
+        $this->commandHandler->expects($this->once())
+                             ->method('getUserRepository')
+                             ->willReturn($repository->reveal());
+
         $result = $this->commandHandler->execute($command);
-        $this->assertTrue($result);
-        //检查密码是否修改正确
-        $user = $repository->getOne($user->getId());
-        $testUser = new User();
-        //使用相同的盐 和 新密码
-        $testUser->encryptPassword($newPassword, $user->getSalt());
-        $this->assertEquals($user->getPassword(), $testUser->getPassword());
+        $this->assertFalse($result);
+    }
+
+    public function testExecuteSuccess()
+    {
     }
 }

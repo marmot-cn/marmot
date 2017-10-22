@@ -4,6 +4,7 @@ namespace System\Classes;
 
 use System\Interfaces\ICommandHandlerFactory;
 use System\Interfaces\ICommand;
+use System\Classes\Transaction;
 
 /**
  * 命令总线
@@ -11,7 +12,6 @@ use System\Interfaces\ICommand;
  * 2. 发送命令,通过 commandHandlerFactory 获取到适当的 commandHandler
  * 3. 执行 commandHandler
  *
- * @codeCoverageIgnore
  */
 class CommandBus
 {

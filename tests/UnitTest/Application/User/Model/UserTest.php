@@ -33,44 +33,28 @@ class UserTest extends GenericTestCase
     public function testUserConstructor()
     {
         //测试初始化网店用户id
-        $idParameter = $this->getPrivateProperty('User\Model\User', 'id');
-        $this->assertEquals(0, $idParameter->getValue($this->user));
         $this->assertEquals(0, $this->user->getId());
 
         //测试初始化用户手机号
-        $cellPhoneParameter = $this->getPrivateProperty('User\Model\User', 'cellPhone');
-        $this->assertEmpty($cellPhoneParameter->getValue($this->user));
         $this->assertEmpty($this->user->getCellPhone());
 
         //测试初始化昵称
-        $nickNameParameter = $this->getPrivateProperty('User\Model\User', 'nickName');
-        $this->assertEmpty($nickNameParameter->getValue($this->user));
         $this->assertEmpty($this->user->getNickName());
 
         //测试初始化用户名预留字段
-        $userNameParameter = $this->getPrivateProperty('User\Model\User', 'userName');
-        $this->assertEmpty($userNameParameter->getValue($this->user));
         $this->assertEmpty($this->user->getUserName());
 
         //测试初始化用户密码
-        $passwordParameter = $this->getPrivateProperty('User\Model\User', 'password');
-        $this->assertEmpty($passwordParameter->getValue($this->user));
         $this->assertEmpty($this->user->getPassword());
 
         //测试初始化注册时间
-        $createTimeParameter = $this->getPrivateProperty('User\Model\User', 'createTime');
-        $this->assertGreaterThan(0, $createTimeParameter->getValue($this->user));
-        $this->assertEquals($createTimeParameter->getValue($this->user), $this->user->getCreateTime());
+        $this->assertEquals(time(), $this->user->getCreateTime());
 
         //测试初始化更新时间
-        $updateTimeParameter = $this->getPrivateProperty('User\Model\User', 'updateTime');
-        $this->assertEquals(0, $updateTimeParameter->getValue($this->user));
-        $this->assertEquals($updateTimeParameter->getValue($this->user), $this->user->getUpdateTime());
+        $this->assertEquals(0, $this->user->getUpdateTime());
 
         //测试初始化更新时间
-        $statusTimeParameter = $this->getPrivateProperty('User\Model\User', 'statusTime');
-        $this->assertEquals(0, $statusTimeParameter->getValue($this->user));
-        $this->assertEquals($statusTimeParameter->getValue($this->user), $this->user->getStatusTime());
+        $this->assertEquals(0, $this->user->getStatusTime());
     }
 
     //cellPhone 测试 --------------------------------------------------- start
@@ -216,4 +200,49 @@ class UserTest extends GenericTestCase
         $this->user->setSalt(array(1,2,3));
     }
     //salt 测试 --------------------------------------------------------   end
+    
+    public function testChangePassworVerifyPasswordFailure()
+    {
+        $oldPassword = 'oldPassword';
+        $newPassword = 'newPassword';
+
+        $this->user = $this->getMockBuilder('User\Model\User')
+                           ->setMethods(['verifyPassword', 'updatePassword'])
+                           ->getMockForAbstractClass();
+
+        $this->user->expects($this->once())
+                   ->method('verifyPassword')
+                   ->with($this->equalTo($oldPassword))
+                   ->willReturn(false);
+
+        $this->user->expects($this->exactly(0))
+                   ->method('updatePassword')
+                   ->with($this->equalTo($newPassword));
+
+        $result = $this->user->changePassowd($oldPassword, $newPassword);
+        $this->assertFalse($result);
+    }
+
+    public function testChangePassworUpdatePasswordFailure()
+    {
+        $oldPassword = 'oldPassword';
+        $newPassword = 'newPassword';
+
+        $this->user = $this->getMockBuilder('User\Model\User')
+                           ->setMethods(['verifyPassword', 'updatePassword'])
+                           ->getMockForAbstractClass();
+
+        $this->user->expects($this->once())
+                   ->method('verifyPassword')
+                   ->with($this->equalTo($oldPassword))
+                   ->willReturn(true);
+
+        $this->user->expects($this->once())
+                   ->method('updatePassword')
+                   ->with($this->equalTo($newPassword))
+                   ->willReturn(false);
+
+        $result = $this->user->changePassowd($oldPassword, $newPassword);
+        $this->assertFalse($result);
+    }
 }

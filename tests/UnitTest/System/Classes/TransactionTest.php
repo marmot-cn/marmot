@@ -36,7 +36,7 @@ class TransactionTest extends tests\GenericTestsDatabaseTestCase
             $ids[0],
             array('id'=>$ids[0],'title'=>'titleA3','user'=>'userA3')
         );
-        $command -> execute();
+        $command->execute();
 
         //插入一条语句
         Core::$dbDriver->insert('pcore_system_test_a', array('title'=>'titleA4','user'=>'userA4'));
@@ -55,7 +55,6 @@ class TransactionTest extends tests\GenericTestsDatabaseTestCase
      */
     public function testTransactionCommit()
     {
-
         $ids = array();
         //查出旧数据
         $conn = $this->getConnection()->getConnection();
@@ -64,12 +63,13 @@ class TransactionTest extends tests\GenericTestsDatabaseTestCase
         $oldCount = sizeof($results);
 
         //开启事务
-        Transaction::beginTransaction();
+        $transaction = Transaction::getInstance();
+        $transaction->beginTransaction();
         
         $this->prepareSaveCacheCommand($ids);
 
         //commit提交
-        $status = Transaction::Commit();
+        $status = $transaction->endTransaction();
         $this->assertTrue($status);
         //检索插入的数据已经插入成功
         //检索总数据数量为旧的总数+2
@@ -98,38 +98,5 @@ class TransactionTest extends tests\GenericTestsDatabaseTestCase
         $this->assertEquals(5, $data['id']);
         $this->assertEquals('titleA4', $data['title']);
         $this->assertEquals('userA4', $data['user']);
-    }
-
-    /**
-     * 测试MyPdo的事务功能回滚
-     */
-    public function testTransactionRollBack()
-    {
- 
-        $ids = array();
-        //查出旧数据
-        $oldResults = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a');
-        $oldCount = sizeof($oldResults);
-
-        //开启事务
-        Transaction::beginTransaction();
-        
-        $this->prepareSaveCacheCommand($ids);
-
-        //回滚
-        $status = Transaction::rollBack();
-        $this->assertTrue($status);
-        //检索插入的数据没有插入成功
-        $newResults = Core::$dbDriver->query('SELECT * FROM pcore_system_test_a');
-
-        //确认旧数据的内容一致
-        $this->assertEquals($oldResults, $newResults);
-
-        //从缓存检索插入数据,检查内容是否为空
-        $data = Core::$cacheDriver->fetch($ids[0]);
-        $this->assertEmpty($data);
-
-        $data = Core::$cacheDriver->fetch($ids[1]);
-        $this->assertEmpty($data);
     }
 }

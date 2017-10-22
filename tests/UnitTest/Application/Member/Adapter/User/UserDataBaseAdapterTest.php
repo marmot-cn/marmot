@@ -51,10 +51,8 @@ class UserDataBaseAdapterTest extends GenericTestCase
         $this->assertInstanceOf('Member\Adapter\User\IUserAdapter', $adapter);
     }
 
-    public function testAddSucess()
+    public function testAddSuccess()
     {
-        $adapter = new UserDataBaseAdapter();
-
         $lastInsertId = 5;
 
         $user = $this->getMockBuilder(User::class)
@@ -72,8 +70,15 @@ class UserDataBaseAdapterTest extends GenericTestCase
                                 ->willReturn($lastInsertId)
                                 ->shouldBeCalledTimes(1);
 
-        $adapter->setUserDataBaseTranslator($this->userDataBaseTranslator->reveal());
-        $adapter->setUserRowCacheQuery($this->userRowCacheQuery->reveal());
+        $adapter = $this->getMockBuilder(UserDataBaseAdapter::class)
+                        ->setMethods(['getUserRowCacheQuery', 'getUserDataBaseTranslator'])
+                        ->getMock();
+        $adapter->expects($this->once())
+            ->method('getUserDataBaseTranslator')
+            ->willReturn($this->userDataBaseTranslator->reveal());
+        $adapter->expects($this->once())
+            ->method('getUserRowCacheQuery')
+            ->willReturn($this->userRowCacheQuery->reveal());
 
         $result = $adapter->add($user);
         $this->assertTrue($result);
@@ -81,8 +86,6 @@ class UserDataBaseAdapterTest extends GenericTestCase
 
     public function testAddFailure()
     {
-        $adapter = new UserDataBaseAdapter();
-
         $user = $this->getMockBuilder(User::class)
                      ->setMethods(['setId'])
                      ->getMock();
@@ -98,8 +101,15 @@ class UserDataBaseAdapterTest extends GenericTestCase
                                 ->willReturn(0)
                                 ->shouldBeCalledTimes(1);
 
-        $adapter->setUserDataBaseTranslator($this->userDataBaseTranslator->reveal());
-        $adapter->setUserRowCacheQuery($this->userRowCacheQuery->reveal());
+        $adapter = $this->getMockBuilder(UserDataBaseAdapter::class)
+                        ->setMethods(['getUserRowCacheQuery', 'getUserDataBaseTranslator'])
+                        ->getMock();
+        $adapter->expects($this->once())
+            ->method('getUserDataBaseTranslator')
+            ->willReturn($this->userDataBaseTranslator->reveal());
+        $adapter->expects($this->once())
+            ->method('getUserRowCacheQuery')
+            ->willReturn($this->userRowCacheQuery->reveal());
 
         $result = $adapter->add($user);
 
@@ -107,10 +117,8 @@ class UserDataBaseAdapterTest extends GenericTestCase
         $this->assertFalse($result);
     }
 
-    public function testUpdateSucess()
+    public function testUpdateSuccess()
     {
-        $adapter = new UserDataBaseAdapter();
-
         $user = ObjectGenerate::generateUser(1);
         $modifyKeys = array('nickName','realName');
 
@@ -130,8 +138,16 @@ class UserDataBaseAdapterTest extends GenericTestCase
             Argument::exact(array($userRowCacheQuery->getPrimaryKey()=>$user->getId()))
         )->shouldBeCalledTimes(1)->willReturn(true);
 
-        $adapter->setUserDataBaseTranslator($this->userDataBaseTranslator->reveal());
-        $adapter->setUserRowCacheQuery($this->userRowCacheQuery->reveal());
+        $adapter = $this->getMockBuilder(UserDataBaseAdapter::class)
+                        ->setMethods(['getUserRowCacheQuery', 'getUserDataBaseTranslator'])
+                        ->getMock();
+        $adapter->expects($this->once())
+            ->method('getUserDataBaseTranslator')
+            ->willReturn($this->userDataBaseTranslator->reveal());
+        $adapter->expects($this->exactly(2))
+            ->method('getUserRowCacheQuery')
+            ->willReturn($this->userRowCacheQuery->reveal());
+
         $result = $adapter->update($user, $modifyKeys);
 
         $this->assertTrue($result);
@@ -139,7 +155,6 @@ class UserDataBaseAdapterTest extends GenericTestCase
 
     public function testUpdateFailure()
     {
-        $adapter = new UserDataBaseAdapter();
 
         $user = ObjectGenerate::generateUser(1);
         $modifyKeys = array('nickName','realName');
@@ -160,8 +175,16 @@ class UserDataBaseAdapterTest extends GenericTestCase
             Argument::exact(array($userRowCacheQuery->getPrimaryKey()=>$user->getId()))
         )->shouldBeCalledTimes(1)->willReturn(false);
 
-        $adapter->setUserDataBaseTranslator($this->userDataBaseTranslator->reveal());
-        $adapter->setUserRowCacheQuery($this->userRowCacheQuery->reveal());
+        $adapter = $this->getMockBuilder(UserDataBaseAdapter::class)
+                        ->setMethods(['getUserRowCacheQuery', 'getUserDataBaseTranslator'])
+                        ->getMock();
+        $adapter->expects($this->once())
+            ->method('getUserDataBaseTranslator')
+            ->willReturn($this->userDataBaseTranslator->reveal());
+        $adapter->expects($this->exactly(2))
+            ->method('getUserRowCacheQuery')
+            ->willReturn($this->userRowCacheQuery->reveal());
+
         $result = $adapter->update($user, $modifyKeys);
 
         $this->assertFalse($result);
@@ -175,11 +198,18 @@ class UserDataBaseAdapterTest extends GenericTestCase
         $this->userRowCacheQuery->getOne(Argument::exact($userId))->shouldBeCalledTimes(1)->willReturn(array());
         $this->userDataBaseTranslator->arrayToObject()->shouldNotBeCalled();
 
-        $adapter->setUserDataBaseTranslator($this->userDataBaseTranslator->reveal());
-        $adapter->setUserRowCacheQuery($this->userRowCacheQuery->reveal());
+        $adapter = $this->getMockBuilder(UserDataBaseAdapter::class)
+                        ->setMethods(['getUserRowCacheQuery', 'getUserDataBaseTranslator'])
+                        ->getMock();
+        $adapter->expects($this->exactly(0))
+            ->method('getUserDataBaseTranslator')
+            ->willReturn($this->userDataBaseTranslator->reveal());
+        $adapter->expects($this->exactly(1))
+            ->method('getUserRowCacheQuery')
+            ->willReturn($this->userRowCacheQuery->reveal());
 
         $result = $adapter->getOne($userId);
-        $this->assertFalse($result);
+        $this->assertInstanceOf('Member\Model\NullUser', $result);
     }
 
     public function testGetOneExist()
@@ -198,8 +228,15 @@ class UserDataBaseAdapterTest extends GenericTestCase
                                      ->shouldBeCalledTimes(1)
                                      ->willReturn($user);
 
-        $adapter->setUserDataBaseTranslator($this->userDataBaseTranslator->reveal());
-        $adapter->setUserRowCacheQuery($this->userRowCacheQuery->reveal());
+        $adapter = $this->getMockBuilder(UserDataBaseAdapter::class)
+                        ->setMethods(['getUserRowCacheQuery', 'getUserDataBaseTranslator'])
+                        ->getMock();
+        $adapter->expects($this->exactly(1))
+            ->method('getUserDataBaseTranslator')
+            ->willReturn($this->userDataBaseTranslator->reveal());
+        $adapter->expects($this->exactly(1))
+            ->method('getUserRowCacheQuery')
+            ->willReturn($this->userRowCacheQuery->reveal());
 
         $result = $adapter->getOne($userId);
         $this->assertSame($user, $result);
@@ -213,11 +250,18 @@ class UserDataBaseAdapterTest extends GenericTestCase
         $this->userRowCacheQuery->getList(Argument::exact($userIds))->shouldBeCalledTimes(1)->willReturn(array());
         $this->userDataBaseTranslator->arrayToObject()->shouldNotBeCalled();
 
-        $adapter->setUserDataBaseTranslator($this->userDataBaseTranslator->reveal());
-        $adapter->setUserRowCacheQuery($this->userRowCacheQuery->reveal());
+        $adapter = $this->getMockBuilder(UserDataBaseAdapter::class)
+                        ->setMethods(['getUserRowCacheQuery', 'getUserDataBaseTranslator'])
+                        ->getMock();
+        $adapter->expects($this->exactly(0))
+            ->method('getUserDataBaseTranslator')
+            ->willReturn($this->userDataBaseTranslator->reveal());
+        $adapter->expects($this->exactly(1))
+            ->method('getUserRowCacheQuery')
+            ->willReturn($this->userRowCacheQuery->reveal());
 
         $result = $adapter->getList($userIds);
-        $this->assertFalse($result);
+        $this->assertEmpty($result);
     }
 
     public function testGetListExist()
@@ -237,8 +281,15 @@ class UserDataBaseAdapterTest extends GenericTestCase
 
         $this->userRowCacheQuery->getList(Argument::exact($userIds))->shouldBeCalledTimes(1)->willReturn($userInfoList);
 
-        $adapter->setUserDataBaseTranslator($this->userDataBaseTranslator->reveal());
-        $adapter->setUserRowCacheQuery($this->userRowCacheQuery->reveal());
+        $adapter = $this->getMockBuilder(UserDataBaseAdapter::class)
+                        ->setMethods(['getUserRowCacheQuery', 'getUserDataBaseTranslator'])
+                        ->getMock();
+        $adapter->expects($this->once())
+            ->method('getUserDataBaseTranslator')
+            ->willReturn($this->userDataBaseTranslator->reveal());
+        $adapter->expects($this->exactly(1))
+            ->method('getUserRowCacheQuery')
+            ->willReturn($this->userRowCacheQuery->reveal());
 
         $result = $adapter->getList($userIds);
         $this->assertSame($userObjects, $result);
@@ -261,10 +312,18 @@ class UserDataBaseAdapterTest extends GenericTestCase
         $adapter->expects($this->exactly(0))
                 ->method('getList');
 
-        $adapter->setUserRowCacheQuery($this->userRowCacheQuery->reveal());
+        $adapter = $this->getMockBuilder(UserDataBaseAdapter::class)
+                        ->setMethods(['getUserRowCacheQuery', 'getUserDataBaseTranslator'])
+                        ->getMock();
+        $adapter->expects($this->exactly(0))
+            ->method('getUserDataBaseTranslator')
+            ->willReturn($this->userDataBaseTranslator->reveal());
+        $adapter->expects($this->exactly(1))
+            ->method('getUserRowCacheQuery')
+            ->willReturn($this->userRowCacheQuery->reveal());
 
         $result = $adapter->filter();
-        $this->assertFalse($result);
+        $this->assertEmpty($result);
     }
 
     private function generateUserIds(int $number = 20) : array
@@ -296,18 +355,20 @@ class UserDataBaseAdapterTest extends GenericTestCase
             Argument::exact(20)
         )->shouldBeCalledTimes(1)->willReturn($userIdsFormat);
 
-        $this->userRowCacheQuery->getPrimaryKey()->shouldBeCalledTimes(sizeof($userIds))->willReturn($primaryKey);
+        $this->userRowCacheQuery->getPrimaryKey()->shouldBeCalledTimes(1)->willReturn($primaryKey);
         $this->userRowCacheQuery->count(Argument::exact(' 1 '))->shouldBeCalledTimes(1)->willReturn(sizeof($userIds));
 
         $adapter = $this->getMockBuilder(UserDataBaseAdapter::class)
-                        ->setMethods(['getList'])
+                        ->setMethods(['getUserRowCacheQuery', 'getList'])
                         ->getMock();
+        $adapter->expects($this->exactly(1))
+            ->method('getUserRowCacheQuery')
+            ->willReturn($this->userRowCacheQuery->reveal());
         $adapter->expects($this->exactly(1))
                 ->method('getList')
                 ->with($this->equalTo($userIds))
                 ->will($this->returnArgument(0));
 
-        $adapter->setUserRowCacheQuery($this->userRowCacheQuery->reveal());
         
         list($userList, $count) = $adapter->filter();
 

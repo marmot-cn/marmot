@@ -38,25 +38,10 @@ class User extends AbstractUser
     }
 
     /**
-     * 设置用户状态
-     * @param int $status 用户状态
-     */
-    public function setStatus(int $status)
-    {
-        $this->status= in_array(
-            $status,
-            array(
-                self::STATUS_NORMAL,
-                self::STATUS_DELETE
-            )
-        ) ? $status : self::STATUS_NORMAL;
-    }
-
-    /**
      * 设置用户的真实姓名
      * @param string $realName
      */
-    public function setRealName(string $realName)
+    public function setRealName(string $realName) : void
     {
         $this->realName = $realName;
     }
@@ -69,6 +54,21 @@ class User extends AbstractUser
     {
         return $this->realName;
     }
+
+    /**
+     * 设置用户状态
+     * @param int $status 用户状态
+     */
+    public function setStatus(int $status) : void
+    {
+        $this->status= in_array(
+            $status,
+            array(
+                self::STATUS_NORMAL,
+                self::STATUS_DELETE
+            )
+        ) ? $status : self::STATUS_NORMAL;
+    }
    
     public function isNormal() : bool
     {
@@ -80,20 +80,11 @@ class User extends AbstractUser
         return $this->getStatus() == self::STATUS_DELETE;
     }
 
-    public function setUserRepository(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-
-    private function getUserRepository() : UserRepository
+    protected function getUserRepository() : UserRepository
     {
         return $this->userRepository;
     }
 
-    /**
-     * 注册
-     * @return bool 是否注册成功
-     */
     public function signUp() : bool
     {
         if (!$this->getUserRepository()->add($this)) {
@@ -103,22 +94,7 @@ class User extends AbstractUser
         return true;
     }
 
-    /**
-     * 更新密码
-     * @return bool 是否登陆成功
-     */
-    public function updatePassword(string $password) : bool
-    {
-        $this->encryptPassword($password);
-        
-        return $this->getUserRepository()->update($this, array(
-                    'updateTime',
-                    'password',
-                    'salt',
-                ));
-    }
-
-    public function verifyPassword(string $oldPassword) : bool
+    protected function verifyPassword(string $oldPassword) : bool
     {
         //检查旧密码是否正确
         $oldEncryptedPassword = $this->getPassword();
@@ -129,5 +105,20 @@ class User extends AbstractUser
         }
 
         return true;
+    }
+
+    /**
+     * 更新密码
+     * @return bool 是否登陆成功
+     */
+    protected function updatePassword(string $newPassword) : bool
+    {
+        $this->encryptPassword($newPassword);
+        
+        return $this->getUserRepository()->update($this, array(
+                    'updateTime',
+                    'password',
+                    'salt',
+                ));
     }
 }

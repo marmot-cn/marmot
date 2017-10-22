@@ -3,31 +3,41 @@ namespace Member\CommandHandler\User;
 
 use System\Interfaces\ICommandHandler;
 use System\Interfaces\ICommand;
+use System\Interfaces\INull;
+
 use Member\Model\User;
-use Marmot\Core;
 use Member\Command\User\UpdatePasswordUserCommand;
+use Member\Repository\User\UserRepository;
+use Marmot\Core;
 
 class UpdatePasswordUserCommandHandler implements ICommandHandler
 {
+    private $userRepository;
+
+    public function __construct()
+    {
+        $this->userRepository = Core::$container->get('Member\Repository\User\UserRepository');
+    }
+
+    public function __destruct()
+    {
+        unset($this->userRepository);
+    }
+
+    protected function getUserRepository() : UserRepository
+    {
+        return $this->userRepository;
+    }
+
     public function execute(ICommand $command)
     {
         if (!($command instanceof UpdatePasswordUserCommand)) {
             throw new \InvalidArgumentException;
         }
 
-        $repository = Core::$container->get('Member\Repository\User\UserRepository');
+        $repository = $this->getUserRepository();
         $user = $repository->getOne($command->uid);
-        //确认用户是否存在
-        if (!$user instanceof User) {
-            Core::setLastError(RESOURCE_NOT_EXIST);
-            return false;
-        }
 
-        if ($user->verifyPassword($command->oldPassword)
-            &&$user->updatePassword($command->password)) {
-            //发布领域事件
-            return true;
-        }
-        return false;
+        return $user->changePassowd($command->oldPassword, $command->password);
     }
 }

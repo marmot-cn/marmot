@@ -15,6 +15,7 @@ return [
     'System\Classes\Event' => S_ROOT.'System/Classes/Event.class.php',
     'System\Classes\Server' => S_ROOT.'System/Classes/Server.class.php',
     'System\Classes\ValidateStrategy' => S_ROOT.'System/Classes/ValidateStrategy.class.php',
+    'System\Interfaces\INull' => S_ROOT.'System/Interfaces/INull.class.php',
 
     //strategy
     'System\Strategy\Validate\IntStrategy' => S_ROOT.'System/Strategy/Validate/IntStrategy.class.php',

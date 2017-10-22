@@ -12,8 +12,6 @@ namespace Marmot;
 define('S_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
 //内核部分文件夹路径
 define('SYS_ROOT', S_ROOT.'System'.DIRECTORY_SEPARATOR);
-//开发环境
-define('D_BUG', 1);
 
 /**
  * 文件核心类
@@ -44,6 +42,10 @@ class Core
     //上一次错误
     private static $lastError;
     
+    private function __construct()
+    {
+    }
+
     /**
      * 使用单例封装全局函数的core调用
      */

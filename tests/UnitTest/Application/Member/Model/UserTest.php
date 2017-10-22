@@ -2,6 +2,7 @@
 namespace Member\Model;
 
 use Marmot\Core;
+use Member\Model\User;
 use Member\Repository\User\UserRepository;
 
 use tests\GenericTestCase;
@@ -35,12 +36,7 @@ class UserTest extends GenericTestCase
     public function testUserConstructor()
     {
         //测试初始化用户状态
-        $statusParameter = $this->getPrivateProperty('Member\Model\User', 'status');
-        $this->assertEquals(User::STATUS_NORMAL, $statusParameter->getValue($this->user));
         $this->assertEquals(User::STATUS_NORMAL, $this->user->getStatus());
-
-        $realNameParameter = $this->getPrivateProperty('Member\Model\User', 'realName');
-        $this->assertEquals('', $realNameParameter->getValue($this->user));
         $this->assertEquals('', $this->user->getRealName());
     }
 
@@ -121,116 +117,141 @@ class UserTest extends GenericTestCase
         $this->assertTrue($this->user->isDelete());
         $this->assertFalse($this->user->isNormal());
     }
-
-    //test verifyUpdatePassword
     
     public function testSignUpSucess()
     {
+        $this->user = $this->getMockBuilder(User::class)
+                           ->setMethods(['getUserRepository'])
+                           ->getMock();
+
         $repository = $this->prophesize(UserRepository::class);
-        
         $repository->add(Argument::exact($this->user))
                    ->shouldBeCalledTimes(1)
                    ->willReturn(true);
 
-        $this->user->setUserRepository($repository->reveal());
+        $this->user->expects($this->once())
+                   ->method('getUserRepository')
+                   ->willReturn($repository->reveal());
 
         $result = $this->user->signUp();
-
         $this->assertTrue($result);
     }
 
     public function testSignUpFailure()
     {
+        $this->user = $this->getMockBuilder(User::class)
+                           ->setMethods(['getUserRepository'])
+                           ->getMock();
+
         $repository = $this->prophesize(UserRepository::class);
-        
         $repository->add(Argument::exact($this->user))
                    ->shouldBeCalledTimes(1)
                    ->willReturn(false);
 
-        $this->user->setUserRepository($repository->reveal());
+        $this->user->expects($this->once())
+                   ->method('getUserRepository')
+                   ->willReturn($repository->reveal());
 
         $result = $this->user->signUp();
-
         $this->assertFalse($result);
         $this->assertEquals(USER_IDENTIFY_DUPLICATE, Core::getLastError()->getId());
     }
 
-    public function testUpdatePasswordSucess()
-    {
-        $password = 'password';
-        $this->user->setPassword($password);
-
-        $this->user = $this->getMockBuilder(User::class)
-                           ->setMethods(['encryptPassword'])
-                           ->getMock();
-
-        $this->user->expects($this->once())
-            ->method('encryptPassword')
-            ->with($this->equalTo($password));
-
-        $repository = $this->prophesize(UserRepository::class);
-        
-        $repository->update(
-            Argument::exact($this->user),
-            Argument::exact(array('updateTime', 'password', 'salt'))
-        )->shouldBeCalledTimes(1)
-         ->willReturn(true);
-
-        $this->user->setUserRepository($repository->reveal());
-
-        $result = $this->user->updatePassword($password);
-        $this->assertTrue($result);
-    }
-
-    public function testUpdatePassworFailure()
-    {
-        $password = 'password';
-        $this->user->setPassword($password);
-
-        $this->user = $this->getMockBuilder(User::class)
-                           ->setMethods(['encryptPassword'])
-                           ->getMock();
-
-        $this->user->expects($this->once())
-            ->method('encryptPassword')
-            ->with($this->equalTo($password));
-
-        $repository = $this->prophesize(UserRepository::class);
-        
-        $repository->update(
-            Argument::exact($this->user),
-            Argument::exact(array('updateTime', 'password', 'salt'))
-        )->shouldBeCalledTimes(1)
-         ->willReturn(false);
-
-        $this->user->setUserRepository($repository->reveal());
-
-        $result = $this->user->updatePassword($password);
-        $this->assertFalse($result);
-    }
-
-    public function testVerifyPasswordSucess()
-    {
-        $oldPassword = 'oldPassword';
-        $newPassword = 'newPassword';
-        $salt = 'salt';
-
-        $this->user->encryptPassword($oldPassword, $salt);
-
-        $result = $this->user->verifyPassword($oldPassword);
-        $this->assertTrue($result);
-    }
-
-    public function testVerifyPasswordFailure()
-    {
-        $oldPassword = 'oldPassword';
-        $newPassword = 'newPassword';
-        $salt = 'salt';
-
-        $this->user->encryptPassword($oldPassword, $salt);
-
-        $result = $this->user->verifyPassword($newPassword);
-        $this->assertFalse($result);
-        $this->assertEquals(USER_OLD_PASSWORD_NOT_CORRECT, Core::getLastError()->getId());
-    }
+//    public function testVerifyPasswordSucess()
+//    {
+//        $oldPassword = 'oldPassword';
+//        $salt = 'salt';
+//
+//        $this->user->encryptPassword($oldPassword, $salt);
+//
+//        $verifyPasswordMethod = $this->getPrivateMethod(
+//            'Member\Model\User',
+//            'verifyPassword'
+//        );
+//        $result = $verifyPasswordMethod->invoke($this->user, $oldPassword);
+//        $this->assertTrue($result);
+//    }
+//
+//    public function testVerifyPasswordFailure()
+//    {
+//        $oldPassword = 'oldPassword';
+//        $newPassword = 'newPassword';
+//        $salt = 'salt';
+//
+//        $this->user->encryptPassword($oldPassword, $salt);
+//
+//        $verifyPasswordMethod = $this->getPrivateMethod(
+//            'Member\Model\User',
+//            'verifyPassword'
+//        );
+//        $result = $verifyPasswordMethod->invoke($this->user, $newPassword);
+//        $this->assertFalse($result);
+//        $this->assertEquals(USER_OLD_PASSWORD_NOT_CORRECT, Core::getLastError()->getId());
+//    }
+//    
+//    public function testUpdatePasswordSucess()
+//    {
+//        $password = 'password';
+//        $this->user->setPassword($password);
+//
+//        $this->user = $this->getMockBuilder(User::class)
+//                           ->setMethods(['encryptPassword', 'getUserRepository'])
+//                           ->getMock();
+//
+//        $this->user->expects($this->once())
+//            ->method('encryptPassword')
+//            ->with($this->equalTo($password));
+//
+//        $repository = $this->prophesize(UserRepository::class);
+//        
+//        $repository->update(
+//            Argument::exact($this->user),
+//            Argument::exact(array('updateTime', 'password', 'salt'))
+//        )->shouldBeCalledTimes(1)
+//         ->willReturn(true);
+//
+//        $this->user->expects($this->once())
+//                   ->method('getUserRepository')
+//                   ->willReturn($repository->reveal());
+//
+//        $updatePasswordMethod = $this->getPrivateMethod(
+//            'Member\Model\User',
+//            'updatePassword'
+//        );
+//        $result = $updatePasswordMethod->invoke($this->user, $password);
+//        $this->assertTrue($result);
+//    }
+//
+//    public function testUpdatePassworFailure()
+//    {
+//        $password = 'password';
+//        $this->user->setPassword($password);
+//
+//        $this->user = $this->getMockBuilder(User::class)
+//                           ->setMethods(['encryptPassword','getUserRepository'])
+//                           ->getMock();
+//
+//        $this->user->expects($this->once())
+//            ->method('encryptPassword')
+//            ->with($this->equalTo($password));
+//
+//        $repository = $this->prophesize(UserRepository::class);
+//        
+//        $repository->update(
+//            Argument::exact($this->user),
+//            Argument::exact(array('updateTime', 'password', 'salt'))
+//        )->shouldBeCalledTimes(1)
+//         ->willReturn(false);
+//
+//        $this->user->expects($this->once())
+//                   ->method('getUserRepository')
+//                   ->willReturn($repository->reveal());
+//
+//        $updatePasswordMethod = $this->getPrivateMethod(
+//            'Member\Model\User',
+//            'updatePassword'
+//        );
+//        $result = $updatePasswordMethod->invoke($this->user, $password);
+//        $this->assertFalse($result);
+//    }
 }

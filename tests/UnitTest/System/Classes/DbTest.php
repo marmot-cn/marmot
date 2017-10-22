@@ -6,8 +6,7 @@ use Marmot\Core;
 
 /**
  * 测试Db封装类,需要测试如下:
- * 1. delete
- * 2. insert
+ * 1. delete * 2. insert
  * 3. update
  * 4. select
  */

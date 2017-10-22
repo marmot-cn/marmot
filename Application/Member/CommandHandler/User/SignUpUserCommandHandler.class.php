@@ -10,25 +10,41 @@ use Member\Model\User;
 
 class SignUpUserCommandHandler implements ICommandHandler
 {
+
+    private $user;
+
+    public function __construct()
+    {
+        $this->user = new User();
+    }
+
+    public function __destruct()
+    {
+        unset($this->user);
+    }
+
+    protected function getUser()
+    {
+        return $this->user;
+    }
+
     public function execute(ICommand $command)
     {
         if (!($command instanceof SignUpUserCommand)) {
             throw new \InvalidArgumentException;
         }
 
-        $user = new User();
+        $user = $this->getUser();
         $user->setCellPhone($command->cellPhone);
         $user->setUserName($command->cellPhone);
         $user->encryptPassword($command->password);
 
         //这里只操作一张表,但是这里演示事物,使用事物处理
-        Transaction::beginTransaction();
-        if ($user->signUp() && Transaction::commit()) {
+        if ($user->signUp()) {
             $command->uid = $user->getId();
-           //发布领域事件
+            //发布领域事件
             return true;
         }
-        Transaction::rollBack();
         return false;
     }
 }

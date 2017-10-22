@@ -19,7 +19,8 @@
         "pdepend/pdepend" : "^2.5",
         "sebastian/phpcpd": "*",
         "phpmd/phpmd" : "2.6.0",
-        "fzaninotto/faker": "^1.6"
+        "fzaninotto/faker": "^1.6",
+        "behat/behat": "^3.4"
     },
     "repositories": {
         "packagist": {

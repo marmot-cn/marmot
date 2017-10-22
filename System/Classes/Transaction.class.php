@@ -1,7 +1,8 @@
 <?php
 namespace System\Classes;
 
-use System\Observer;
+use System\Observer\Subject;
+use System\Interfaces\Observer;
 use Marmot\Core;
 
 /**
@@ -13,42 +14,81 @@ use Marmot\Core;
 class Transaction
 {
     
-    public static $transactionSubject = null;
+    private $transactionSubject;
 
+    private static $instance;
     /**
      * 这里没有使用PDO::inTransaction,因为数据库连接已经设置为延迟加载.
      * 如果调用此方法需要初始化一次数据库连接.
      * 所以这里用程序来判断.
      */
-    private static $inTransaction = false;//true 当前事务开启 false 当前事务关闭
+    private $inTransaction = false;//true 当前事务开启 false 当前事务关闭
+
+    private function __construct()
+    {
+        $this->inTransaction = false;
+        $this->transactionSubject = new Subject();
+    }
     
-    public static function beginTransaction()
+    public function __destruct()
+    {
+        unset($this->inTransaction);
+        unset($this->transactionSubject);
+    }
+    
+    public static function &getInstance()
+    {
+        if (!self::$instance instanceof self) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    private function getTransactionSubject() : Subject
+    {
+        return $this->transactionSubject;
+    }
+    
+    public function beginTransaction() : bool
     {
         //memcached观察者声明,用于在事务中使用保证cache数据和mysql数据一致
         //当时事务发生回滚时候,需要调用command undo
-        self::$transactionSubject = new Observer\Subject();
-        self::$inTransaction = true;
+        $this->inTransaction = true;
         return Core::$dbDriver->beginTA();
     }
 
-    public static function commit()
+    public function endTransaction() : bool
+    {
+        if (!$this->commit()) {
+            $this->rollBack();
+            return false;
+        }
+        return true;
+    }
+
+    private function commit() : bool
     {
         if (!Core::$dbDriver->commit()) {
-            return self::rollBack();
+            return $this->rollBack();
         }
         return true;
     }
     
-    public static function inTransaction()
+    public function inTransaction() : bool
     {
-        return self::$inTransaction;
+        return $this->inTransaction;
+    }
+
+    public function attachRollBackObserver(Observer $observer) : bool
+    {
+        return $this->transactionSubject->attach($observer);
     }
     
-    public static function rollBack()
+    private function rollBack() : bool
     {
-        self::$transactionSubject -> notifyObserver();
-        self::$inTransaction = false;//关闭事务
-        self::$transactionSubject = null;//释放subject
+        $this->$transactionSubject->notifyObserver();
+        $this->$inTransaction = false;//关闭事务
+        $this->$transactionSubject = null;//释放subject
         return Core::$dbDriver->rollBack();
     }
 }
