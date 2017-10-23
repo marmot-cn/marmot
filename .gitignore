@@ -1,3 +1,4 @@
+.htaccess
 vendor
 config.php
 !Application/config.php
