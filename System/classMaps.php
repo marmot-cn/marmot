@@ -23,7 +23,7 @@ return [
     'System\Strategy\Validate\StringStrategy' => S_ROOT.'System/Strategy/Validate/StringStrategy.class.php',
     'System\Strategy\Validate\DateStrategy' => S_ROOT.'System/Strategy/Validate/DateStrategy.class.php',
     'System\Strategy\Validate\EmailStrategy' => S_ROOT.'System/Strategy/Validate/EmailStrategy.class.php',
-    'System\Strategy\MediaTypes\JsonapiStrategy' => S_ROOT.'System/Strategy/MediaTypes/JsonApiStrategy.class.php',
+    'System\Strategy\MediaTypes\JsonapiStrategy' => S_ROOT.'System/Strategy/MediaTypes/JsonapiStrategy.class.php',
 
     //interfaces
     'System\Interfaces\Command' => S_ROOT.'System/Interfaces/Command.class.php',

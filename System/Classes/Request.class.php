@@ -44,7 +44,7 @@ class Request
 
     public function __construct()
     {
-        $this->mediaTypeStrqtegy = new JsonapiStrategy();
+        $this->mediaTypeStrategy = new JsonapiStrategy();
     }
 
     public function __destruct()
@@ -53,17 +53,17 @@ class Request
         unset($this->bodyParams);
         unset($this->rawBody);
         unset($this->headers);
-        unset($this->mediaTypeStrqtegy);
+        unset($this->mediaTypeStrategy);
     }
 
     public function setMediaTypeStrategy(IMediaTypeStrategy $mediaTypeStrategy)
     {
-        $this->mediaTypeStrqtegy = $mediaTypeStrategy;
+        $this->mediaTypeStrategy = $mediaTypeStrategy;
     }
 
     public function getMediaTypeStrategy() : IMediaTypeStrategy
     {
-        return $this->mediaTypeStrqtegy;
+        return $this->mediaTypeStrategy;
     }
 
     /**
