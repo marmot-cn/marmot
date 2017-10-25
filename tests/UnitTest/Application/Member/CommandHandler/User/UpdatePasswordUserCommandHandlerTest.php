@@ -1,7 +1,7 @@
 <?php
 namespace Member\CommandHandler\User;
 
-use tests\GenericTestsDatabaseTestCase;
+use tests\GenericTestCase;
 use System\Interfaces\ICommand;
 use Marmot\Core;
 
@@ -18,16 +18,10 @@ use Prophecy\Argument;
  * @version 1.0.20160828
  */
 
-class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
+class UpdatePasswordUserCommandHandlerTest extends GenericTestCase
 {
-
-    public $fixtures = array(
-        'pcore_user',
-    );
-
     public function setUp()
     {
-        //这里不构建初始数据,只是在最后清理数据
         $this->commandHandler = new UpdatePasswordUserCommandHandler();
     }
 
@@ -77,7 +71,7 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestsDatabaseTestCase
         );
 
         $user = $this->prophesize(User::class);
-        $user->changePassowd(
+        $user->changePassword(
             Argument::exact($oldPassword),
             Argument::exact($newPassword)
         )->shouldBeCalledTimes(1)

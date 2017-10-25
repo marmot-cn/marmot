@@ -32,12 +32,7 @@ class NullUser extends User implements INull
         return $this->resourceNotExist();
     }
 
-    public function updatePassword(string $password) : bool
-    {
-        return $this->resourceNotExist();
-    }
-
-    public function verifyPassword(string $oldPassword) : bool
+    public function changePassword(string $oldPassword, string $newPassword) : bool
     {
         return $this->resourceNotExist();
     }

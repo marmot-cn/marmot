@@ -80,7 +80,11 @@
 		
 启动我们的开发环境,如果没有镜像会自动拉取
 
-#### 其他环境
+#### 其他环境 的 docker-compose 文件
+
+所有内容保存到响应的文件夹内, 然后在运行`dokcer-compose up -d`启动.
+
+比如需要下载`mysql`环境, 把配置文件存到`mysql`文件夹的`docker-compose.yml`文件内. 在到该文件内运行`docker-compose up -d`即可启动环境.
 
 ##### `mongo` and `rockmongo`
 
@@ -110,7 +114,7 @@ rockmongo:
 mysql:
   image: "registry.cn-hangzhou.aliyuncs.com/marmot/mysql-5.6"
   volumes:
-  - ~/data/mysql/:/var/lib/mysql
+  - ./:/var/lib/mysql
   environment:
    - MYSQL_ROOT_PASSWORD=123456
   container_name: mysql-master

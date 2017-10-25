@@ -221,8 +221,9 @@ abstract class User implements IObject
     /**
      * 修改密码
      */
-    public function changePassowd(string $oldPassword, string $newPassword) : bool
+    public function changePassword(string $oldPassword, string $newPassword) : bool
     {
+        
         return $this->verifyPassword($oldPassword) && $this->updatePassword($newPassword);
     }
 

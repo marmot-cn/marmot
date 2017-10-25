@@ -2,6 +2,7 @@
 namespace Member\Model;
 
 use tests\GenericTestCase;
+use Marmot\Core;
 
 class NullUserTest extends GenericTestCase
 {
@@ -27,7 +28,24 @@ class NullUserTest extends GenericTestCase
         $this->assertInstanceof('System\Interfaces\INull', $this->nullUser);
     }
 
-    public function testResouceNotExist()
+    public function testIsNormal()
     {
+        $result = $this->nullUser->isNormal();
+        $this->assertFalse($result);
+        $this->assertEquals(RESOURCE_NOT_EXIST, Core::getLastError()->getId());
+    }
+    
+    public function testIsDelete()
+    {
+        $result = $this->nullUser->isDelete();
+        $this->assertFalse($result);
+        $this->assertEquals(RESOURCE_NOT_EXIST, Core::getLastError()->getId());
+    }
+
+    public function testChangePassword()
+    {
+        $result = $this->nullUser->changePassword('oldPassword', 'newPassword');
+        $this->assertFalse($result);
+        $this->assertEquals(RESOURCE_NOT_EXIST, Core::getLastError()->getId());
     }
 }

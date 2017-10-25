@@ -38,6 +38,6 @@ class UpdatePasswordUserCommandHandler implements ICommandHandler
         $repository = $this->getUserRepository();
         $user = $repository->getOne($command->uid);
 
-        return $user->changePassowd($command->oldPassword, $command->password);
+        return $user->changePassword($command->oldPassword, $command->password);
     }
 }

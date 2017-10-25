@@ -6,7 +6,6 @@ function createDatabase {
 }
 
 function initialTestDatabase {
-	#导入测试库,暂时还有中文注释乱码问题没解决
 	cat database/test.sql | docker exec -i $1 /usr/bin/mysql -uroot -p123456 2>/dev/null
 	for sqlfile in `ls ./database/*.execute.sql`; 
 	do 
@@ -16,7 +15,6 @@ function initialTestDatabase {
 }
 
 function initialDatabase {
-	#导入正式库,暂时还有中文注释乱码问题没解决
 	for sqlfile in `ls ./database/*.execute.sql`; 
 	do 
 		cat $sqlfile | docker exec -i $1 /usr/bin/mysql -uroot -p123456 2>/dev/null; 

@@ -219,7 +219,7 @@ class UserTest extends GenericTestCase
                    ->method('updatePassword')
                    ->with($this->equalTo($newPassword));
 
-        $result = $this->user->changePassowd($oldPassword, $newPassword);
+        $result = $this->user->changePassword($oldPassword, $newPassword);
         $this->assertFalse($result);
     }
 
@@ -242,7 +242,7 @@ class UserTest extends GenericTestCase
                    ->with($this->equalTo($newPassword))
                    ->willReturn(false);
 
-        $result = $this->user->changePassowd($oldPassword, $newPassword);
+        $result = $this->user->changePassword($oldPassword, $newPassword);
         $this->assertFalse($result);
     }
 }
