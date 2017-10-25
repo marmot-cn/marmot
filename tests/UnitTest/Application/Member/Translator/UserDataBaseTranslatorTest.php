@@ -52,12 +52,18 @@ class UserDataBaseTranslatorTest extends GenericTestsDatabaseTestCase
     /**
      * 测试翻译对象转换为数组
      */
-    public function testObjectToArray()
+    public function testObjectToArrayCorrectObject()
     {
         $user = ObjectGenerate::generateUser(1);
 
         $expression = $this->translator->objectToArray($user);
 
         $this->compareArrayAndObject($expression, $user);
+    }
+
+    public function testObjectToArrayIncorrectObject()
+    {
+        $result = $this->translator->objectToArray(null);
+        $this->assertFalse($result);
     }
 }

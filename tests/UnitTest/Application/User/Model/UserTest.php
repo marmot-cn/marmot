@@ -55,8 +55,16 @@ class UserTest extends GenericTestCase
 
         //测试初始化更新时间
         $this->assertEquals(0, $this->user->getStatusTime());
+
+        //测试初始化status
+        $this->assertEquals(0, $this->user->getStatus());
     }
 
+    public function testSetId()
+    {
+        $this->user->setId(1);
+        $this->assertEquals(1, $this->user->getId());
+    }
     //cellPhone 测试 --------------------------------------------------- start
     /**
      * 设置 User setCellPhone() 正确的传参类型,期望传值正确

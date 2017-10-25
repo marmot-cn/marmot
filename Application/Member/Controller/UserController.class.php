@@ -3,6 +3,7 @@ namespace Member\Controller;
 
 use System\Classes\Controller;
 use System\View\EmptyView;
+use System\Interfaces\INull;
 use System\Classes\CommandBus;
 use System\Interfaces\ICommand;
 use Common\Controller\JsonApiController;
@@ -13,10 +14,31 @@ use Member\View\UserView;
 use Member\Command\User\SignUpUserCommand;
 use Member\Command\User\UpdatePasswordUserCommand;
 use Member\CommandHandler\User\UserCommandHandlerFactory;
+use Member\Repository\User\UserRepository;
 
 class UserController extends Controller
 {
     use JsonApiController;
+
+    private $userRepository;
+
+    private $commandBus;
+
+    public function __construct()
+    {
+        $this->userRepository = new UserRepository();
+        $this->commandBus = new CommandBus(new UserCommandHandlerFactory());
+    }
+
+    protected function getUserRepository() : UserRepository
+    {
+        return $this->userRepository;
+    }
+
+    protected function getCommandBus() : CommandBus
+    {
+        return $this->commandBus;
+    }
 
     /**
      * 对应路由 /users[/{ids:[\d,]+}]
@@ -29,7 +51,6 @@ class UserController extends Controller
      * 示例: /users/1,2,3 获取用户id为1的信息
      * /users?page[number]=5&page[size]=20 从第5页开始取数据,每页取20条
      *
-     * @codeCoverageIgnore
      * @param int $id 用户id
      * @return jsonApi
      */
@@ -98,7 +119,6 @@ class UserController extends Controller
      *                                                        )
      *                                    )
      *                      )
-     * @codeCoverageIgnore
      * @return jsonApi
      */
     public function signUp()
@@ -143,7 +163,6 @@ class UserController extends Controller
      *                                                        )
      *                                   )
      *                         )
-     * @codeCoverageIgnore
      * @return jsonApi
      */
     public function signIn()
@@ -193,26 +212,31 @@ class UserController extends Controller
      *                                                       )
      *                                   )
      *                         )
-     * @codeCoverageIgnore
      * @return jsonApi
      */
     public function updatePassword($id)
     {
         $data = $this->getRequest()->put("data");
+
+        $type = $data['type'];
+        $oldPassword = $data['attributes']['oldPassword'];
+        $password = $data['attributes']['password'];
        
-        if ($data['type'] == 'users') {
-            if (!empty($data['attributes']['oldPassword']) && !empty($data['attributes']['password'])) {
-                $commandBus = new CommandBus(new UserCommandHandlerFactory());
-                if ($commandBus->send(new UpdatePasswordUserCommand(
-                    $data['attributes']['oldPassword'],
-                    $data['attributes']['password'],
-                    $id
-                ))
+        if ($type == 'users') {
+            if (!empty($oldPassword) && !empty($password)) {
+                $commandBus = $this->getCommandBus();
+                if ($commandBus->send(
+                    new UpdatePasswordUserCommand(
+                        $oldPassword,
+                        $password,
+                        $id
+                    )
+                )
                 ) {
-                    $repository = Core::$container->get('Member\Repository\User\UserRepository');
+                    $repository = $this->getUserRepository();
                     $user  = $repository->getOne($id);
 
-                    if ($user instanceof User) {
+                    if (!$user instanceof INull) {
                         $this->render(new UserView($user));
                         return true;
                     }
