@@ -83,10 +83,10 @@ class Core
      */
     public function initTest()
     {
-
         self::initAutoload();//autoload
         self::initEnv();//初始化环境
-        self::initContainer('test');//引入容器
+        self::initTestEnv();//初始化测试环境
+        self::initContainer();//引入容器
         self::initCache();//初始化缓存使用
         self::initDb();//初始化mysql
         // self::initMongo();
@@ -175,6 +175,11 @@ class Core
         include S_ROOT.'Application/config.php';
     }
 
+    private function initTestEnv()
+    {
+        $_ENV['APP_ENV'] = 'test';
+    }
+
     /**
      * 初始化错误信息
      */
@@ -222,7 +227,7 @@ class Core
      * @author  chloroplast1983
      * @version 1.0.20160215
      */
-    private function initContainer(string $env = '')
+    private function initContainer()
     {
         //初始化容器
         $containerBuilder = new \DI\ContainerBuilder();
@@ -235,7 +240,7 @@ class Core
 
         $containerBuilder->writeProxiesToFile(true, S_ROOT.'cache/proxies');
         //为容器设置配置文件
-        $containerBuilder->addDefinitions(S_ROOT.'config'.$env.'.php');
+        $containerBuilder->addDefinitions(S_ROOT.'config.'.$_ENV['APP_ENV'].'.php');
         //创建容器
         self::$container = $containerBuilder->build();
     }
@@ -261,8 +266,8 @@ class Core
                 }
             },
             [
-                'cacheFile' => S_ROOT. 'cache/route.cache', /* required */
-                'cacheDisabled' => false,     /* optional, enabled by default */
+                'cacheFile' => S_ROOT. 'cache/route.cache',
+                'cacheDisabled' => Core::$container->get('cache.route.disable'),
             ]
         );
 

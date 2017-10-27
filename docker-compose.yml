@@ -19,6 +19,8 @@ phpfpm:
    - "mysql-master:mysql"
   cap_add:
    - SYS_PTRACE
+  environment:
+   - APP_ENV=dev
   container_name: marmot-phpfpm
 
 memcached-1:

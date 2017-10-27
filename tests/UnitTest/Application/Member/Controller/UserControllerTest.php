@@ -43,7 +43,10 @@ class UserControllerTest extends GenericTestCase
         $this->assertInstanceof('System\Classes\Controller', $controller);
     }
 
-    //测试其他函数
+    /**
+     * 测试更新密码成功
+     * 1.
+     */
     public function testUpdatePasswordSuccess()
     {
         $putData = array(
