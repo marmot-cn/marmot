@@ -57,21 +57,9 @@ class Transaction
         return Core::$dbDriver->beginTA();
     }
 
-    public function endTransaction() : bool
+    public function commit() : bool
     {
-        if (!$this->commit()) {
-            $this->rollBack();
-            return false;
-        }
-        return true;
-    }
-
-    private function commit() : bool
-    {
-        if (!Core::$dbDriver->commit()) {
-            return $this->rollBack();
-        }
-        return true;
+        return Core::$dbDriver->commit();
     }
     
     public function inTransaction() : bool
@@ -84,7 +72,7 @@ class Transaction
         return $this->transactionSubject->attach($observer);
     }
     
-    private function rollBack() : bool
+    public function rollBack() : bool
     {
         $this->$transactionSubject->notifyObserver();
         $this->$inTransaction = false;//关闭事务

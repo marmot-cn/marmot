@@ -32,7 +32,6 @@ class UserTest extends GenericTestCase
      */
     public function testUserConstructor()
     {
-        //测试初始化网店用户id
         $this->assertEquals(0, $this->user->getId());
 
         //测试初始化用户手机号

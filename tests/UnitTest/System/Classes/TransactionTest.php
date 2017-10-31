@@ -69,7 +69,7 @@ class TransactionTest extends tests\GenericTestsDatabaseTestCase
         $this->prepareSaveCacheCommand($ids);
 
         //commit提交
-        $status = $transaction->endTransaction();
+        $status = $transaction->commit();
         $this->assertTrue($status);
         //检索插入的数据已经插入成功
         //检索总数据数量为旧的总数+2

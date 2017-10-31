@@ -4,7 +4,10 @@ namespace System\Classes;
 
 use System\Interfaces\ICommandHandlerFactory;
 use System\Interfaces\ICommand;
+use System\Interfaces\INull;
 use System\Classes\Transaction;
+
+use Marmot\Core;
 
 /**
  * 命令总线
@@ -16,33 +19,53 @@ use System\Classes\Transaction;
 class CommandBus
 {
     
-    //transaction
+    private $transaction;
     
     private $commandHandlerFactory;
 
     public function __construct(ICommandHandlerFactory $commandHandlerFactory)
     {
+        $this->transaction = Transaction::getInstance();
         $this->commandHandlerFactory = $commandHandlerFactory;
     }
 
-    private function getCommandHandlerFactory() : ICommandHandlerFactory
+    public function __destruct()
+    {
+        unset($this->transaction);
+        unset($this->commandHandlerFactory);
+    }
+
+    protected function getCommandHandlerFactory() : ICommandHandlerFactory
     {
         return $this->commandHandlerFactory;
+    }
+
+    protected function getTransaction() : Transaction
+    {
+        return $this->transaction;
     }
 
     public function send(ICommand $command)
     {
         $handler = $this->getCommandHandlerFactory()->getHandler($command);
-        
-        //transaction start
-        if ($handler != null) {
-            return $handler->execute($command);
+        //这里为了没有必要开启事务
+        if ($handler instanceof INull) {
+            Core::setLastError(COMMAND_HANDLER_NOT_EXIST);
+            return false;
         }
-        //truansaction end
+        
+        $transaction = $this->getTransaction();
+
+        $transaction->beginTransaction();
+        if ($handler->execute($command) && $transaction->commit()) {
+            return true;
+        }
+        $transaction->rollBack();
         
         //log
         
-        //error
+        //event
+        //
         return false;
     }
 }

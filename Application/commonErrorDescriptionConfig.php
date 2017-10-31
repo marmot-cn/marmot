@@ -89,4 +89,15 @@ return array(
             'source'=>array(),
             'meta'=>array()
         ),
+    COMMAND_HANDLER_NOT_EXIST=>
+        array(
+            'id'=>COMMAND_HANDLER_NOT_EXIST,
+            'link'=>'',
+            'status'=>404,
+            'code'=>COMMAND_HANDLER_NOT_EXIST,
+            'title'=>'Command handler not exist',
+            'detail'=>'Command handler not exist',
+            'source'=>array(),
+            'meta'=>array()
+        ),
 );

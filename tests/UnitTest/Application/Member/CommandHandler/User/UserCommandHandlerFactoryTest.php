@@ -2,25 +2,40 @@
 namespace Member\CommandHandler\User;
 
 use tests\GenericTestCase;
+
+use System\Classes\NullCommandHandler;
+use System\Interfaces\ICommand;
+
 use Member\Command\User\SignUpUserCommand;
 use Member\Command\User\UpdatePasswordUserCommand;
 
 class UserCommandHandlerFactoryTest extends GenericTestCase
 {
 
-    private $stub;
+    private $commandHandler;
     private $faker;
 
     public function setUp()
     {
         $this->faker = \Faker\Factory::create('zh_CN');
         //初始化工厂桩件
-        $this->stub = new UserCommandHandlerFactory();
+        $this->commandHandler = new UserCommandHandlerFactory();
+    }
+
+    public function testDefaultCommandHandler()
+    {
+        $command = $this->getMockBuilder(ICommand::class)
+                        ->getMock();
+        $commandHandler = $this->commandHandler->getHandler(
+            $command
+        );
+
+        $this->assertInstanceOf('System\Classes\NullCommandHandler', $commandHandler);
     }
 
     public function testSignUpUserCommandHandler()
     {
-        $commandHandler = $this->stub->getHandler(
+        $commandHandler = $this->commandHandler->getHandler(
             new SignUpUserCommand(
                 $this->faker->phoneNumber,
                 $this->faker->password
@@ -33,7 +48,7 @@ class UserCommandHandlerFactoryTest extends GenericTestCase
 
     public function testUpdatePasswordUserCommandHandler()
     {
-        $commandHandler = $this->stub->getHandler(
+        $commandHandler = $this->commandHandler->getHandler(
             new UpdatePasswordUserCommand(
                 md5($this->faker->password.$this->faker->randomDigitNotNull),
                 md5($this->faker->password),

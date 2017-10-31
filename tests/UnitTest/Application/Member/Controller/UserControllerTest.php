@@ -8,6 +8,7 @@ use Member\Command\User\UpdatePasswordUserCommand;
 use Member\Repository\User\UserRepository;
 use Member\CommandHandler\User\UserCommandHandlerFactory;
 use Member\Model\User;
+use Member\Model\NullUser;
 use Member\View\UserView;
 use Member\Utils\ObjectGenerate;
 
@@ -43,9 +44,104 @@ class UserControllerTest extends GenericTestCase
         $this->assertInstanceof('System\Classes\Controller', $controller);
     }
 
+    public function testUpdatePasswordCommandExecuteFailure()
+    {
+        $putData = array(
+            'type'=>'users',
+            'attributes'=>array(
+                'oldPassword'=>'oldPassword',
+                'password'=>'password'
+            )
+        );
+        $id = 1;
+
+        $request = $this->prophesize(Request::class);
+        $request->put(Argument::exact('data'))
+                ->shouldBeCalledTimes(1)
+                ->willReturn($putData);
+
+        $commandBus = $this->prophesize(CommandBus::class);
+        $commandBus->send(
+            Argument::exact(
+                new UpdatePasswordUserCommand(
+                    'oldPassword',
+                    'password',
+                    $id
+                )
+            )
+        )->shouldBeCalledTimes(1)
+         ->willReturn(false);
+
+        $this->controller->expects($this->exactly(0))
+                   ->method('getUserRepository');
+        $this->controller->expects($this->once())
+                   ->method('getCommandBus')
+                   ->willReturn($commandBus->reveal());
+        $this->controller->expects($this->once())
+                   ->method('getRequest')
+                   ->willReturn($request->reveal());
+        $this->controller->expects($this->exactly(0))
+                   ->method('render');
+        $this->controller->expects($this->once())
+                   ->method('displayError');
+
+        $result = $this->controller->updatePassword($id);
+        $this->assertFalse($result);
+    }
+
+    public function testUpdatePasswordDataNotExistUser()
+    {
+        $putData = array(
+            'type'=>'users',
+            'attributes'=>array(
+                'oldPassword'=>'oldPassword',
+                'password'=>'password'
+            )
+        );
+        $request = $this->prophesize(Request::class);
+        $request->put(Argument::exact('data'))
+                ->shouldBeCalledTimes(1)
+                ->willReturn($putData);
+
+        $id = 1;
+        $user = ObjectGenerate::generateUser($id);
+        $userRepository = $this->prophesize(UserRepository::class);
+        $userRepository->getOne(Argument::exact($id))
+                       ->shouldBeCalledTimes(1)
+                       ->willReturn(new NullUser());
+
+        $commandBus = $this->prophesize(CommandBus::class);
+        $commandBus->send(
+            Argument::exact(
+                new UpdatePasswordUserCommand(
+                    'oldPassword',
+                    'password',
+                    $id
+                )
+            )
+        )->shouldBeCalledTimes(1)
+         ->willReturn(true);
+
+        $this->controller->expects($this->once())
+                   ->method('getUserRepository')
+                   ->willReturn($userRepository->reveal());
+        $this->controller->expects($this->once())
+                   ->method('getCommandBus')
+                   ->willReturn($commandBus->reveal());
+        $this->controller->expects($this->once())
+                   ->method('getRequest')
+                   ->willReturn($request->reveal());
+        $this->controller->expects($this->exactly(0))
+                   ->method('render');
+        $this->controller->expects($this->once())
+                   ->method('displayError');
+
+        $result = $this->controller->updatePassword($id);
+        $this->assertFalse($result);
+    }
+
     /**
      * 测试更新密码成功
-     * 1.
      */
     public function testUpdatePasswordSuccess()
     {

@@ -15,7 +15,7 @@ return [
     'System\Classes\Event' => S_ROOT.'System/Classes/Event.class.php',
     'System\Classes\Server' => S_ROOT.'System/Classes/Server.class.php',
     'System\Classes\ValidateStrategy' => S_ROOT.'System/Classes/ValidateStrategy.class.php',
-    'System\Interfaces\INull' => S_ROOT.'System/Interfaces/INull.class.php',
+    'System\Classes\NullCommandHandler' => S_ROOT.'System/Classes/NullCommandHandler.class.php',
 
     //strategy
     'System\Strategy\Validate\IntStrategy' => S_ROOT.'System/Strategy/Validate/IntStrategy.class.php',
@@ -36,6 +36,7 @@ return [
     'System\Interfaces\ICommand' => S_ROOT.'System/Interfaces/ICommand.class.php',
     'System\Interfaces\ICommandHandler' => S_ROOT.'System/Interfaces/ICommandHandler.class.php',
     'System\Interfaces\ICommandHandlerFactory' => S_ROOT.'System/Interfaces/ICommandHandlerFactory.class.php',
+    'System\Interfaces\INull' => S_ROOT.'System/Interfaces/INull.class.php',
     'System\Interfaces\IResponseFormatter' => S_ROOT.'System/Interfaces/IResponseFormatter.class.php',
     'System\Interfaces\IValidateStrategy' => S_ROOT.'System/Interfaces/IValidateStrategy.class.php',
     'System\Interfaces\IMediaTypeStrategy' => S_ROOT.'System/Interfaces/IMediaTypeStrategy.class.php',

@@ -3,7 +3,6 @@ namespace Member\CommandHandler\User;
 
 use System\Interfaces\ICommandHandler;
 use System\Interfaces\ICommand;
-use System\Classes\Transaction;
 
 use Member\Command\User\SignUpUserCommand;
 use Member\Model\User;

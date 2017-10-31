@@ -4,6 +4,8 @@ namespace Member\CommandHandler\User;
 use System\Interfaces\ICommandHandlerFactory;
 use System\Interfaces\ICommandHandler;
 use System\Interfaces\ICommand;
+
+use System\Classes\NullCommandHandler;
 use Marmot\Core;
 
 class UserCommandHandlerFactory implements ICommandHandlerFactory
@@ -21,6 +23,10 @@ class UserCommandHandlerFactory implements ICommandHandlerFactory
             //修改密码
             case 'Member\Command\User\UpdatePasswordUserCommand':
                 $commandHandler = new UpdatePasswordUserCommandHandler();
+                break;
+            //默认
+            default:
+                $commandHandler = new NullCommandHandler();
                 break;
         }
         return $commandHandler;

@@ -15,8 +15,6 @@ class IndexController extends Controller
      */
     public function index()
     {
-        //setcookie('oauid',1,time() + 3000,'/','qixinyun.com', false, true);
-//        var_dump($_COOKIE);
         var_dump("Hello World marmot");
         return true;
     }
