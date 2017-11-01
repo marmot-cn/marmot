@@ -342,7 +342,13 @@ class Request
         $this->headers[$name] = $value;
     }
     
-    public function validate(array $rules) : bool
+    /**
+     * 1. 验证请求的媒体类型
+     * 2. 验证数据是否正确
+     *
+     * @param array $rules
+     */
+    public function validate(array $rules = array()) : bool
     {
         return $this->validateMediaTypes() && $this->validateRequestData($rules);
     }
@@ -356,8 +362,12 @@ class Request
      * 验证应用服务层参数
      * @return bool
      */
-    protected function validateRequestData(array $rules) : bool
+    private function validateRequestData(array $rules) : bool
     {
+        if (empty($rules)) {
+            return true;
+        }
+
         foreach ($rules as $rule) {
             $verifyValue = $rule[0];
             $strategyName = ucfirst($rule[1]).'Strategy';

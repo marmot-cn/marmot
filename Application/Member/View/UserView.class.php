@@ -25,6 +25,8 @@ class UserView implements IView
         $this->rules = array(
             User::class => UserSchema::class
         );
+
+        return $this;
     }
 
     public function display()

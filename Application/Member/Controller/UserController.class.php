@@ -26,6 +26,8 @@ class UserController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->userRepository = new UserRepository();
         $this->commandBus = new CommandBus(new UserCommandHandlerFactory());
     }
@@ -40,45 +42,38 @@ class UserController extends Controller
         return $this->commandBus;
     }
 
-    /**
-     * 对应路由 /users[/{ids:[\d,]+}]
-     * GET方法传参
-     * 根据用户id获取用户详情,该接口用于:
-     * 1. 获取单个用户详情数据
-     * 2. 批量多个用户详情数据
-     * 3. 根据检索条件获取用户详情数据
-     *
-     * 示例: /users/1,2,3 获取用户id为1的信息
-     * /users?page[number]=5&page[size]=20 从第5页开始取数据,每页取20条
-     *
-     * @param int $id 用户id
-     * @return jsonApi
-     */
-    public function get(string $ids = '')
+    public function getOne(int $id)
     {
-        //初始化仓库
-        $repository = Core::$container->get('Member\Repository\User\UserRepository');
+        $repository = $this->getUserRepository();
 
-        if (!empty($ids)) {
-            if (is_numeric($ids)) {//获取单条
-                $user = $repository->getOne($ids);
-                if ($user instanceof User) {
-                    $this->render(new UserView($user));
-                    return true;
-                }
-            }
-
-            //批量获取
-            $userList = $repository->getList(explode(',', $ids));
-            if (!empty($userList)) {
-                $this->render(new UserView($userList));
-                return true;
-            }
-
-            $this->getResponse()->setStatusCode(404);
-            $this->render(new EmptyView());
-            return false;
+        $user = $repository->getOne($id);
+        if (!$user instanceof INull) {
+            $this->render(new UserView($user));
+            return true;
         }
+
+        $this->displayError();
+        return false;
+    }
+
+    public function getList(string $ids)
+    {
+        $repository = $this->getUserRepository();
+
+        //批量获取
+        $userList = $repository->getList(explode(',', $ids));
+        if (!empty($userList)) {
+            $this->render(new UserView($userList));
+            return true;
+        }
+
+        $this->displayError();
+        return false;
+    }
+
+    public function filter()
+    {
+        $repository = $this->getUserRepository();
 
         list($filter, $sort, $curpage, $perpage) = $this->formatParameters();
 
@@ -93,20 +88,18 @@ class UserController extends Controller
         if ($count > 0) {
             //获取多条数据 repository->filter 返回 list 和 count
             $view = new UserView($userList);
-            $this->render(
-                $view->pagination(
-                    'users',
-                    $this->getRequest()->get(),
-                    $count,
-                    $perpage,
-                    $curpage
-                )
+            $view->pagination(
+                'users',
+                $this->getRequest()->get(),
+                $count,
+                $perpage,
+                $curpage
             );
+            $this->render($view);
             return true;
         }
 
-        $this->getResponse()->setStatusCode(404);
-        $this->render(new EmptyView());
+        $this->displayError();
         return false;
     }
 

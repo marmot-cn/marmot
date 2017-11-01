@@ -7,6 +7,8 @@ use Member\Model\User;
 use Member\Adapter\User\Query\UserRowCacheQuery;
 use Member\Utils\ObjectGenerate;
 
+use Marmot\Core;
+
 use Prophecy\Argument;
 
 class UserDataBaseAdapterTest extends GenericTestCase
@@ -210,6 +212,7 @@ class UserDataBaseAdapterTest extends GenericTestCase
 
         $result = $adapter->getOne($userId);
         $this->assertInstanceOf('Member\Model\NullUser', $result);
+        $this->assertEquals(RESOURCE_NOT_EXIST, Core::getLastError()->getId());
     }
 
     public function testGetOneExist()

@@ -6,6 +6,8 @@ use Member\Model\User;
 use Member\Model\NullUser;
 use Member\Adapter\User\Query\UserRowCacheQuery;
 
+use Marmot\Core;
+
 class UserDataBaseAdapter implements IUserAdapter
 {
     private $userDataBaseTranslator;
@@ -73,6 +75,7 @@ class UserDataBaseAdapter implements IUserAdapter
 
         $info = $this->getUserRowCacheQuery()->getOne($id);
         if (empty($info)) {
+            Core::setLastError(RESOURCE_NOT_EXIST);
             return NullUser::getInstance();
         }
 
