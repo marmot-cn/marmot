@@ -173,6 +173,7 @@ class Core
     {
         //加载应用配置文件
         include S_ROOT.'Application/config.php';
+        include S_ROOT.'Application/widgetRules.php';
     }
 
     private function initTestEnv()

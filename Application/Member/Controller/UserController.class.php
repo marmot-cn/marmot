@@ -2,12 +2,12 @@
 namespace Member\Controller;
 
 use System\Classes\Controller;
-use System\View\EmptyView;
 use System\Interfaces\INull;
 use System\Classes\CommandBus;
 use System\Interfaces\ICommand;
+
+use Application\WidgetRules;
 use Common\Controller\JsonApiController;
-use Marmot\Core;
 
 use Member\Model\User;
 use Member\View\UserView;
@@ -44,16 +44,23 @@ class UserController extends Controller
 
     public function getOne(int $id)
     {
-        $repository = $this->getUserRepository();
+        if ($this->validateGetOneScenario($id)) {
+            $repository = $this->getUserRepository();
 
-        $user = $repository->getOne($id);
-        if (!$user instanceof INull) {
-            $this->render(new UserView($user));
-            return true;
+            $user = $repository->getOne($id);
+            if (!$user instanceof INull) {
+                $this->render(new UserView($user));
+                return true;
+            }
         }
 
         $this->displayError();
         return false;
+    }
+
+    private function validateGetOneScenario(int $id)
+    {
+        return $this->getRequest()->validate([WidgetRules::id($id, 6)]);
     }
 
     public function getList(string $ids)

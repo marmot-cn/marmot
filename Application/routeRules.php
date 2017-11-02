@@ -6,14 +6,14 @@
 return [
     //user 用户
     //获取用户详情接口
-    [
-        'method'=>'GET',
-        'rule'=>'/users/{ids:[\d,]+}',
-        'controller'=>[
-            'Member\Controller\UserController',
-            'getList'
-        ]
-    ],
+//    [
+//        'method'=>'GET',
+//        'rule'=>'/users/{ids:[\d,]+}',
+//        'controller'=>[
+//            'Member\Controller\UserController',
+//            'getList'
+//        ]
+//    ],
     [
         'method'=>'GET',
         'rule'=>'/users/{id:\d+}',

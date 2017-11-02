@@ -3,7 +3,6 @@ namespace User\Model;
 
 use Marmot\Common\Model\Object;
 use Marmot\Common\Model\IObject;
-use Shop\Model\Shop;
 
 /**
  * 用户领域对象
