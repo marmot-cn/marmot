@@ -74,9 +74,9 @@ class Transaction
     
     public function rollBack() : bool
     {
-        $this->$transactionSubject->notifyObserver();
-        $this->$inTransaction = false;//关闭事务
-        $this->$transactionSubject = null;//释放subject
+        $this->transactionSubject->notifyObserver();
+        $this->inTransaction = false;//关闭事务
+        $this->transactionSubject = null;//释放subject
         return Core::$dbDriver->rollBack();
     }
 }

@@ -39,10 +39,6 @@ class UserDataBaseAdapter implements IUserAdapter
     {
         $info = array();
 
-        //翻译器 对象翻译成db 数组
-        //数组插入数据库
-        //插入成功返回true
-        //插入失败返回false
         $info = $this->getUserDataBaseTranslator()->objectToArray($user);
         $id = $this->getUserRowCacheQuery()->add($info);
         if (!$id) {

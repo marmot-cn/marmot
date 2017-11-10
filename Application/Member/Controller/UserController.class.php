@@ -9,6 +9,8 @@ use System\Interfaces\ICommand;
 use Application\WidgetRules;
 use Common\Controller\JsonApiController;
 
+use Marmot\Core;
+
 use Member\Model\User;
 use Member\View\UserView;
 use Member\Command\User\SignUpUserCommand;
@@ -124,34 +126,37 @@ class UserController extends Controller
     public function signUp()
     {
         $data = $this->getRequest()->post('data');
+        //验证type
+        $cellPhone = $data['attributes']['cellPhone'];
+        $password = $data['attributes']['password'];
 
-        if ($data['type'] == 'users') {
+        if ($this->validateSignUpScenario()) {
             $commandBus = new CommandBus(new UserCommandHandlerFactory());
 
-            if (!empty($data['attributes']['cellPhone']) && !empty($data['attributes']['password'])) {
                 $command = new SignUpUserCommand(
                     $data['attributes']['cellPhone'],
                     $data['attributes']['password']
                 );
-            }
 
-            if ($command instanceof ICommand) {
-                if ($commandBus->send($command)) {
-                    //查询新注册的用户
-                    $repository = Core::$container->get('Member\Repository\User\UserRepository');
-                    $user = $repository->getOne($command->uid);
-                    if ($user instanceof User) {
-                        $this->getResponse()->setStatusCode(201);
-                        $this->render(new UserView($user));
-                        return true;
-                    }
-                    //返回新用户信息
+            if ($commandBus->send($command)) {
+                //查询新注册的用户
+                $repository = Core::$container->get('Member\Repository\User\UserRepository');
+                $user = $repository->getOne($command->uid);
+                if ($user instanceof User) {
+                    $this->getResponse()->setStatusCode(201);
+                    $this->render(new UserView($user));
+                    return true;
                 }
             }
         }
 
         $this->displayError();
         return false;
+    }
+
+    private function validateSignUpScenario()
+    {
+        return $this->getRequest()->validate([]);
     }
 
     /**

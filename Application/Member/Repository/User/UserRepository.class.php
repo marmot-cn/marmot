@@ -46,7 +46,7 @@ class UserRepository
      * 获取用户
      * @param integer $id 用户id
      */
-    public function getOne($id)
+    public function getOne($id) : User
     {
         return $this->getAdapter()->getOne($id);
     }
@@ -55,7 +55,7 @@ class UserRepository
      * 批量获取用户
      * @param array $ids 商户申请表id数组
      */
-    public function getList(array $ids)
+    public function getList(array $ids) : array
     {
         return $this->getAdapter()->getList($ids);
     }
@@ -68,7 +68,7 @@ class UserRepository
         array $sort = array(),
         int $offset = 0,
         int $size = 20
-    ) {
+    ) : array {
         return $this->getAdapter()->filter($filter, $sort, $offset, $size);
     }
 }
