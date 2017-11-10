@@ -134,8 +134,8 @@ class UserController extends Controller
             $commandBus = new CommandBus(new UserCommandHandlerFactory());
 
                 $command = new SignUpUserCommand(
-                    $data['attributes']['cellPhone'],
-                    $data['attributes']['password']
+                    $cellPhone,
+                    $password
                 );
 
             if ($commandBus->send($command)) {
