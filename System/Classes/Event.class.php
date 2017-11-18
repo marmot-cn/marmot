@@ -36,7 +36,7 @@ class Event
         return $this->saveDb($this->formatSaveEventData());
     }
 
-    private function formatSaveEventData() : array
+    private function toArray() : array
     {
         return array(
             'source' => $this->sourceName,
@@ -65,7 +65,7 @@ class Event
         return $this->publish($this->formatPublishEventData());
     }
 
-    private function formatPublishEventData() : string
+    private function toString() : string
     {
         return $this->sourceName.':'.$this->source->getId().':'.$this->eventName;
     }

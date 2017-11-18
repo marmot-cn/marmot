@@ -89,7 +89,7 @@ class UserControllerTest extends GenericTestCase
         $this->assertFalse($result);
     }
 
-    public function testUpdatePasswordDataNotExistUser()
+    public function testUpdatePasswordNotExistUser()
     {
         $putData = array(
             'type'=>'users',

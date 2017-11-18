@@ -20,6 +20,9 @@ class UserSchema extends SchemaProvider
     {
         return [
             'cellPhone'  => $user->getCellPhone(),
+            'userName' => $user->getUserName(),
+            'realName' => $user->getRealName(),
+            'nickName' => $user->getNickName(),
             'status' => $user->getStatus(),
             'createTime' => $user->getCreateTime(),
             'updateTime' => $user->getUpdateTime(),

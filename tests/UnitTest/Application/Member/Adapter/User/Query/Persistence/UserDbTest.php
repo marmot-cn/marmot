@@ -1,5 +1,5 @@
 <?php
-namespace Member\Persistence;
+namespace Member\Adapter\User\Query\Persistence;
 
 use tests\GenericTestCase;
 use Marmot\Core;
@@ -25,16 +25,5 @@ class UserDbTest extends GenericTestCase
     public function testCorrectInstanceExtendsDb()
     {
         $this->assertInstanceof('System\Classes\Db', $this->db);
-    }
-
-    /**
-     * 测试该文件是否正确的初始化key,且和表名一致
-     */
-    public function testUserDbCorrectKey()
-    {
-        $table = $this->getPrivateProperty('Member\Persistence\UserDb', 'table');
-        $tableName = $table->getValue($this->db);
-        //判断key赋值设想一致
-        $this->assertEquals('user', $tableName);
     }
 }

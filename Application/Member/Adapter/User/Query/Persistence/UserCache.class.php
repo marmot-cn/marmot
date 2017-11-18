@@ -1,5 +1,5 @@
 <?php
-namespace Member\Persistence;
+namespace Member\Adapter\User\Query\Persistence;
 
 use System\Classes\Cache;
 

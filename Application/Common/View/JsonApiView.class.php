@@ -17,6 +17,11 @@ trait JsonApiView
     private $links = [];
     private $meta = [];
 
+    public function setEncodingParameters($encodingParameters)
+    {
+        $this->encodingParameters = $encodingParameters;
+    }
+
     public function pagination(string $url, array $conditions, int $num, int $perpage, int $curpage)
     {
 

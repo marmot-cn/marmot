@@ -1,7 +1,7 @@
 nginx:
  image: "registry.cn-hangzhou.aliyuncs.com/nginx-phpfpm/nginx-end"
  ports:
-  - "80:80"
+  - "8081:80"
  links:
   - "phpfpm"
  volumes:

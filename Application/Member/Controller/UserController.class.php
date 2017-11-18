@@ -2,9 +2,10 @@
 namespace Member\Controller;
 
 use System\Classes\Controller;
-use System\Interfaces\INull;
 use System\Classes\CommandBus;
 use System\Interfaces\ICommand;
+use System\Interfaces\INull;
+use System\Interfaces\IView;
 
 use Application\WidgetRules;
 use Common\Controller\JsonApiController;
@@ -44,35 +45,41 @@ class UserController extends Controller
         return $this->commandBus;
     }
 
-    public function getOne(int $id)
+    private function renderView(IView $view)
     {
-        if ($this->validateGetOneScenario($id)) {
-            $repository = $this->getUserRepository();
-
-            $user = $repository->getOne($id);
-            if (!$user instanceof INull) {
-                $this->render(new UserView($user));
-                return true;
-            }
-        }
-
-        $this->displayError();
-        return false;
+        $view->setEncodingParameters($this->getParameters());
+        $this->render($view);
     }
 
-    private function validateGetOneScenario(int $id)
-    {
-        return $this->getRequest()->validate([WidgetRules::id($id, 6)]);
-    }
+//    public function getOne(int $id)
+//    {
+//        if ($this->validateGetOneScenario($id)) {
+//            $repository = $this->getUserRepository();
+//
+//            $user = $repository->getOne($id);
+//            if (!$user instanceof INull) {
+//                $this->renderView(new UserView($user)); 
+//                return true;
+//            }
+//        }
+//
+//        $this->displayError();
+//        return false;
+//    }
+//
+//    private function validateGetOneScenario(int $id)
+//    {
+//        return $this->getRequest()->validate([WidgetRules::id($id, 6)]);
+//    }
 
-    public function getList(string $ids)
+    public function get(string $ids)
     {
         $repository = $this->getUserRepository();
 
         //批量获取
         $userList = $repository->getList(explode(',', $ids));
         if (!empty($userList)) {
-            $this->render(new UserView($userList));
+            $this->renderView(new UserView($userList));
             return true;
         }
 

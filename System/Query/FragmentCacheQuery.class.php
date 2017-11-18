@@ -14,25 +14,20 @@ use System\Interfaces;
  */
 abstract class FragmentCacheQuery
 {
-
     private $fragmentKey;//片段缓存key名
 
     private $cacheLayer;//缓存层
 
-    private $dbLayer;//数据层
-
-    public function __construct(string $fragmentKey, Interfaces\CacheLayer $cacheLayer, Interfaces\DbLayer $dbLayer)
+    public function __construct(string $fragmentKey, Interfaces\CacheLayer $cacheLayer)
     {
         $this->fragmentKey = $fragmentKey;
         $this->cacheLayer = $cacheLayer;
-        $this->dbLayer = $dbLayer;
     }
 
     public function __destruct()
     {
         unset($this->fragmentKey);
         unset($this->cacheLayer);
-        unset($this->dbLayer);
     }
 
     /**
@@ -40,7 +35,6 @@ abstract class FragmentCacheQuery
      */
     public function get()
     {
-
         //从缓存获取数据
         $cacheData = $this->cacheLayer->get($this->fragmentKey);
         if ($cacheData) {
@@ -58,6 +52,7 @@ abstract class FragmentCacheQuery
      * 更新缓存片段
      */
     abstract public function refresh();
+
     /**
      * 删除片段缓存
      */

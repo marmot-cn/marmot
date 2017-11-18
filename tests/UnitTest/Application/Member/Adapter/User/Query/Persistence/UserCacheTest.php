@@ -1,5 +1,5 @@
 <?php
-namespace Member\Persistence;
+namespace Member\Adapter\User\Query\Persistence;
 
 use tests\GenericTestCase;
 use Marmot\Core;
@@ -26,16 +26,5 @@ class UserCacheTest extends GenericTestCase
     public function testCorrectInstanceExtendsCache()
     {
         $this->assertInstanceof('System\Classes\Cache', $this->cache);
-    }
-
-    /**
-     * 测试该文件是否正确的初始化key,且和表名一致
-     */
-    public function testUserCacheCorrectKey()
-    {
-        $key = $this->getPrivateProperty('Member\Persistence\UserCache', 'key');
-        $tableName = $key->getValue($this->cache);
-        //判断key赋值设想一致
-        $this->assertEquals('user', $tableName);
     }
 }

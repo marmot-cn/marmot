@@ -29,7 +29,6 @@ return [
     'System\Interfaces\Command' => S_ROOT.'System/Interfaces/Command.class.php',
     'System\Interfaces\Observer' => S_ROOT.'System/Interfaces/Observer.class.php',
     'System\Interfaces\Subject' => S_ROOT.'System/Interfaces/Subject.class.php',
-    'System\Interfaces\Widget' => S_ROOT.'System/Interfaces/Widget.class.php',
     'System\Interfaces\CacheLayer' => S_ROOT.'System/Interfaces/CacheLayer.class.php',
     'System\Interfaces\DbLayer' => S_ROOT.'System/Interfaces/DbLayer.class.php',
     'System\Interfaces\IView' => S_ROOT.'System/Interfaces/IView.class.php',
