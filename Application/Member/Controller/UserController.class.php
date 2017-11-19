@@ -51,28 +51,28 @@ class UserController extends Controller
         $this->render($view);
     }
 
-//    public function getOne(int $id)
-//    {
-//        if ($this->validateGetOneScenario($id)) {
-//            $repository = $this->getUserRepository();
-//
-//            $user = $repository->getOne($id);
-//            if (!$user instanceof INull) {
-//                $this->renderView(new UserView($user)); 
-//                return true;
-//            }
-//        }
-//
-//        $this->displayError();
-//        return false;
-//    }
-//
-//    private function validateGetOneScenario(int $id)
-//    {
-//        return $this->getRequest()->validate([WidgetRules::id($id, 6)]);
-//    }
+    public function getOne(int $id)
+    {
+        if ($this->validateGetOneScenario($id)) {
+            $repository = $this->getUserRepository();
 
-    public function get(string $ids)
+            $user = $repository->getOne($id);
+            if (!$user instanceof INull) {
+                $this->renderView(new UserView($user));
+                return true;
+            }
+        }
+
+        $this->displayError();
+        return false;
+    }
+
+    private function validateGetOneScenario(int $id)
+    {
+        return $this->getRequest()->validate([WidgetRules::id($id, 6)]);
+    }
+
+    public function getList(string $ids)
     {
         $repository = $this->getUserRepository();
 

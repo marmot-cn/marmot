@@ -8,10 +8,18 @@ return [
     //获取用户详情接口
     [
         'method'=>'GET',
-        'rule'=>'/users/{ids:[\d,]+}',
+        'rule'=>'/users/{id:\d+}',
         'controller'=>[
             'Member\Controller\UserController',
-            'get'
+            'getOne'
+        ]
+    ],
+    [
+        'method'=>'GET',
+        'rule'=>'/users/{ids:\d,[\d,]+}',
+        'controller'=>[
+            'Member\Controller\UserController',
+            'getList'
         ]
     ],
     //注册
