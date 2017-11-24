@@ -349,85 +349,11 @@ class Request
      */
     public function validate(array $rules = array()) : bool
     {
-        return $this->validateMediaTypes() && $this->validateRequestData($rules);
+        return $this->validateMediaTypes();
     }
 
     private function validateMediaTypes() : bool
     {
         return $this->getMediaTypeStrategy()->validate($this);
-    }
-
-    /**
-     * 验证应用服务层参数
-     * @param array $rules [[验证变量,'验证策略','选项','错误编号']
-     *              验证变量$number, int策略, 最小值1,最大值4, 如果错误返回错误编号100
-     *              [[$number, 'int', 'min:1|max:4', '100']]
-     * @return bool
-     */
-    private function validateRequestData(array $rules) : bool
-    {
-        if (empty($rules)) {
-            return true;
-        }
-
-        foreach ($rules as $rule) {
-            $verifyValue = $rule[0];
-            $strategyName = ucfirst($rule[1]).'Strategy';
-            $options = $rule[2];
-            $errorCode = $rule[3];
-            
-            if (!$this->isStrategyExist($strategyName)) {
-                return false;
-            }
-            
-            $strategy = $this->strategyFactory($strategyName);
-            if (!$strategy->validate($verifyValue, $options, $errorCode)) {
-                return false;
-            }
-            return true;
-        }
-
-        return true;
-    }
-
-    private function strategyFactory(string $strategyName) : IValidateStrategy
-    {
-        if ($this->isSystemStrategyExist($strategyName)) {
-            $strategy = 'System\Strategy\Validate\\'.$strategyName;
-            return new $strategy();
-        }
-
-        if ($this->isApplicationStrategyExist($strategyName)) {
-            $strategy = 'Application\Strategy\Validate\\'.$strategyName;
-            return new $strategy();
-        }
-
-        return null;
-    }
-
-    private function isStrategyExist(string $strategyName) : bool
-    {
-        return $this->isSystemStrategyExist($strategyName)
-                || $this->isApplicationStrategyExist($strategyName);
-    }
-
-    private function isSystemStrategyExist(string $strategyName) : bool
-    {
-        if (!class_exists('System\Strategy\Validate\\'.$strategyName)) {
-            //错误code
-            return false;
-        }
-
-        return true;
-    }
-
-    private function isApplicationStrategyExist(string $strategyName) : bool
-    {
-        if (!class_exists('Application\Strategy\\'.$strategyName)) {
-            //错误code
-            return false;
-        }
-
-        return true;
     }
 }

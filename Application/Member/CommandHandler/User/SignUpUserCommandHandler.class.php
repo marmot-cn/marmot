@@ -34,8 +34,8 @@ class SignUpUserCommandHandler implements ICommandHandler
         }
 
         $user = $this->getUser();
-        $user->setCellPhone($command->cellPhone);
-        $user->setUserName($command->cellPhone);
+        $user->setCellphone($command->cellphone);
+        $user->setUserName($command->cellphone);
         $user->encryptPassword($command->password);
 
         //这里只操作一张表,但是这里演示事物,使用事物处理

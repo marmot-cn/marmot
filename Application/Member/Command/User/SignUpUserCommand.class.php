@@ -6,9 +6,9 @@ use System\Interfaces\ICommand;
 class SignUpUserCommand implements ICommand
 {
     /**
-     * @var string cellPhone 手机号
+     * @var string cellphone 手机号
      */
-    public $cellPhone;
+    public $cellphone;
     /**
      * @var string  password 密码
      */
@@ -19,11 +19,11 @@ class SignUpUserCommand implements ICommand
     public $uid;
 
     public function __construct(
-        string $cellPhone,
+        string $cellphone,
         string $password,
         int $uid = 0
     ) {
-        $this->cellPhone = $cellPhone;
+        $this->cellphone = $cellphone;
         $this->password = $password;
         $this->uid = $uid;
     }

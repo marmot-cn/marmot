@@ -42,10 +42,6 @@ class Core
     //上一次错误
     private static $lastError;
     
-    private function __construct()
-    {
-    }
-
     /**
      * 使用单例封装全局函数的core调用
      */

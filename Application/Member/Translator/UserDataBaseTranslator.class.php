@@ -9,7 +9,7 @@ class UserDataBaseTranslator implements ITranslator
     public function arrayToObject(array $expression)
     {
         $user = new User($expression['user_id']);
-        $user->setCellPhone($expression['cellphone']);
+        $user->setCellphone($expression['cellphone']);
         $user->setPassword($expression['password']);
         $user->setSalt($expression['salt']);
         $user->setCreateTime($expression['create_time']);
@@ -36,7 +36,7 @@ class UserDataBaseTranslator implements ITranslator
         if (empty($keys)) {
             $keys = array(
                 'id',
-                'cellPhone',
+                'cellphone',
                 'updateTime',
                 'createTime',
                 'statusTime',
@@ -54,10 +54,10 @@ class UserDataBaseTranslator implements ITranslator
         if (in_array('id', $keys)) {
             $expression['user_id'] = $user->getId();
         }
-        if (in_array('cellPhone', $keys)) {
-            $cellPhone = $user->getCellPhone();
-            if (!empty($cellPhone)) {
-                $expression['cellphone'] = $cellPhone;
+        if (in_array('cellphone', $keys)) {
+            $cellphone = $user->getCellphone();
+            if (!empty($cellphone)) {
+                $expression['cellphone'] = $cellphone;
             }
         }
 

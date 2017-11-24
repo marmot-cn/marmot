@@ -14,9 +14,9 @@ class ObjectGenerate
         $faker->seed($seed);//设置seed,放置和生成数据相同
         $user = new User($id);
 
-        //cellPhone
-        $cellPhone = isset($value['cellPhone']) ? $value['cellPhone'] : $faker->phoneNumber;
-        $user->setCellPhone($cellPhone);
+        //cellphone
+        $cellphone = isset($value['cellphone']) ? $value['cellphone'] : $faker->phoneNumber;
+        $user->setCellphone($cellphone);
 
         //password,salt
         $password = isset($value['password']) ? $value['password'] : $faker->password;

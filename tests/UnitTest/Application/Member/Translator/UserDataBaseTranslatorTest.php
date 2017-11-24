@@ -33,7 +33,7 @@ class UserDataBaseTranslatorTest extends GenericTestsDatabaseTestCase
 
         $expression = array();
         $expression['user_id'] = $user->getId();
-        $expression['cellphone'] = $user->getCellPhone();
+        $expression['cellphone'] = $user->getCellphone();
         $expression['password'] = $user->getPassword();
         $expression['salt'] = $user->getSalt();
         $expression['nick_name'] = $user->getNickName();

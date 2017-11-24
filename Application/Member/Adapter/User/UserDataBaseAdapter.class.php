@@ -101,9 +101,9 @@ class UserDataBaseAdapter implements IUserAdapter
         if (!empty($filter)) {
             $user = new User();
 
-            if (isset($filter['cellPhone'])) {
-                $user->setCellPhone($filter['cellPhone']);
-                $info = $this->getUserDataBaseTranslator()->objectToArray($user, array('cellPhone'));
+            if (isset($filter['cellphone'])) {
+                $user->setCellphone($filter['cellphone']);
+                $info = $this->getUserDataBaseTranslator()->objectToArray($user, array('cellphone'));
                 $condition .= $conjection.key($info).' = \''.current($info).'\'';
                 $conjection = ' AND ';
             }

@@ -10,7 +10,7 @@ trait UserUtils
         $user
     ) {
         $this->assertEquals($expectedArray['user_id'], $user->getId());
-        $this->assertEquals($expectedArray['cellphone'], $user->getCellPhone());
+        $this->assertEquals($expectedArray['cellphone'], $user->getCellphone());
         $this->assertEquals($expectedArray['password'], $user->getPassword());
         $this->assertEquals($expectedArray['salt'], $user->getSalt());
         $this->assertEquals($expectedArray['create_time'], $user->getCreateTime());
@@ -30,7 +30,7 @@ trait UserUtils
             $this->assertEquals($oldArray['user_id'], $newArray['user_id']);
         }
         
-        if (in_array('cellPhone', $keys)) {
+        if (in_array('cellphone', $keys)) {
             $this->assertNotEquals($oldArray['cellphone'], $newArray['cellphone']);
         } else {
             $this->assertEquals($oldArray['cellphone'], $newArray['cellphone']);

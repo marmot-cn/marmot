@@ -24,12 +24,12 @@ class SignUpUserCommandTest extends GenericTestCase
         //保证每次生成数据一致
         $faker->seed($this->fakerSeed);
         $this->fakerData = array(
-                                'cellPhone' => $faker->phoneNumber,
+                                'cellphone' => $faker->phoneNumber,
                                 'password' => $faker->password,
                                 'uid' => $faker->randomNumber(3)
                             );
         $this->stub = new SignUpUserCommand(
-            $this->fakerData['cellPhone'],
+            $this->fakerData['cellphone'],
             $this->fakerData['password'],
             $this->fakerData['uid']
         );
@@ -47,7 +47,7 @@ class SignUpUserCommandTest extends GenericTestCase
 
     public function testCellphoneParameter()
     {
-        $this->assertEquals($this->fakerData['cellPhone'], $this->stub->cellPhone);
+        $this->assertEquals($this->fakerData['cellphone'], $this->stub->cellphone);
     }
 
     public function testUidParameter()
@@ -60,7 +60,7 @@ class SignUpUserCommandTest extends GenericTestCase
         $command = $this->getMockBuilder('Member\Command\User\SignUpUserCommand')
                            ->setConstructorArgs(
                                array(
-                                        $this->fakerData['cellPhone'],
+                                        $this->fakerData['cellphone'],
                                         $this->fakerData['password']
                                     )
                            )

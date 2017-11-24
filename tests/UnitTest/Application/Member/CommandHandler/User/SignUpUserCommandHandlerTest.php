@@ -70,7 +70,7 @@ class SignUpUserCommandHandlerTest extends GenericTestCase
         );
 
         $user = $this->prophesize(User::class);
-        $user->setCellPhone(
+        $user->setCellphone(
             Argument::exact($phoneNumber)
         )->shouldBeCalledTimes(1);
         $user->setUserName(
@@ -109,7 +109,7 @@ class SignUpUserCommandHandlerTest extends GenericTestCase
         );
 
         $user = $this->prophesize(User::class);
-        $user->setCellPhone(
+        $user->setCellphone(
             Argument::exact($phoneNumber)
         )->shouldBeCalledTimes(1);
         $user->setUserName(

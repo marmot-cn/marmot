@@ -23,9 +23,9 @@ abstract class User implements IObject
      */
     protected $id;
     /**
-     * @var string $cellPhone 用户手机号
+     * @var string $cellphone 用户手机号
      */
-    protected $cellPhone;
+    protected $cellphone;
     /**
      * @var string $nickName 昵称
      */
@@ -46,7 +46,7 @@ abstract class User implements IObject
     public function __construct(int $id = 0)
     {
         $this->id = !empty($id) ? $id : 0;
-        $this->cellPhone = '';
+        $this->cellphone = '';
         $this->nickName = '';
         $this->userName = '';
         $this->password = '';
@@ -60,7 +60,7 @@ abstract class User implements IObject
     public function __destruct()
     {
         unset($this->id);
-        unset($this->cellPhone);
+        unset($this->cellphone);
         unset($this->nickName);
         unset($this->userName);
         unset($this->password);
@@ -92,21 +92,21 @@ abstract class User implements IObject
 
     /**
      * 设置用户手机号码
-     * @param string $cellPhone
+     * @param string $cellphone
      */
-    public function setCellPhone($cellPhone)
+    public function setCellphone($cellphone)
     {
-        $this->cellPhone = is_numeric($cellPhone) ? $cellPhone : '';
+        $this->cellphone = is_numeric($cellphone) ? $cellphone : '';
     }
 
     /**
-     * Gets the value of cellPhone.
+     * Gets the value of cellphone.
      *
-     * @return string $cellPhone 用户名,现在用手机号
+     * @return string $cellphone 用户名,现在用手机号
      */
-    public function getCellPhone() : string
+    public function getCellphone() : string
     {
-        return $this->cellPhone;
+        return $this->cellphone;
     }
 
     /**

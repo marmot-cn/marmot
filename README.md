@@ -1,13 +1,13 @@
 # MARMOT微服务框架说明文档
 
-### 版本
+## 版本
 
 * 2.0
 	* [2.1.0](./Docs/Version/2.1.md "2.1")
 	* [2.2.0](./Docs/Version/2.2.md "2.2")
 	* [2.3.0](./Docs/Version/2.3.md "2.3")`开发中`
 
-### 目录
+## 目录
 
 * [框架简介](#abstract) 
 * [环境搭建](#environment)
@@ -19,7 +19,7 @@
 * [规范](#rule)
 * [更新记录](./changelog.md "change log")
 
-### [框架简介](id:abstract)
+## <a name="abstract">框架简介</a>
 
 
 该框架主要是基于`DDD`,`CQRS`的思路去架构.基于`DDD`领域驱动的`微服务`架构,我们可以更好的和用户方来分析项目需求(可以配合使用`四色原型`),大家可以使用通用的领域语言来讨论领域对象.使用`composer`做第三方`package`管理.`phpunit`做单元测试.开发环境是基于PHP7.0.3做的开发.
@@ -46,9 +46,9 @@
 
 `Command` -> `CommandBus` -> `CommandHandler` -> `Event`
 
-### [环境搭建](id:environment)
+## <a name="environment">环境搭建</a>
 
-#### 下载docker
+### 下载docker
 
 [https://docs.docker.com](https://docs.docker.com ,"https://docs.docker.com")
 
@@ -56,7 +56,7 @@
 
 还没使用过`docker for windows`,可以考虑使用虚拟机来进行开发.
 
-#### 下载docker-compose
+### 下载docker-compose
 
 		curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 		
@@ -65,14 +65,9 @@
 		$ docker-compose --version
 		docker-compose version: 1.8.0
 
-#### 使用docker-compose安装开发环境
+### 使用docker-compose安装开发环境
 
 这里使用自己编译的后端镜像,已经编译进`mongo`,`redis`,`memcached`等一些常用的扩展.
-
-端口:
-
-* `80`: 程序访问端口号
-* `10081`: phpmyadmin访问端口号
 
 在根目录可以看见`docker-compose`文件,运行:
 
@@ -80,13 +75,13 @@
 		
 启动我们的开发环境,如果没有镜像会自动拉取
 
-#### 其他环境 的 docker-compose 文件
+### 其他环境 的 docker-compose 文件
 
 所有内容保存到响应的文件夹内, 然后在运行`dokcer-compose up -d`启动.
 
 比如需要下载`mysql`环境, 把配置文件存到`mysql`文件夹的`docker-compose.yml`文件内. 在到该文件内运行`docker-compose up -d`即可启动环境.
 
-##### `mongo` and `rockmongo`
+#### `mongo` and `rockmongo`
 
 `rockmongo`的访问地址是`127.0.0.1:10082`.用户名:`admin`, 密码`admin`
 
@@ -106,7 +101,7 @@ rockmongo:
   container_name: mongo.api.saas.com-rockmongo
 ```
 
-##### `mysql` and `phpmyadmin`
+#### `mysql` and `phpmyadmin`
 
 用户名:`root`, 密码`123456`. `phpmyadmin`的访问地址是`127.0.0.1:10081`
 
@@ -130,7 +125,7 @@ phpmyadmin:
   container_name: phpmyadmin
 ```
 
-##### `rabbitmq`
+#### `rabbitmq`
 
 默认用户名是`root`, 密码是`test`, 端口号是`5672`
 
@@ -147,9 +142,9 @@ rabbitmq:
   container_name: rabbitmq
 ```
 
-### [composer](id:composer)
+## <a name="composer">composer</a>
 
-#### 命令
+### 命令
 
 **生产环境**
 
@@ -163,9 +158,9 @@ rabbitmq:
 
 		composer install && composer dump-autoload --optimize
 
-#### dev 开发中使用
+### 开发依赖包
 
-##### phploc/phploc
+#### phploc/phploc
 
 衡量我们项目大小的工具
 
@@ -180,13 +175,13 @@ rabbitmq:
 		Size
 		...
 
-##### phpmd/phpmd
-
-wait...
+#### phpmd/phpmd
 
 [https://phpmd.org](https://phpmd.org "https://phpmd.org")
 
-##### sebastian/phpcpd
+		vendor/bin/phpmd ./Application text ruleset.xml
+
+#### sebastian/phpcpd
 
 Copy/Paste Detector
 
@@ -203,14 +198,14 @@ Copy/Paste Detector
 
 [https://pdepend.org](https://pdepend.org "https://pdepend.org")
 
-##### phpmd/phpmd
+#### phpmd/phpmd
 
 [https://phpmd.org/](https://phpmd.org "https://phpmd.org")
 
 		vendor/bin/phpmd ./Application text ruleset.xml
 
 		
-##### phpunit/phpunit phpunit/dbunit
+#### phpunit/phpunit phpunit/dbunit
 
 单元测试
 
@@ -233,7 +228,7 @@ Copy/Paste Detector
 
 		phpdbg -qrr ./vendor/bin/phpunit --coverage-html ./Docs/xxx
 
-##### squizlabs/php_codesniffer
+#### squizlabs/php_codesniffer
 
 代码风格检测
 
@@ -247,7 +242,7 @@ Copy/Paste Detector
 		
 		Time: 3.97 secs; Memory: 8Mb
 		
-##### fzaninotto/faker
+#### fzaninotto/faker
 
 数据生成器,主要用于生成我们在测试文件的数据.以及生成我们数据库的`xml`文件.
 
@@ -261,26 +256,26 @@ Copy/Paste Detector
 		$faker->name;//中文名
 		$faker->phoneNumber;//手机号
 		
-`常用fake数据`:
+常用fake数据:
 
-* `随机单个数不为空`: `$faker->randomDigitNotNull`
-* `随机单个数可为空`: `$faker->randomDigit`
-* `随机数`: `$faker->randomNumber($nbDigits = NULL) // 79907610`
-* `随机小树`: `$faker->randomFloat($nbMaxDecimals = NULL, $min = 0, $max = NULL) // 48.8932`
-* `随机范围数`: `$faker->numberBetween($min = 1000, $max = 9000) // 8567`
-* `随机字母`: `$faker->randomLetter`
-* `随机元素`: `$faker->randomElement($array = array ('a','b','c')) // 'b'`
-* `手机号`: `$faker->phoneNumber`
-* `用户名`: `$faker->userName`
-* `昵称`: `$faker->userName`
-* `密码`: `md5($faker->password)`
-* `类型,状态`: `$faker -> randomElement($array = array (xxx, xx))`
-* `时间`: `$faker->unixTime()`
-* `银行卡号`: `$faker->creditCardNumber`
+* 随机单个数不为空: `$faker->randomDigitNotNull`
+* 随机单个数可为空: `$faker->randomDigit`
+* 随机数: `$faker->randomNumber($nbDigits = NULL) // 79907610`
+* 随机小数: `$faker->randomFloat($nbMaxDecimals = NULL, $min = 0, $max = NULL) // 48.8932`
+* 随机范围数: `$faker->numberBetween($min = 1000, $max = 9000) // 8567`
+* 随机字母: `$faker->randomLetter`
+* 随机元素: `$faker->randomElement($array = array ('a','b','c')) // 'b'`
+* 手机号: `$faker->phoneNumber`
+* 用户名: `$faker->userName`
+* 昵称: `$faker->userName`
+* 密码: `md5($faker->password)`
+* 类型,状态: `$faker -> randomElement($array = array (xxx, xx))`
+* 时间: `$faker->unixTime()`
+* 银行卡号: `$faker->creditCardNumber`
 
-#### 通用
+### 通用
 
-##### mongodb/mongodb
+#### mongodb/mongodb
 
 [github](https://github.com/mongodb/mongo-php-library "https://github.com/mongodb/mongo-php-library")
 
@@ -315,7 +310,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 
 
 
-### [HelloWorld](id:helloworld)
+## <a name="helloworld">HelloWorld</a>
 
 1. 下载代码
 2. 下载并运行镜像
@@ -330,9 +325,9 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 
 		输出 Hello World
 
-### [框架目录](id:framework)
+## <a name="framework">框架目录</a>
 
-#### Application
+### Application
 
 应用目录,我们构建的代码都会放在该目录.
 
@@ -354,15 +349,15 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 		config.php
 		routeRules.php
 			
-**AppName**
+#### AppName
 
 这里我们用`User`为示例代码.这里放我们各个`领域`的代码.里面我们使用命名空间来划分`领域的上下文`.
 
-**Command**
+#### Command
 
 在`应用服务层`通过`命令`来传输数据.
 
-**CommandHandler**
+#### CommandHandler
 
 `命令控制器`来处理`命令`.
 
@@ -370,26 +365,26 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 
 `Command` -> `CommandBus` -> `CommandHandler` -> `Event`
 
-**Controller**
+#### Controller
 
 应用层服务,主要用于协调调用`命令(写)`和`仓库(读)`文件
 
-**Model**
+#### Model
 
 领域对象,内部封装自己部分业务逻辑.
 
-**Persistence**
+#### Persistence
 
 持久层,一般我们会存放2类文件:
 
 1. xxDb.class.php: 数据层文件
 2. xxCache.class.php: 缓存层文件
 
-**Repository**
+#### Repository
 
 仓库,每个领域对象一般会对应拥有一个仓库文件.
 
-**Query**
+#### Query
 
 我们存放查询层的封装,一般我们会存放如下几类文件:
 
@@ -399,17 +394,17 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 4. xxSearchQuery: 搜索查询文件
 5. xxVectorQuery: 关系型缓存文件
 
-**Services**
+#### Services
 
 领域服务层,用于协调多个领域对象的操作
 
-**config.php**
+#### config.php
 
 主要存放我们项目使用的常量.
 
 		define('xxx',xxx);
 
-**routeRules.php**
+#### routeRules.php
 
 路由文件,设定路由规则匹配我们的controller文件.
 
@@ -422,7 +417,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 * `/xxx/{id:\d+}`
 	* xxx/com/xxx/id 
 
-#### System
+### System
 
 框架核心文件存放位置,文件路径为:
 
@@ -464,7 +459,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 **Classes**
 
 
-#### tests
+### tests
 
 测试文件夹,文件路径为
 
@@ -477,38 +472,38 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 		GenericTestCase.php
 		GenericTestDataBaseTestCase.php
 		
-**Fxitures**
+#### Fxitures
 
 每张表的数据对应一张表.在表内通过使用`Faker`自动生成数据.
 
-**IntegrationTest**
+#### IntegrationTest
 
 集成测试用例存放位置
 
-**UnitTest**
+#### UnitTest
 
 单元测试存放位置,其中`Application`文件夹存放我们应用服务的单元测试文件.`System`存放系统测试的单元测试文件.
 
-**CoreTest.php**
+#### CoreTest.php
 
 测试`Core.php`的单元测试文件
 
-**GenericTestCase.php**
+#### GenericTestCase.php
 
 框架封装的常规测试文件,继承该类即可使用PHPunit通用方法.额外提供:
 
 1. `getPrivateMethod`: 测试私有方法
 2. `getPrivateProperty`: 测试私有属性
 
-**GenericTestsDatabaseTestCase.php**
+#### GenericTestsDatabaseTestCase.php
 
 框架封装的数据测试文件,继承该类即可方便的使用数据库测试方法,且也会额外的封装`GenericTestCase.php`中测试私有方法和私有属性函数.
 
-**MyAppDbUnitArrayDataSet.php**
+#### MyAppDbUnitArrayDataSet.php
 
 生成测试数据库文件,我们这里主要通过`Faker`生成测试数据到数据表内.过去我们需要手动添加测试数据较为麻烦.并且数据较为不规范,我们现在选用`php`文件生成.
 
-### [自动化](id:automatic)
+## <a name="automatic">自动化</a>
 
 我们使用`git`的`提交钩子`来触发自动化提交.
 
@@ -516,53 +511,54 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 
 		 cp pre-commit .git/hooks/
 		 
-**检查目标**
+### 检查目标
 
 * 代码格式是否为`PSR2`
 * 代码复制黏贴检测
+* 代码复杂度检测
 * 单元测试
 
-#### deployment 部署使用的脚本
+### deployment 部署使用的脚本
 
-**`deployment/sandbox`**
+#### deployment/sandbox
 
 沙箱环境部署脚本文件,自动化部署时读取该文件
 
-**`deployment/production`**
+#### deployment/production
 
 生产环境部署脚本文件,自动化部署时候读取该文件
 
-**`deployment/test`**
+#### deployment/test
 
 测试环境部署脚本文件,做`CI`集时候部署的脚本文件
 
-#### database 持续集成的数据库脚本
+### database 持续集成的数据库脚本
 
-**`database/database.sql`**
+#### database/database.sql
 
 测试数据库加载表结构文件
 
-**`database/test.sql`**
+#### database/test.sql
 
 测试数据库加载系统测试表结构文件
 
-#### Jenkinsfile
+### Jenkinsfile
 
 jenkins 系统使用的部署脚本文件
 
-#### VERSION
+### VERSION
 
 我们每次开发前制定的版本号,如果测试通过会自动读取该文件的版本号并推送到版本仓库内
 
-#### conf 配置文件模板
+### conf 配置文件模板
 
 基于`配置隔离`思想,我们把代码和我们的配置信息分隔开.使用的工具是`confd`
 
-**`conf/production`**
+#### conf/production
 
 生产环境模板文件
 
-**`conf/sandbox`**
+#### conf/sandbox
 
 沙箱配置模板文件
 
@@ -574,7 +570,7 @@ jenkins 系统使用的部署脚本文件
 
 同步配置文件脚本
 
-### [marmot](id:marmot)
+## <a name="marmot">marmot</a>
 
 脚手架工具.
 
@@ -594,22 +590,22 @@ jenkins 系统使用的部署脚本文件
 
 **生成模型文件**	
 
-### [规范](id:rule)
+## <a name="rule">规范</a>
 
-#### 接口请求规范
+### 接口请求规范
 
-##### 客户端
+#### 客户端
 
 1. 必须发送`json api`格式数据并且携带头`Content-Type: application/vnd.api+json`, 且不能有任何其他媒体类型参数(media type parameters).
 2. 必须在`accpet`header中声明媒体类型`application/vnd.api+json`至少一次.
 
-##### 服务端
+#### 服务端
 
 1. 服务端必须在返回`jsonapi`数据时携带头`Content-Type: application/vnd.api+json`且没有其他媒体类型参数(media type parameters).
 2. 服务端必须响应`415 Unsupported Media Type`状态码如果一个请求包含了头`Content-Type: application/vnd.api+json`且还带有媒体类型参数(media type parameters).
 3. 服务端必须响应`406 Not Acceptable`状态码如果一个请求包含`Accept:application/vnd.api+json`且还带有媒体类型参数(media type parameters).
 
-###### media type parameters
+##### media type parameters
 
 A media type is composed of a type, a subtype, and optional parameters.
 
@@ -617,7 +613,7 @@ A media type is composed of a type, a subtype, and optional parameters.
 
 `top-level type name / [ tree. ] subtype name [ +suffix ] [ ; parameters ]`
 
-#### 命名规范
+### 命名规范
 
 1. 变量命名为`驼峰`.
 2. 类的命名规则为第`一`个字母`大写`.
@@ -626,14 +622,14 @@ A media type is composed of a type, a subtype, and optional parameters.
 5. Persistence命名规范: `名称`+`Db|Cache`
 6. Query命名规范: `名称`+`FragmentCacheQuery|RowCacheQuery|RowQuery|SearchQuery|VectorQuery`
 
-#### 注释规范
+### 注释规范
 
 参考[phpdoc](https://www.phpdoc.org// "phpdoc")
 
-#### 接口版本
+### 接口版本
 
 `MAJOR.MINOR.PATCH`
 
 * `MAJOR`: 改变意味着其中包含向后不兼容的修改.
 * `MINOR`: 改变意味这有新功能的增加,但应该是向后兼容的.
-* `PATCH`: 改变代表对已有功能的缺陷修复.
+* `PATCH`: 改变代表对已有功能的缺陷修复

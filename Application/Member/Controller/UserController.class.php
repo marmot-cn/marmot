@@ -123,7 +123,7 @@ class UserController extends Controller
      * 对应路由 /users
      * 用户注册功能,通过post传参
      * @param jsonApi array("data"=>array("type"=>"users",
-     *                                    "attributes"=>array("cellPhone"=>"手机号",
+     *                                    "attributes"=>array("cellphone"=>"手机号",
      *                                                        "password"=>"密码"
      *                                                        )
      *                                    )
@@ -134,14 +134,14 @@ class UserController extends Controller
     {
         $data = $this->getRequest()->post('data');
         //验证type
-        $cellPhone = $data['attributes']['cellPhone'];
+        $cellphone = $data['attributes']['cellphone'];
         $password = $data['attributes']['password'];
 
         if ($this->validateSignUpScenario()) {
             $commandBus = new CommandBus(new UserCommandHandlerFactory());
 
                 $command = new SignUpUserCommand(
-                    $cellPhone,
+                    $cellphone,
                     $password
                 );
 
@@ -170,7 +170,7 @@ class UserController extends Controller
      * /users/signIn
      * 用户登录功能,通过POST传参
      * @param jsonApi array("data"=>array("type"=>"users",
-     *                                    "attributes"=>array("cellPhone"=>"手机号",
+     *                                    "attributes"=>array("cellphone"=>"手机号",
      *                                                        "password"=>"密码"
      *                                                        )
      *                                   )
@@ -182,11 +182,11 @@ class UserController extends Controller
         $data = $this->getRequest()->post('data');
 
         if ($data['type'] == 'users') {
-            if (!empty($data['attributes']['cellPhone']) && !empty($data['attributes']['password'])) {
+            if (!empty($data['attributes']['cellphone']) && !empty($data['attributes']['password'])) {
                 $repository = Core::$container->get('Member\Repository\User\UserRepository');
                 list($userList, $count) = $repository->filter(
                     array(
-                        'cellPhone' => $data['attributes']['cellPhone']
+                        'cellphone' => $data['attributes']['cellphone']
                     )
                 );
 

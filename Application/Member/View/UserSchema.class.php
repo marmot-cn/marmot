@@ -19,7 +19,7 @@ class UserSchema extends SchemaProvider
     public function getAttributes($user) : array
     {
         return [
-            'cellPhone'  => $user->getCellPhone(),
+            'cellphone'  => $user->getCellphone(),
             'userName' => $user->getUserName(),
             'realName' => $user->getRealName(),
             'nickName' => $user->getNickName(),

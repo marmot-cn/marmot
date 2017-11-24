@@ -35,7 +35,7 @@ class UserTest extends GenericTestCase
         $this->assertEquals(0, $this->user->getId());
 
         //测试初始化用户手机号
-        $this->assertEmpty($this->user->getCellPhone());
+        $this->assertEmpty($this->user->getCellphone());
 
         //测试初始化昵称
         $this->assertEmpty($this->user->getNickName());
@@ -64,25 +64,25 @@ class UserTest extends GenericTestCase
         $this->user->setId(1);
         $this->assertEquals(1, $this->user->getId());
     }
-    //cellPhone 测试 --------------------------------------------------- start
+    //cellphone 测试 --------------------------------------------------- start
     /**
-     * 设置 User setCellPhone() 正确的传参类型,期望传值正确
+     * 设置 User setCellphone() 正确的传参类型,期望传值正确
      */
-    public function testSetCellPhoneCorrectType()
+    public function testSetCellphoneCorrectType()
     {
-        $this->user->setCellPhone('15202939435');
-        $this->assertEquals('15202939435', $this->user->getCellPhone());
+        $this->user->setCellphone('15202939435');
+        $this->assertEquals('15202939435', $this->user->getCellphone());
     }
     
     /**
-     * 设置 User setCellPhone() 正确的传参类型,但是不属于手机格式,期望返回空.
+     * 设置 User setCellphone() 正确的传参类型,但是不属于手机格式,期望返回空.
      */
-    public function testSetCellPhoneCorrectTypeButNotEmail()
+    public function testSetCellphoneCorrectTypeButNotEmail()
     {
-        $this->user->setCellPhone('15202939435'.'a');
-        $this->assertEquals('', $this->user->getCellPhone());
+        $this->user->setCellphone('15202939435'.'a');
+        $this->assertEquals('', $this->user->getCellphone());
     }
-    //cellPhone 测试 ---------------------------------------------------   end
+    //cellphone 测试 ---------------------------------------------------   end
 
     //nickName 测试 ---------------------------------------------------- start
     /**
