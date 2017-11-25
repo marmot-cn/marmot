@@ -80,9 +80,9 @@ class Core
     public function initTest()
     {
         self::initAutoload();//autoload
-        self::initEnv();//初始化环境
         self::initTestEnv();//初始化测试环境
         self::initContainer();//引入容器
+        self::initEnv();//初始化环境
         self::initCache();//初始化缓存使用
         self::initDb();//初始化mysql
         // self::initMongo();
@@ -99,10 +99,9 @@ class Core
      */
     public function initCli()
     {
-
         self::initAutoload();//autoload
-        self::initEnv();//初始化环境
         self::initContainer();//引入容器
+        self::initEnv();//初始化环境
         self::initCache();//初始化缓存使用
         self::initDb();//初始化mysql
         // self::initMongo();
@@ -167,6 +166,7 @@ class Core
      */
     private function initEnv()
     {
+        Core::$container->set('time', time());
         //加载应用配置文件
         include S_ROOT.'Application/config.php';
         include S_ROOT.'Application/widgetRules.php';

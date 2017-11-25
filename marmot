@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/local/bin/php
 <?php
 /**
  * 自动工具包
@@ -7,7 +7,7 @@ define('CLI_VERSION','1.0.20160413');
 
 include_once 'Core.php';
 $core = \Marmot\Core::getInstance();
-$core -> initCli();
+$core->initCli();
 
 $aliasCommands = ['-h'=>'help',
 				  '-v'=>'version'];

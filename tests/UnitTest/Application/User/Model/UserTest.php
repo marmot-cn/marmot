@@ -47,7 +47,7 @@ class UserTest extends GenericTestCase
         $this->assertEmpty($this->user->getPassword());
 
         //测试初始化注册时间
-        $this->assertEquals(time(), $this->user->getCreateTime());
+        $this->assertEquals(Core::$container->get('time'), $this->user->getCreateTime());
 
         //测试初始化更新时间
         $this->assertEquals(0, $this->user->getUpdateTime());

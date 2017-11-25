@@ -38,12 +38,15 @@ class ModelTemplate implements TemplateInterface{
 		$this->buffer .= "<?php";
 		$this->buffer .= "\nnamespace ".$this->profileData['nameSpace'].";";
 		$this->buffer .= "\n";
+		$this->buffer .= "\nuse Marmot\Core;";
+		$this->buffer .= "\n";
 		$this->buffer .= "\n/**";
 		$this->buffer .= "\n * ".$this->profileData['className']." ".$this->profileData['comment'];
 		$this->buffer .= "\n * @author chloroplast";
 		$this->buffer .= "\n * @version 1.0.0:".date('Y.m.d',time());
 		$this->buffer .= "\n */";
-		$this->buffer .= "\n\nclass ".$this->profileData['className']."{\n";
+		$this->buffer .= "\n\nclass ".$this->profileData['className']."\n";
+		$this->buffer .= "{";
 	}
 
 	/**
@@ -75,7 +78,6 @@ class ModelTemplate implements TemplateInterface{
 		$this->buffer .= "\t/**\n\t * ".$this->profileData['className']." ".$this->profileData['comment']." 构造函数"."\n\t */\n";
 
 		$this->buffer .= "\tpublic function __construct(){\n";
-		$this->buffer .= "\t\tglobal ".'$_FWGLOBAL'.";\n";
 		foreach($this->profileData['parameters'] as $parameter){
 			$default = $parameter['default'] !== '' ? $parameter['default'] : "''";
 
@@ -110,10 +112,11 @@ class ModelTemplate implements TemplateInterface{
 			//添加注释
 			$this->buffer .= "\t/**\n\t * 设置".$parameter['comment']."\n\t * @param ".$parameter['type']." $".$parameter['key']." ".$parameter['comment']."\n\t */\n";
 
-			$this->buffer .= "\tpublic function set".ucfirst($parameter['key'])."(".$parameter['type'].' $'.$parameter['key']."){\n";
+			$this->buffer .= "\tpublic function set".ucfirst($parameter['key'])."(".$parameter['type'].' $'.$parameter['key'].")\n";
+			$this->buffer .= "\t{\n";
 			if(empty($parameter['rule'])||$parameter['rule']=='int'||$parameter['rule']=='string'){
 				$this->buffer .= "\t\t".'$this->'.$parameter['key']." = ".'$'.$parameter['key'].";\n";
-			}else if($parameter['rule']=='cellPhone'){
+			}else if($parameter['rule']=='cellphone'){
 				$this->buffer .= "\t\t".'$this->'.$parameter['key']." = is_numeric(".'$'.$parameter['key'].") ? ". '$'.$parameter['key']." : '';\n";
 			}else if($parameter['rule']=='qq'){
 				$this->buffer .= "\t\t".'$this->'.$parameter['key']." = is_numeric(".'$'.$parameter['key'].") ? ". '$'.$parameter['key']." : '';\n";
@@ -140,7 +143,8 @@ class ModelTemplate implements TemplateInterface{
 			//生成get
 			//添加注释
 			$this->buffer .= "\t/**\n\t * 获取".$parameter['comment']."\n\t * @return ".$parameter['type']." $".$parameter['key']." ".$parameter['comment']."\n\t */\n";
-			$this->buffer .= "\tpublic function get".ucfirst($parameter['key'])."(){\n";
+			$this->buffer .= "\tpublic function get".ucfirst($parameter['key'])."()\n";
+			$this->buffer .= "\t{\n";
 			$this->buffer .= "\t\treturn ".'$this->'.$parameter['key'].";\n";
 			$this->buffer .= "\t}\n";
 			$this->buffer .= "\n";

@@ -4,6 +4,8 @@ namespace User\Model;
 use Marmot\Common\Model\Object;
 use Marmot\Common\Model\IObject;
 
+use Marmot\Core;
+
 /**
  * 用户领域对象
  * @author chloroplast
@@ -50,7 +52,7 @@ abstract class User implements IObject
         $this->nickName = '';
         $this->userName = '';
         $this->password = '';
-        $this->createTime = time();
+        $this->createTime = Core::$container->get('time');
         $this->updateTime = 0;
         $this->salt = '';
         $this->status = 0;

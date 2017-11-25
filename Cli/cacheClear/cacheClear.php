@@ -1,8 +1,5 @@
 <?php
 //清除memcached
-\Marmot\Core::$cacheDriver->flushAll();
+$core::$cacheDriver->flushAll();
 runSucess('memcached');
 
-//清除apcu
-apcu_clear_cache();
-runSucess('apcu');
