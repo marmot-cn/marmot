@@ -75,7 +75,7 @@
 		
 启动我们的开发环境,如果没有镜像会自动拉取
 
-### 其他环境 的 docker-compose 文件
+### 其他环境的 docker-compose 文件
 
 所有内容保存到响应的文件夹内, 然后在运行`dokcer-compose up -d`启动.
 
@@ -417,7 +417,7 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 * `/xxx/{id:\d+}`
 	* xxx/com/xxx/id 
 
-### System
+#### System
 
 框架核心文件存放位置,文件路径为:
 
@@ -456,10 +456,9 @@ php mongoDb 封装使用包,封装了我们对mongo的常用操作.
 		classMaps.php
 		pc.version.php
 
-**Classes**
+#### Classes
 
-
-### tests
+#### tests
 
 测试文件夹,文件路径为
 
@@ -581,14 +580,55 @@ jenkins 系统使用的部署脚本文件
 			autoCreate	Add new model file and unitTest file automaticly
 			cacheClear	Clear cache in marmot framework
 
-**清理缓存**
+### 清理缓存
 
 		php marmot.php cacheClear
 		
 		root@0967b4c11e7e:/var/www/html# php marmot.php cacheClear
 		memcached                                                         [  ok  ]
 
-**生成模型文件**	
+### 生成模型文件
+
+#### 编写`profile`
+
+文件夹位置`Cli/autoCreate/Profile/`.
+
+编写模型的`profile`文件. 具体可见内部示例.
+
+```php
+/**
+ * 支持rule:
+ * 1.cellphone: 手机
+ * 2.qq: QQ号码
+ * 3.email: 邮箱
+ * 4.time: 时间
+ * 5.数组: 状态码
+ * 6.object: 对象
+ * 7.string: 字符串
+ */
+
+return [
+	'className' => '类名字', 
+	'nameSpace' => '命名空间',
+	'comment' => '描述',
+	'parameters' => [
+	['key'=>'字段名字','type'=>'字段类型','rule'=>'字段规则','default'=>字段默认值,'comment'=>'字段描述'],
+	]
+];
+```
+
+#### 生成文件
+
+这里的`xxx.php`就是刚才编写的`profile`文件. 举例: `UserProfile.php`
+
+```php
+./marmot autoCreate --addModel='xxx.php'
+```
+
+* 模型文件: `Cli/autoCreate/Model/`内.
+* 单元测试文件: `Cli/autoCreate/Profile/`内.
+
+然后把这连个文件放置到对应的位置就可进行单元测试.
 
 ## <a name="rule">规范</a>
 
