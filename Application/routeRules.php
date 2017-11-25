@@ -22,6 +22,14 @@ return [
             'getList'
         ]
     ],
+    [
+        'method'=>'GET',
+        'rule'=>'/users',
+        'controller'=>[
+            'Member\Controller\UserController',
+            'filter'
+        ]
+    ],
     //注册
     [
         'method'=>'POST',

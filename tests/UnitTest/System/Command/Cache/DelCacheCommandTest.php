@@ -2,6 +2,7 @@
 namespace System\Command\Cache;
 
 use Marmot\Core;
+use tests\GenericTestCase;
 
 /**
  * 测试添加缓存命令(DelCacheCommand),测试如下功能:
@@ -9,7 +10,7 @@ use Marmot\Core;
  * @author chloroplast
  * @version 1.0.20160217
  */
-class DelCacheCommandTest extends \PHPUnit_Framework_TestCase
+class DelCacheCommandTest extends GenericTestCase
 {
     
     private $command;

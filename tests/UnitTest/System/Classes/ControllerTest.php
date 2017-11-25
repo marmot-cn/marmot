@@ -42,7 +42,10 @@ class ControllerTest extends tests\GenericTestCase
     public function testRender()
     {
         //mock interface
-        $ivew = $this->getMock('System\Interfaces\IView');
+        $ivew = $this->getMockBuilder('System\Interfaces\IView')
+                     ->setMethods(['display'])
+                     ->getMock();
+
         $ivew->expects($this->any())
              ->method('display')
              ->will($this->returnValue(json_encode(array('key'=>'value'))));

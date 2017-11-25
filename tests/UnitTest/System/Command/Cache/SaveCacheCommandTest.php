@@ -2,6 +2,7 @@
 namespace System\Command\Cache;
 
 use Marmot\Core;
+use tests\GenericTestCase;
 
 /**
  * 测试添加缓存命令(AddCacheCommand),测试如下功能:
@@ -10,7 +11,7 @@ use Marmot\Core;
  * @author chloroplast
  * @version 1.0.20160217
  */
-class SaveCacheCommandTest extends \PHPUnit_Framework_TestCase
+class SaveCacheCommandTest extends GenericTestCase
 {
     
     private $command;

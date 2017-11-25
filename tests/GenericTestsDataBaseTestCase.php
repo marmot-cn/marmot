@@ -2,6 +2,8 @@
 namespace tests;
 
 use PDO;
+use PHPUnit\DbUnit\TestCase;
+//use PHPUnit\Framework\TestCase;
 use tests\MyAppDbUnitArrayDataSet;
 
 /**
@@ -14,7 +16,7 @@ use tests\MyAppDbUnitArrayDataSet;
  * @version 1.0.20160218
  */
 
-abstract class GenericTestsDatabaseTestCase extends \PHPUnit_Extensions_Database_TestCase
+abstract class GenericTestsDatabaseTestCase extends TestCase
 {
 
     // 只实例化 pdo 一次，供测试的清理和装载基境使用
@@ -29,7 +31,6 @@ abstract class GenericTestsDatabaseTestCase extends \PHPUnit_Extensions_Database
 
     final public function getConnection()
     {
-
         if ($this->conn === null) {
             if (self::$pdo == null) {
                 self::$pdo = new PDO(

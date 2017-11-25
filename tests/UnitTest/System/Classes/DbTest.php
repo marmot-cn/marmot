@@ -40,10 +40,8 @@ class DbTest extends tests\GenericTestsDatabaseTestCase
      */
     public function testDbDelete()
     {
-
         //删除两条语句
 
-        // $row = $method->invokeArgs(null, array(array('user'=>'userA2')));
         $row = $this->stub->delete(array('user'=>'userA2'));
         //确认返回影响行数为2
         $this->assertEquals(2, $row);

@@ -1,13 +1,15 @@
 <?php
 namespace tests;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * 框架自用通用测试类,封装了一些常用的函数用于测试private参数等方法
  * @author chloroplast
  * @version 1.0.20160218
  */
 
-abstract class GenericTestCase extends \PHPUnit_Framework_TestCase
+abstract class GenericTestCase extends TestCase
 {
 
     /**
