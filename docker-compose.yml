@@ -17,6 +17,7 @@ phpfpm:
    - "memcached-2"
   external_links:
    - "mysql-master:mysql"
+   - "mongo:mongo"
   cap_add:
    - SYS_PTRACE
   environment:

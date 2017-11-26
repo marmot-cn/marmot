@@ -64,7 +64,7 @@ class Core
         self::initCache();//初始化缓存使用
         self::initEnv();//初始化环境
         self::initDb();//初始化mysql
-        // self::initMongo();
+        self::initMongo();
         self::initError();
         self::initRoute();
     }
@@ -85,7 +85,7 @@ class Core
         self::initEnv();//初始化环境
         self::initCache();//初始化缓存使用
         self::initDb();//初始化mysql
-        // self::initMongo();
+        self::initMongo();
         self::initError();
     }
     
@@ -316,7 +316,6 @@ class Core
      */
     private function initMongo()
     {
-
         $mongoHost = self::$container->get('mongo.host');
 
         if (!empty($mongoHost)) {

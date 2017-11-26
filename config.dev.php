@@ -7,6 +7,8 @@ return [
     'database.user'		=> 'root',
     'database.passwod'	=> '123456',
     'database.tablepre' => 'pcore_',
+    //mongo
+    'mongo.host' => 'mongodb://mongo:27017',
     //cache
     'cache.route.disable' => true,
     //memcached
