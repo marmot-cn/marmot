@@ -7,8 +7,8 @@ return [
     'database.user'		=> 'root',
     'database.passwod'	=> '123456',
     'database.tablepre' => 'pcore_',
+    //mongo
+    'mongo.host' => 'mongodb://mongo:27017',
     //memcached
     'memcached.serevice'=>[['memcached-1',11211],['memcached-2',11211]],
 ];
-?>
-
