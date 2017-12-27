@@ -1,7 +1,8 @@
 nginx:
  image: "registry.cn-hangzhou.aliyuncs.com/nginx-phpfpm/nginx-end"
  ports:
-  - "8081:80"
+  - "80:80"
+  - "443:443"
  links:
   - "phpfpm"
  volumes:
@@ -17,7 +18,7 @@ phpfpm:
    - "memcached-2"
   external_links:
    - "mysql-master:mysql"
-   - "mongo:mongo"
+     #   - "mongo:mongo"
   cap_add:
    - SYS_PTRACE
   environment:
