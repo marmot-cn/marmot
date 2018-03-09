@@ -27,7 +27,7 @@ class CoreTest extends GenericTestCase
                                S_ROOT.'/System/Observer/',
                                S_ROOT.'/System/Query/',
                                S_ROOT.'/System/View/',
-                               S_ROOT.'/System/Strategy/Validate/',
+                               S_ROOT.'/System/Extension/Monolog/',
                                S_ROOT.'/System/Strategy/MediaTypes',
                               );
         //准备系统文件的文件夹,用于统计系统文件总数 -- 结束

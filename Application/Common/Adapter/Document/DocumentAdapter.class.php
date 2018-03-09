@@ -8,6 +8,7 @@ use Marmot\Core;
 /**
  * @author chloroplast
  * @version 1.0:20160227
+ * @SuppressWarnings(PHPMD)
  */
 abstract class DocumentAdapter
 {
@@ -19,14 +20,6 @@ abstract class DocumentAdapter
      * @var resource $collection mongo 集合
      */
     private $collection;
-    /**
-     * @var string $dbName mongo 数据库
-     */
-    private $dbName;
-    /**
-     * @var string $collectionName mongo 集合
-     */
-    private $collectionName;
 
     public function __construct(string $dbName, string $collectionName)
     {
@@ -51,8 +44,9 @@ abstract class DocumentAdapter
         $result = $this->getCollection()->insertOne($data);
         $lastInsertId = $result->getInsertedId();
 
+        $data['_id'] = (string)$lastInsertId;
         $this->getDocumentCache()->save((string)$lastInsertId, $data);
-
+        
         $document->setId($lastInsertId);
         return true;
     }
@@ -82,6 +76,7 @@ abstract class DocumentAdapter
             $this->getDocumentCache()->save($id, $data);
         }
 
+        unset($data['_id']);
         $document->setData($data);
         return true;
     }
@@ -91,6 +86,8 @@ abstract class DocumentAdapter
      * @param string mongo db
      * @param string collection 集合
      * @param string id mongo id
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function fetchList(array $documents)
     {
@@ -123,7 +120,7 @@ abstract class DocumentAdapter
                 $hits = array_merge($hits, $missRows);
             }
         }
-        $resArray = array();
+
         if ($hits) {
             //按该页要显示的id排序
             $result = array();
@@ -133,7 +130,8 @@ abstract class DocumentAdapter
             //按照传入id列表初始顺序排序
             foreach ($ids as $id) {
                 if (isset($result[$id])) {
-                    $documentsByIds[$id]->setData((array)$result[$id]);
+                    unset($result[$id]['_id']);
+                    $documentsByIds[$id]->setData($result[$id]);
                 }
             }
             unset($result);

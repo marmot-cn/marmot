@@ -21,25 +21,41 @@ class UserRepositoryTest extends GenericTestCase
 
     public function setUp()
     {
-        $this->repository = Core::$container->get('Member\Repository\User\UserRepository');
+        $this->repository = $this->getMockBuilder('Member\Repository\User\UserRepository')
+                           ->setMethods(['getAdapter'])
+                           ->getMock();
+
+        $this->childRepository = new class extends UserRepository {
+            public function getAdapter() : IUserAdapter
+            {
+                return parent::getAdapter();
+            }
+        };
         parent::setUp();
     }
-    /**
-     * 测试仓库构建
-     */
-    public function testUserRepositoryConstructor()
+
+    public function tearDown()
     {
-        $adapter= $this->getPrivateProperty(
-            'Member\Repository\User\UserRepository',
-            'adapter'
-        );
+        parent::tearDown();
+        unset($this->repository);
+        unset($this->childRepository);
+    }
+
+    public function testImplementsIUserAdapter()
+    {
         $this->assertInstanceOf(
-            'Member\Adapter\User\UserDataBaseAdapter',
-            $adapter->getValue($this->repository)
+            'Member\Adapter\User\IUserAdapter',
+            $this->repository
         );
     }
-    //测试default getAdapter
-    //测试setAdapter
+
+    public function testGetAdapter()
+    {
+        $this->assertInstanceOf(
+            'Member\Adapter\User\UserDataBaseAdapter',
+            $this->childRepository->getAdapter()
+        );
+    }
 
     /**
      * 测试仓库add
@@ -52,7 +68,9 @@ class UserRepositoryTest extends GenericTestCase
         $adapter->add(Argument::exact($user))
             ->shouldBeCalledTimes(1);
 
-        $this->repository->setAdapter($adapter->reveal());
+        $this->repository->expects($this->exactly(1))
+                         ->method('getAdapter')
+                         ->willReturn($adapter->reveal());
 
         $this->repository->add($user);
     }
@@ -69,7 +87,9 @@ class UserRepositoryTest extends GenericTestCase
         $adapter->update(Argument::exact($user), Argument::exact($modifyKeys))
             ->shouldBeCalledTimes(1);
 
-        $this->repository->setAdapter($adapter->reveal());
+        $this->repository->expects($this->exactly(1))
+                         ->method('getAdapter')
+                         ->willReturn($adapter->reveal());
 
         $this->repository->update($user, $modifyKeys);
     }
@@ -85,7 +105,9 @@ class UserRepositoryTest extends GenericTestCase
         $adapter->getOne(Argument::exact($id))
                 ->shouldBeCalledTimes(1);
 
-        $this->repository->setAdapter($adapter->reveal());
+        $this->repository->expects($this->exactly(1))
+                         ->method('getAdapter')
+                         ->willReturn($adapter->reveal());
 
         $this->repository->getOne($id);
     }
@@ -101,7 +123,9 @@ class UserRepositoryTest extends GenericTestCase
         $adapter->getList(Argument::exact($ids))
                 ->shouldBeCalledTimes(1);
 
-        $this->repository->setAdapter($adapter->reveal());
+        $this->repository->expects($this->exactly(1))
+                         ->method('getAdapter')
+                         ->willReturn($adapter->reveal());
 
         $this->repository->getList($ids);
     }
@@ -121,7 +145,9 @@ class UserRepositoryTest extends GenericTestCase
             Argument::exact($size)
         )->shouldBeCalledTimes(1);
 
-        $this->repository->setAdapter($adapter->reveal());
+        $this->repository->expects($this->exactly(1))
+                         ->method('getAdapter')
+                         ->willReturn($adapter->reveal());
 
         $this->repository->filter($filter, $sort, $offset, $size);
     }

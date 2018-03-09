@@ -18,11 +18,6 @@ return [
     'System\Classes\NullCommandHandler' => S_ROOT.'System/Classes/NullCommandHandler.class.php',
 
     //strategy
-    'System\Strategy\Validate\IntStrategy' => S_ROOT.'System/Strategy/Validate/IntStrategy.class.php',
-    'System\Strategy\Validate\FloatStrategy' => S_ROOT.'System/Strategy/Validate/FloatStrategy.class.php',
-    'System\Strategy\Validate\StringStrategy' => S_ROOT.'System/Strategy/Validate/StringStrategy.class.php',
-    'System\Strategy\Validate\DateStrategy' => S_ROOT.'System/Strategy/Validate/DateStrategy.class.php',
-    'System\Strategy\Validate\EmailStrategy' => S_ROOT.'System/Strategy/Validate/EmailStrategy.class.php',
     'System\Strategy\MediaTypes\JsonapiStrategy' => S_ROOT.'System/Strategy/MediaTypes/JsonapiStrategy.class.php',
 
     //interfaces
@@ -62,5 +57,8 @@ return [
     //view
     'System\View\JsonApiResponseFormatter' => S_ROOT.'System/View/JsonApiResponseFormatter.class.php',
     'System\View\EmptyView' => S_ROOT.'System/View/EmptyView.class.php',
-    'System\View\ErrorView' => S_ROOT.'System/View/ErrorView.class.php'
+    'System\View\ErrorView' => S_ROOT.'System/View/ErrorView.class.php',
+
+    //extension
+    'System\Extension\Monolog\FluentdHandler' => S_ROOT.'System/Extension/Monolog/FluentdHandler.class.php'
 ];

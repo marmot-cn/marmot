@@ -2,7 +2,6 @@ nginx:
  image: "registry.cn-hangzhou.aliyuncs.com/nginx-phpfpm/nginx-end"
  ports:
   - "80:80"
-  - "443:443"
  links:
   - "phpfpm"
  volumes:
@@ -10,20 +9,47 @@ nginx:
  container_name: marmot-nginx
 
 phpfpm:
-  image: "registry.cn-hangzhou.aliyuncs.com/phpfpm/phpfpm-end:dev.latest"
+  image: "registry.cn-hangzhou.aliyuncs.com/phpfpm/phpfpm-end"
   volumes:
    - ./:/var/www/html/
   links:
    - "memcached-1"
    - "memcached-2"
-  external_links:
-   - "mysql-master:mysql"
-     #   - "mongo:mongo"
+   - "mysql"
+   - "mongo"
   cap_add:
    - SYS_PTRACE
   environment:
    - APP_ENV=dev
   container_name: marmot-phpfpm
+
+mysql:
+  image: "registry.cn-hangzhou.aliyuncs.com/marmot/mysql-5.7"
+  environment:
+   - MYSQL_ROOT_PASSWORD=123456
+  container_name: mysql-master
+
+mongo:
+  image: "registry.cn-hangzhou.aliyuncs.com/marmot-mongo/mongo-3.6"
+  container_name: mongo
+
+phpmyadmin:
+  image: "registry.cn-hangzhou.aliyuncs.com/marmot/phpmyadmin"
+  links:
+    - "mysql:mysql"
+  ports:
+   - "10081:80"
+  environment:
+   - UPLOAD_SIZE=1G
+  container_name: phpmyadmin
+
+rabbitmq:
+  image: "registry.cn-hangzhou.aliyuncs.com/marmot/rabbitmq3"
+  environment:
+    RABBITMQ_DEFAULT_USER: root
+    RABBITMQ_DEFAULT_PASS: test
+  stdin_open: true
+  container_name: rabbitmq
 
 memcached-1:
   image: "registry.aliyuncs.com/marmot/memcached:1.0"

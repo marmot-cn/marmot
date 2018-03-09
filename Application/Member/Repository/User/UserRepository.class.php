@@ -12,7 +12,7 @@ use Marmot\Core;
  * @author chloroplast
  * @version 1.0:20160227
  */
-class UserRepository
+class UserRepository implements IUserAdapter
 {
 
     private $adapter;
@@ -22,12 +22,7 @@ class UserRepository
         $this->adapter = new UserDataBaseAdapter();
     }
 
-    public function setAdapter(IUserAdapter $adapter)
-    {
-        $this->adapter = $adapter;
-    }
-
-    private function getAdapter() : IUserAdapter
+    protected function getAdapter() : IUserAdapter
     {
         return $this->adapter;
     }

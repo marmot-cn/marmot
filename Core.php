@@ -321,17 +321,8 @@ class Core
         if (!empty($mongoHost)) {
             self::$mongoDriver = new \MongoDB\Client(
                 $mongoHost,
-                [
-                    'username' => self::$container->get('mongo.user'),
-                    'password' => self::$container->get('mongo.password'),
-                    'authSource' => self::$container->get('mongo.database'),
-                    'ssl' => true
-                ],
-                [
-                    'allow_invalid_hostname'=>true,
-                    'ca_file' => S_ROOT.'/cacert.pem',
-                    'pem_file' => S_ROOT.'/mongo.pem'
-                ]
+                self::$container->get('mongo.uriOptions'),
+                self::$container->get('mongo.driverOptions')
             );
         }
     }

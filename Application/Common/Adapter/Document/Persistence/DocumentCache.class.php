@@ -13,11 +13,11 @@ class DocumentCache extends Cache
 
     /**
      * 构造mongo 存储的key
-     * @param string $db mongo 数据库
+     * @param string $dbName mongo 数据库
      * @param string $collection mongo 集合
      */
-    public function __construct(string $db, string $collection)
+    public function __construct(string $dbName, string $collection)
     {
-        parent::__construct($db.'_'.$collection);
+        parent::__construct($dbName.'_'.$collection);
     }
 }
