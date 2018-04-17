@@ -1,7 +1,7 @@
 <?php
 namespace System\Classes;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 
 use Marmot\Core;
 use System\Classes\CommandBus;
@@ -13,7 +13,7 @@ use System\Classes\NullCommandHandler;
 
 use Prophecy\Argument;
 
-class CommandBusTest extends GenericTestCase
+class CommandBusTest extends TestCase
 {
     private $commandBus;
     private $commandHandler;

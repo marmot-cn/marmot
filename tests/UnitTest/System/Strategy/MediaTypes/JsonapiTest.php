@@ -1,11 +1,11 @@
 <?php
 namespace System\Strategy\MediaTypes;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 use System\Classes\Request;
 use Marmot\Core;
 
-class JsonapiTest extends GenericTestCase
+class JsonapiTest extends TestCase
 {
 
     public function setUp()

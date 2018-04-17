@@ -1,10 +1,10 @@
 <?php
 namespace System\View;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 use Marmot\Core;
 
-class EmptyViewTest extends GenericTestCase
+class EmptyViewTest extends TestCase
 {
 
     private $stub;
@@ -21,15 +21,6 @@ class EmptyViewTest extends GenericTestCase
     public function testCorrectImplementIView()
     {
         $this->assertInstanceof('System\Interfaces\IView', $this->stub);
-    }
-
-    public function testConstructor()
-    {
-        $rulesParameter = $this->getPrivateProperty('System\View\EmptyView', 'rules');
-        $this->assertEmpty($rulesParameter->getValue($this->stub));
-
-        $dataParameter = $this->getPrivateProperty('System\View\EmptyView', 'data');
-        $this->assertEmpty($dataParameter->getValue($this->stub));
     }
 
     public function testDisplay()

@@ -1,7 +1,7 @@
 <?php
 namespace Member\Adapter\User\Query\Persistence;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 use Marmot\Core;
 
 /**
@@ -9,7 +9,7 @@ use Marmot\Core;
  * @author chloroplast
  * @version 1.0.20160218
  */
-class UserDbTest extends GenericTestCase
+class UserDbTest extends TestCase
 {
 
     private $db;

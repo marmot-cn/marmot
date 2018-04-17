@@ -1,17 +1,18 @@
 <?php
 namespace System\Classes;
 
-use tests\GenericTestCase;
 use Marmot\Core;
 use System\Classes\Request;
 use System\Interfaces\IMediaTypeStrategy;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * 用于测试Request类接收不同方式的传参正确性
  * 1. 判断HTTP METHOD正确性
  * 2. 接收传参正确性
  */
-class RequestTest extends GenericTestCase
+class RequestTest extends TestCase
 {
 
     private $request;

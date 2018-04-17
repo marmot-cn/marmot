@@ -1,7 +1,7 @@
 <?php
 namespace Member\Command\User;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Member/Command/User/SignUpUserCommand.class.php 测试文件
@@ -9,7 +9,7 @@ use tests\GenericTestCase;
  * @version 1.0.20160828
  */
 
-class SignUpUserCommandTest extends GenericTestCase
+class SignUpUserCommandTest extends TestCase
 {
     private $stub;
 

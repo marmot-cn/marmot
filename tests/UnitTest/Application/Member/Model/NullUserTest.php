@@ -1,10 +1,11 @@
 <?php
 namespace Member\Model;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
+
 use Marmot\Core;
 
-class NullUserTest extends GenericTestCase
+class NullUserTest extends TestCase
 {
     private $nullUser;
 

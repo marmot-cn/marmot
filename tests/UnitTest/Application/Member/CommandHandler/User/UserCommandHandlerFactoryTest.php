@@ -1,7 +1,7 @@
 <?php
 namespace Member\CommandHandler\User;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 
 use System\Classes\NullCommandHandler;
 use System\Interfaces\ICommand;
@@ -9,7 +9,7 @@ use System\Interfaces\ICommand;
 use Member\Command\User\SignUpUserCommand;
 use Member\Command\User\UpdatePasswordUserCommand;
 
-class UserCommandHandlerFactoryTest extends GenericTestCase
+class UserCommandHandlerFactoryTest extends TestCase
 {
 
     private $commandHandler;

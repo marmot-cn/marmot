@@ -1,7 +1,7 @@
 <?php
 namespace Member\Repository\User;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 use Marmot\Core;
@@ -15,7 +15,7 @@ use Member\Adapter\User\IUserAdapter;
  * @author chloroplast
  * @version 1.0.20160218
  */
-class UserRepositoryTest extends GenericTestCase
+class UserRepositoryTest extends TestCase
 {
     private $repository;
 

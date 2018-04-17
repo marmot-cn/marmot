@@ -12,10 +12,10 @@ use Member\Model\NullUser;
 use Member\View\UserView;
 use Member\Utils\ObjectGenerate;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
-class UserControllerTest extends GenericTestCase
+class UserControllerTest extends TestCase
 {
     private $controller;
 
@@ -199,7 +199,7 @@ class UserControllerTest extends GenericTestCase
         $this->assertTrue($result);
     }
 
-    public function testUpdatePasswordFailure()
-    {
-    }
+//    public function testUpdatePasswordFailure()
+//    {
+//    }
 }

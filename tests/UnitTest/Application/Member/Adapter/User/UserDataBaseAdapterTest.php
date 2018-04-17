@@ -1,7 +1,8 @@
 <?php
 namespace Member\Adapter\User;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
+
 use Member\Translator\UserDataBaseTranslator;
 use Member\Model\User;
 use Member\Adapter\User\Query\UserRowCacheQuery;
@@ -11,7 +12,7 @@ use Marmot\Core;
 
 use Prophecy\Argument;
 
-class UserDataBaseAdapterTest extends GenericTestCase
+class UserDataBaseAdapterTest extends TestCase
 {
     public function setUp()
     {
@@ -23,28 +24,6 @@ class UserDataBaseAdapterTest extends GenericTestCase
     {
         unset($this->userRowCacheQuery);
         unset($this->userDataBaseTranslator);
-    }
-
-    public function testConstructor()
-    {
-        $adapter = new UserDataBaseAdapter();
-        $userRowCacheQueryParameter = $this->getPrivateProperty(
-            'Member\Adapter\User\UserDataBaseAdapter',
-            'userRowCacheQuery'
-        );
-        $this->assertInstanceOf(
-            'Member\Adapter\User\Query\UserRowCacheQuery',
-            $userRowCacheQueryParameter->getValue($adapter)
-        );
-
-        $userDataBaseTranslatorParameter = $this->getPrivateProperty(
-            'Member\Adapter\User\UserDataBaseAdapter',
-            'userDataBaseTranslator'
-        );
-        $this->assertInstanceOf(
-            'Member\Translator\UserDataBaseTranslator',
-            $userDataBaseTranslatorParameter->getValue($adapter)
-        );
     }
 
     public function testImplementsIUserAdapter()

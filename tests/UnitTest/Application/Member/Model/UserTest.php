@@ -5,7 +5,7 @@ use Marmot\Core;
 use Member\Model\User;
 use Member\Repository\User\UserRepository;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**
@@ -14,7 +14,7 @@ use Prophecy\Argument;
  * @version 1.0.0:2016.04.19
  */
 
-class UserTest extends GenericTestCase
+class UserTest extends TestCase
 {
 
     private $user;

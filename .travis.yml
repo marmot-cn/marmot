@@ -1,0 +1,9 @@
+language: php
+php:
+  - 7.1.9
+install: composer install
+script:
+  - vendor/bin/phpcs
+  - vendor/bin/phpcpd Application
+  - vendor/bin/phpunit --stop-on-failure
+  - vendor/bin/phpmd ./Application text ruleset.xml

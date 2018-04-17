@@ -2,14 +2,14 @@
 namespace tests\UnitTest;
 
 use Marmot\Core;
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * 测试框架核心类
  * @author chloroplast
  * @version 1.0.20160218
  */
-class CoreTest extends GenericTestCase
+class CoreTest extends TestCase
 {
 
     

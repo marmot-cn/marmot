@@ -1,11 +1,11 @@
 <?php
 namespace System\Classes;
 
-use tests;
+use PHPUnit\Framework\TestCase;
 use Marmot\Core;
 use System\Classes\Request;
 
-class ControllerTest extends tests\GenericTestCase
+class ControllerTest extends TestCase
 {
     private $stub;
 

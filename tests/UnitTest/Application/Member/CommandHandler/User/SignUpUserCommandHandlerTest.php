@@ -1,7 +1,7 @@
 <?php
 namespace Member\CommandHandler\User;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 use System\Interfaces\ICommand;
 use Marmot\Core;
 
@@ -17,7 +17,7 @@ use Prophecy\Argument;
  * @version 1.0.20160828
  */
 
-class SignUpUserCommandHandlerTest extends GenericTestCase
+class SignUpUserCommandHandlerTest extends TestCase
 {
 
     public function setUp()
@@ -31,18 +31,6 @@ class SignUpUserCommandHandlerTest extends GenericTestCase
         $this->assertInstanceOf(
             'System\Interfaces\ICommandHandler',
             $this->commandHandler
-        );
-    }
-
-    public function testConstructor()
-    {
-        $userParameter = $this->getPrivateProperty(
-            'Member\CommandHandler\User\SignUpUserCommandHandler',
-            'user'
-        );
-        $this->assertInstanceOf(
-            'Member\Model\User',
-            $userParameter->getValue($this->commandHandler)
         );
     }
 

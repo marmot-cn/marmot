@@ -1,7 +1,7 @@
 <?php
 namespace Member\CommandHandler\User;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 use System\Interfaces\ICommand;
 use Marmot\Core;
 
@@ -18,7 +18,7 @@ use Prophecy\Argument;
  * @version 1.0.20160828
  */
 
-class UpdatePasswordUserCommandHandlerTest extends GenericTestCase
+class UpdatePasswordUserCommandHandlerTest extends TestCase
 {
     public function setUp()
     {
@@ -30,18 +30,6 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestCase
         $this->assertInstanceOf(
             'System\Interfaces\ICommandHandler',
             $this->commandHandler
-        );
-    }
-
-    public function testConstructor()
-    {
-        $userRepositoryParameter = $this->getPrivateProperty(
-            'Member\CommandHandler\User\UpdatePasswordUserCommandHandler',
-            'userRepository'
-        );
-        $this->assertInstanceOf(
-            'Member\Repository\User\UserRepository',
-            $userRepositoryParameter->getValue($this->commandHandler)
         );
     }
 
@@ -93,7 +81,7 @@ class UpdatePasswordUserCommandHandlerTest extends GenericTestCase
         $this->assertFalse($result);
     }
 
-    public function testExecuteSuccess()
-    {
-    }
+//    public function testExecuteSuccess()
+//    {
+//    }
 }

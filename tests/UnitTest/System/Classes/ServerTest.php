@@ -1,10 +1,10 @@
 <?php
 namespace System\Classes;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 use Marmot\Core;
 
-class ServerTest extends GenericTestCase
+class ServerTest extends TestCase
 {
     private $stub;
 

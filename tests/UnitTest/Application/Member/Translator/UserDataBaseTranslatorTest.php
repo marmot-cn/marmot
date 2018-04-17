@@ -1,7 +1,8 @@
 <?php
 namespace Member\Translator;
 
-use tests\GenericTestsDatabaseTestCase;
+use PHPUnit\Framework\TestCase;
+
 use Marmot\Core;
 use Member\Utils\UserUtils;
 use Member\Model\User;
@@ -12,7 +13,7 @@ use Member\Utils\ObjectGenerate;
  * @author chloroplast
  * @version 1.0.0:2016.04.18
  */
-class UserDataBaseTranslatorTest extends GenericTestsDatabaseTestCase
+class UserDataBaseTranslatorTest extends TestCase
 {
     use UserUtils;
 

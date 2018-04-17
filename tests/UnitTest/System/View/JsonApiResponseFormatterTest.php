@@ -1,12 +1,12 @@
 <?php
 namespace System\View;
 
-use tests;
+use PHPUnit\Framework\TestCase;
 
 use Marmot\Core;
 use System\Classes\Response;
 
-class JsonApiResponseFormatterTest extends tests\GenericTestCase
+class JsonApiResponseFormatterTest extends TestCase
 {
 
     private $stub;

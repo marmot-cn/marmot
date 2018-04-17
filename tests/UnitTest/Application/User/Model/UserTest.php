@@ -2,7 +2,7 @@
 namespace User\Model;
 
 use Marmot\Core;
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 
 use Member\Model\User;
 
@@ -12,7 +12,7 @@ use Member\Model\User;
  * @version 1.0.0:2016.04.19
  */
 
-class UserTest extends GenericTestCase
+class UserTest extends TestCase
 {
     private $user;
 

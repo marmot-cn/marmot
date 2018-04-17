@@ -1,13 +1,13 @@
 <?php
 namespace System\Classes;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 
 use Marmot\Core;
 use System\Classes\NullCommandHandler;
 use System\Interfaces\ICommand;
 
-class NullCommandHandlerTest extends GenericTestCase
+class NullCommandHandlerTest extends TestCase
 {
     private $nullCommandHandler;
 
