@@ -5,7 +5,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libmemcached-dev
   - pecl install mongodb-1.4.0
-  - echo no | pecl install memcached-3.0.3
+  - echo "no --disable-memcached-sasl" | pecl install memcached-3.0.3
 install: composer install
 script:
   - vendor/bin/phpcs
