@@ -2,6 +2,8 @@ language: php
 php:
   - 7.1.9
 before_install:
+  - sudo apt-get update
+  - sudo apt-get install libmemcached-dev
   - pecl install mongodb-1.4.0
   - pecl install memcached-3.0.3
 install: composer install
