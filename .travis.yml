@@ -1,6 +1,8 @@
 language: php
 php:
   - 7.1.9
+before_install:
+  - echo "extension=mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 install: composer install
 script:
   - vendor/bin/phpcs
