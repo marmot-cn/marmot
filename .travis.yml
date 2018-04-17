@@ -1,11 +1,14 @@
 language: php
 php:
   - 7.1.9
+services:
+  - docker
 before_install:
-  - echo "extension=mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - docker pull registry.cn-hangzhou.aliyuncs.com/phpfpm/phpfpm-end
+  - docker run -d --name=phpfpm registry.cn-hangzhou.aliyuncs.com/phpfpm/phpfpm-end
 install: composer install
 script:
-  - vendor/bin/phpcs
-  - vendor/bin/phpcpd Application
-  - vendor/bin/phpunit --stop-on-failure
-  - vendor/bin/phpmd ./Application text ruleset.xml
+  - docker exec -it phpfpm vendor/bin/phpcs
+  - docker exec -it phpfpm vendor/bin/phpcpd Application
+  - docker exec -it phpfpm vendor/bin/phpunit --stop-on-failure
+  - docker exec -it phpfpm vendor/bin/phpmd ./Application text ruleset.xml
