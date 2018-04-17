@@ -4,7 +4,7 @@ services:
 before_install:
   - docker pull registry.cn-hangzhou.aliyuncs.com/phpfpm/phpfpm-end
   - docker run -d --name=phpfpm registry.cn-hangzhou.aliyuncs.com/phpfpm/phpfpm-end
-install: composer install
+install: docker exec -it phpfpm composer install
 script:
   - docker exec -it phpfpm vendor/bin/phpcs
   - docker exec -it phpfpm vendor/bin/phpcpd Application
