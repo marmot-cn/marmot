@@ -1,11 +1,14 @@
-services:
-  - docker
+language: php
+php:
+  - 7.1.9
 before_install:
-  - docker pull chloroplast/docker-image-phpfpm-end
-  - docker run -d --name=phpfpm chloroplast/docker-image-phpfpm-end
-install: docker exec -it phpfpm composer install
+  - sudo apt-get update
+  - sudo apt-get install libmemcached-dev
+  - pecl install mongodb-1.4.0
+  - echo no | pecl install memcached-3.0.3
+install: composer install
 script:
-  - docker exec -it vendor/bin/phpcs
-  - docker exec -it vendor/bin/phpcpd Application
-  - docker exec -it vendor/bin/phpunit --stop-on-failure
-  - docker exec -it vendor/bin/phpmd ./Application text ruleset.xml
+  - vendor/bin/phpcs
+  - vendor/bin/phpcpd Application
+  - vendor/bin/phpunit --stop-on-failure
+  - vendor/bin/phpmd ./Application text ruleset.xml
