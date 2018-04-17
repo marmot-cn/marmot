@@ -1,12 +1,12 @@
 language: php
-services:
-  - docker
+php:
+  - 7.1.9
 before_install:
-  - docker pull registry.cn-hangzhou.aliyuncs.com/phpfpm/phpfpm-end
-  - docker run -d --name=phpfpm registry.cn-hangzhou.aliyuncs.com/phpfpm/phpfpm-end
-install: docker exec -it phpfpm composer install
+  - pecl install mongodb-1.4.0
+  - before_install: echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+install: composer install
 script:
-  - docker exec -it phpfpm vendor/bin/phpcs
-  - docker exec -it phpfpm vendor/bin/phpcpd Application
-  - docker exec -it phpfpm vendor/bin/phpunit --stop-on-failure
-  - docker exec -it phpfpm vendor/bin/phpmd ./Application text ruleset.xml
+  - vendor/bin/phpcs
+  - vendor/bin/phpcpd Application
+  - vendor/bin/phpunit --stop-on-failure
+  - vendor/bin/phpmd ./Application text ruleset.xml
