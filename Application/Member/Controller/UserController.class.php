@@ -67,7 +67,7 @@ class UserController extends Controller
         return false;
     }
 
-    private function validateGetOneScenario(int $id)
+    protected function validateGetOneScenario(int $id)
     {
         return $this->getRequest()->validate([WidgetRules::id($id, 6)]);
     }
@@ -161,7 +161,7 @@ class UserController extends Controller
         return false;
     }
 
-    private function validateSignUpScenario()
+    protected function validateSignUpScenario()
     {
         return $this->getRequest()->validate([]);
     }

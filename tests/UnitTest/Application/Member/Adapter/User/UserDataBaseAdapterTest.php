@@ -14,10 +14,25 @@ use Prophecy\Argument;
 
 class UserDataBaseAdapterTest extends TestCase
 {
+    private $userRowCacheQuery;
+    private $userDataBaseTranslator;
+    private $childAdapter;
+
     public function setUp()
     {
         $this->userRowCacheQuery = $this->prophesize(UserRowCacheQuery::class);
         $this->userDataBaseTranslator = $this->prophesize(UserDataBaseTranslator::class);
+        $this->childAdapter = new class extends UserDataBaseAdapter{
+            public function getUserDataBaseTranslator() : UserDataBaseTranslator
+            {
+                return parent::getUserDataBaseTranslator();
+            }
+
+            public function getUserRowCacheQuery() : UserRowCacheQuery
+            {
+                return parent::getUserRowCacheQuery();
+            }
+        };
     }
 
     public function tearDown()
@@ -30,6 +45,22 @@ class UserDataBaseAdapterTest extends TestCase
     {
         $adapter = new UserDataBaseAdapter();
         $this->assertInstanceOf('Member\Adapter\User\IUserAdapter', $adapter);
+    }
+
+    public function testGetUserDataBaseTranslator()
+    {
+        $this->assertInstanceOf(
+            'Member\Translator\UserDataBaseTranslator',
+            $this->childAdapter->getUserDataBaseTranslator()
+        );
+    }
+
+    public function testGetUserRowCacheQuery()
+    {
+        $this->assertInstanceOf(
+            'Member\Adapter\User\Query\UserRowCacheQuery',
+            $this->childAdapter->getUserRowCacheQuery()
+        );
     }
 
     public function testAddSuccess()

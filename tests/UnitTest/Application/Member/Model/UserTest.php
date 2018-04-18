@@ -18,10 +18,17 @@ class UserTest extends TestCase
 {
 
     private $user;
+    private $childUser;
 
     public function setUp()
     {
         $this->user = new User();
+        $this->childUser = new class extends User{
+            public function getUserRepository() : UserRepository
+            {
+                return parent::getUserRepository();
+            }
+        };
     }
 
     public function tearDown()
@@ -118,7 +125,15 @@ class UserTest extends TestCase
         $this->assertTrue($this->user->isDelete());
         $this->assertFalse($this->user->isNormal());
     }
-    
+
+    public function testGetUserRepository()
+    {
+        $this->assertInstanceof(
+            'Member\Repository\User\UserRepository',
+            $this->childUser->getUserRepository()
+        );
+    }
+
     public function testSignUpSucess()
     {
         $this->user = $this->getMockBuilder(User::class)

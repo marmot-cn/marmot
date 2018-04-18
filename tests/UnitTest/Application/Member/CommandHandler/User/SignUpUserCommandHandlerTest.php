@@ -20,10 +20,19 @@ use Prophecy\Argument;
 class SignUpUserCommandHandlerTest extends TestCase
 {
 
+    private $commandHandler;
+    private $childCommandHandler;
+
     public function setUp()
     {
         //这里不构建初始数据,只是在最后清理数据
         $this->commandHandler = new SignUpUserCommandHandler();
+        $this->childCommandHandler = new class extends SignUpUserCommandHandler{
+            public function getUser() : User
+            {
+                return parent::getUser();
+            }
+        };
     }
 
     public function testCorrectImplementsICommandHandler()
@@ -31,6 +40,14 @@ class SignUpUserCommandHandlerTest extends TestCase
         $this->assertInstanceOf(
             'System\Interfaces\ICommandHandler',
             $this->commandHandler
+        );
+    }
+
+    public function testGetUser()
+    {
+        $this->assertInstanceof(
+            'Member\Model\User',
+            $this->childCommandHandler->getUser()
         );
     }
 

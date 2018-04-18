@@ -20,9 +20,18 @@ use Prophecy\Argument;
 
 class UpdatePasswordUserCommandHandlerTest extends TestCase
 {
+    private $commandHandler;
+    private $childCommandHandler;
+
     public function setUp()
     {
         $this->commandHandler = new UpdatePasswordUserCommandHandler();
+        $this->childCommandHandler = new class extends UpdatePasswordUserCommandHandler{
+            public function getUserRepository() : UserRepository
+            {
+                return parent::getUserRepository();
+            }
+        };
     }
 
     public function testCorrectImplementsICommandHandler()
@@ -30,6 +39,14 @@ class UpdatePasswordUserCommandHandlerTest extends TestCase
         $this->assertInstanceOf(
             'System\Interfaces\ICommandHandler',
             $this->commandHandler
+        );
+    }
+
+    public function testGetUserRepository()
+    {
+        $this->assertInstanceof(
+            'Member\Repository\User\UserRepository',
+            $this->childCommandHandler->getUserRepository()
         );
     }
 
