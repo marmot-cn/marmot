@@ -16,6 +16,7 @@ class EmptyViewTest extends TestCase
 
     public function tearDown()
     {
+        unset($this->stub);
     }
 
     public function testCorrectImplementIView()

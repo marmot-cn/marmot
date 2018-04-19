@@ -18,6 +18,7 @@ class JsonApiResponseFormatterTest extends TestCase
 
     public function tearDown()
     {
+        unset($this->stub);
     }
 
     public function testCorrectImplementResponseFormatter()
