@@ -138,7 +138,7 @@ class UserController extends Controller
         $password = $data['attributes']['password'];
 
         if ($this->validateSignUpScenario()) {
-            $commandBus = new CommandBus(new UserCommandHandlerFactory());
+            $commandBus = $this->getCommandBus();
 
                 $command = new SignUpUserCommand(
                     $cellphone,

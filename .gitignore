@@ -6,5 +6,5 @@ config.php
 Docs/UnitTestCover
 route.cache
 debug
-!cache/proxies/.gitkeep
-cache/proxies/*.php
+!Cache/proxies/.gitkeep
+Cache/proxies/*.php

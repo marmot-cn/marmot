@@ -208,39 +208,9 @@ class UserControllerTest extends TestCase
 
         $this->controller->expects($this->once())
                     ->method('getUserRepository')
-                     ->willReturn($this->repository->reveal());
+                    ->willReturn($this->repository->reveal());
 
         return $this->controller;
-    }
-
-
-    public function testGetListTrue()
-    {
-        $userList[] = ObjectGenerate::generateUser(1, 1);
-        $userList[] = ObjectGenerate::generateUser(2, 2);
-
-        $this->initialFetchList($userList);
-
-        $this->controller->expects($this->exactly(0))
-            ->method('renderView')
-            ->willReturn(true);
-
-        $ids = '1,2';
-        $result = $this->controller->getList($ids);
-        $this->assertTrue($result);
-    }
-
-    public function testGetListFalse()
-    {
-        $userList[] = array();
-
-        $this->controller->expects($this->exactly(1))
-            ->method('displayError')
-            ->willReturn(false);
-
-        $ids = '1,2';
-        $result = $this->controller->getList($ids);
-        $this->assertFalse($result);
     }
 
     public function testSignUpValidateFailure()
@@ -261,7 +231,7 @@ class UserControllerTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testSignUpCommandFailure()
+    public function testSignUpCommandExecuteFailure()
     {
         $postData = array(
             'type'=>'users',
@@ -287,8 +257,6 @@ class UserControllerTest extends TestCase
                    ->method('render');
         $this->controller->expects($this->once())
                    ->method('displayError');
-
-
 
         $result = $this->controller->signUp();
         $this->assertFalse($result);

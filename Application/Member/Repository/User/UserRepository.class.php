@@ -14,7 +14,6 @@ use Marmot\Core;
  */
 class UserRepository implements IUserAdapter
 {
-
     private $adapter;
     
     public function __construct()
