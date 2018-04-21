@@ -1,5 +1,7 @@
 # MARMOT 后端接口框架说明文档
 
+[![Build Status](https://www.travis-ci.org/chloroplast1983/marmot.svg?branch=master)](https://www.travis-ci.org/chloroplast1983/marmot)
+
 ## 版本
 
 * 2.0
