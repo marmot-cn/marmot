@@ -1,4 +1,6 @@
 <?php
+ini_set("display_errors","on");
+
 return [
 	//database
     'database.host'     => 'mysql',

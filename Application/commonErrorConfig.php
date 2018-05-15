@@ -1,10 +1,5 @@
 <?php
 /**
- * 1 - 10000 通用错误
- * 90000 - 99999 产品服务错误
- */
-define('COMMON_ERROR_LIMIT', 10000);
-/**
  * 未定义错误
  */
 define('ERROR_NOT_DEFINED', 0);

@@ -191,11 +191,11 @@ class Core
     public static function setLastError(int $errorCode = 0)
     {
 
-        if ($errorCode <= COMMON_ERROR_LIMIT) {
-            $errorDescriptions = include 'Application/commonErrorDescriptionConfig.php';
-        } else {
-            $errorDescriptions = include 'Application/errorDescriptionConfig.php';
-        }
+        $commonErrorDescription = $errorDescriptions = array();
+
+        $commonErrorDescription = include 'Application/CommonErrorDescriptionConfig.php';
+        $errorDescriptions = include 'Application/errorDescriptionConfig.php';
+        $errorDescriptions = array_merge($errorDescriptions, $commonErrorDescription);
 
         if (!isset($errorDescriptions[$errorCode])) {
             return false;
@@ -307,7 +307,6 @@ class Core
      */
     private function initDb()
     {
-
         self::$dbDriver = self::$container->get('\System\Classes\MyPdo');
     }
 
@@ -343,8 +342,6 @@ class Core
      * 1. 需要优化在使用到memcached的情况下在连接memcached,减少无用的连接.
      *    比如场景为调取一个静态数据,则不需要连接memcached.
      * 2. 这里需要处理如果memcached失效的情况,做的应急处理.
-     *
-     * @version 1.0.20160204
      *
      * @version 1.0.20160204
      */
