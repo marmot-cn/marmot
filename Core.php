@@ -191,11 +191,11 @@ class Core
     public static function setLastError(int $errorCode = 0)
     {
 
-        $commonErrorDescription = $errorDescriptions = array();
+        $commonErrorDescriptions = $errorDescriptions = array();
 
-        $commonErrorDescription = include 'Application/CommonErrorDescriptionConfig.php';
+        $commonErrorDescriptions = include 'Application/CommonErrorDescriptionConfig.php';
         $errorDescriptions = include 'Application/errorDescriptionConfig.php';
-        $errorDescriptions = array_merge($errorDescriptions, $commonErrorDescription);
+        $errorDescriptions = $errorDescriptions + $commonErrorDescriptions;
 
         if (!isset($errorDescriptions[$errorCode])) {
             return false;
