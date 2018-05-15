@@ -193,7 +193,7 @@ class Core
 
         $commonErrorDescriptions = $errorDescriptions = array();
 
-        $commonErrorDescriptions = include 'Application/CommonErrorDescriptionConfig.php';
+        $commonErrorDescriptions = include 'Application/commonErrorDescriptionConfig.php';
         $errorDescriptions = include 'Application/errorDescriptionConfig.php';
         $errorDescriptions = $errorDescriptions + $commonErrorDescriptions;
 
