@@ -104,7 +104,7 @@ class Core
         self::initEnv();//初始化环境
         self::initCache();//初始化缓存使用
         self::initDb();//初始化mysql
-        // self::initMongo();
+        self::initMongo();
         self::initError();
     }
     
