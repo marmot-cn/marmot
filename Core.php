@@ -188,7 +188,7 @@ class Core
         self::setLastError(ERROR_NOT_DEFINED);
     }
 
-    public static function setLastError(int $errorCode = 0)
+    public static function setLastError(int $errorCode = 0, array $source = array())
     {
 
         $commonErrorDescriptions = $errorDescriptions = array();
@@ -208,7 +208,7 @@ class Core
             $errorDescriptions[$errorCode]['code'],
             $errorDescriptions[$errorCode]['title'],
             $errorDescriptions[$errorCode]['detail'],
-            $errorDescriptions[$errorCode]['source'],
+            !empty($source) ? $source : $errorDescriptions[$errorCode]['source'],
             $errorDescriptions[$errorCode]['meta']
         );
     }
