@@ -75,6 +75,23 @@ abstract class RowCacheQuery
         $this->cacheLayer->del($cacheKey);
         return true;
     }
+    
+    /**
+     * @param array $data 删除数据
+     * @param array $condition 删除条件 | 默认为主键
+     */
+    public function delete(array $condition)
+    {
+        $row = $this->dbLayer->delete($condition);
+        if (!$row) {
+            return false;
+        }
+
+        //更新缓存
+        $cacheKey = $condition[$this->primaryKey];
+        $this->cacheLayer->del($cacheKey);
+        return true;
+    }
 
     /**
      * @param int $id,主键id
