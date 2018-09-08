@@ -86,20 +86,20 @@ class Filter
     public static function stripTagsAttributes($string, $allowtags = null, $allowattributes = null)
     {
 
-        $string = strip_tags($string, $allowtags);
+//        $string = strip_tags($string, $allowtags);
 
-        if (! is_null($allowattributes)) {
-            if (! is_array($allowattributes)) {
-                $allowattributes = explode(',', $allowattributes);
-            }
-            if (is_array($allowattributes)) {
-                $allowattributes = implode(')(?<!', $allowattributes);
-            }
-            if (strlen($allowattributes) > 0) {
-                $allowattributes = '(?<!' . $allowattributes . ')';
-            }
-            $expr = '/ [^ =]*' . $allowattributes . '=(\"[^\"]*\"|\'[^\']*\')/i';
-        }
+//        if (! is_null($allowattributes)) {
+//            if (! is_array($allowattributes)) {
+//                $allowattributes = explode(',', $allowattributes);
+//            }
+//            if (is_array($allowattributes)) {
+//                $allowattributes = implode(')(?<!', $allowattributes);
+//            }
+//            if (strlen($allowattributes) > 0) {
+//                $allowattributes = '(?<!' . $allowattributes . ')';
+//            }
+//            $expr = '/ [^ =]*' . $allowattributes . '=(\"[^\"]*\"|\'[^\']*\')/i';
+//        }
         // XSS protection: <a href="javascript: alert(...
         $string = preg_replace('/href=([\'"]).*?javascript:(.*)?\\1/i', 'href="#$2"', $string);
         return $string;

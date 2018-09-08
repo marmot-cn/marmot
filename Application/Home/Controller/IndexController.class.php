@@ -10,6 +10,8 @@ use Monolog\Logger;
 use Monolog\Handler\MongoDBHandler;
 use System\Extension\Monolog\FluentdHandler;
 
+use System\Classes\Filter;
+
 class IndexController extends Controller
 {
 
