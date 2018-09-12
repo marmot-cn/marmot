@@ -234,16 +234,29 @@ class Response
         $this->checkCache();
         $this->prepare();
         $this->sendHeaders();
-        $this->sendContent();
+
+        if (!$this->isCached()) {
+            $this->sendContent();
+        }
     }
 
-    public function checkCache()
+    public function isCached() : bool
+    {
+        return $this->getStatusCode() == '304';
+    }
+
+    private function checkCache()
     {
         $request = new Request();
-        $etag = $request->getHeader('if-none-match', '');
-        if ($etag == md5(serialize($this->data))) {
+        $etag = $request->getHeader('If-None-Match', '');
+        if ($etag == $this->getEtag()) {
             $this->setStatusCode(304);
         }
+    }
+
+    private function getEtag() : string
+    {
+        return 'W/'.md5(serialize($this->data));
     }
 
     /**
@@ -263,7 +276,7 @@ class Response
         if ($formatter instanceof IResponseFormatter) {
             $formatter->format($this);
         }
-        $this->addHeader('ETag', '"'.md5(serialize($this->data)).'"');
+        $this->addHeader('ETag', $this->getEtag());
         //如果都不符合情况输出exception
     }
 
