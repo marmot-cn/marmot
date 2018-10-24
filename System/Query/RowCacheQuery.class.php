@@ -2,7 +2,8 @@
 namespace System\Query;
 
 use System\Classes;
-use System\Interfaces;
+use System\Interfaces\DbLayer;
+use System\Interfaces\CacheLayer;
 
 /**
  * RowCacheQuery文件,abstract抽象类.所有针对数据库行处理且需要缓存的类需要继承该类.
@@ -27,7 +28,7 @@ abstract class RowCacheQuery
 
     protected $dbLayer;//数据层
 
-    public function __construct(string $primaryKey, Interfaces\CacheLayer $cacheLayer, Interfaces\DbLayer $dbLayer)
+    public function __construct(string $primaryKey, CacheLayer $cacheLayer, DbLayer $dbLayer)
     {
         $this->primaryKey = $primaryKey;
         $this->cacheLayer = $cacheLayer;
@@ -45,13 +46,23 @@ abstract class RowCacheQuery
     {
         return $this->primaryKey;
     }
+
+    protected function getDbLayer() : DbLayer
+    {
+        return $this->dbLayer; 
+    }
+
+    protected function getCacheLayer() : CacheLayer
+    {
+        return $this->cacheLayer;
+    }
     
     /**
      * @param array $data 添加数据
      */
     public function add(array $data, $lasetInsertId = true)
     {
-        $result = $this->dbLayer->insert($data, $lasetInsertId);
+        $result = $this->getDbLayer()->insert($data, $lasetInsertId);
 
         if (!$result) {
             return false;
@@ -67,12 +78,12 @@ abstract class RowCacheQuery
     {
         $cacheKey = $condition[$this->primaryKey];
         
-        $row = $this->dbLayer->update($data, $condition);
+        $row = $this->getDbLayer()->update($data, $condition);
         if (!$row) {
             return false;
         }
         //更新缓存
-        $this->cacheLayer->del($cacheKey);
+        $this->getCacheLayer()->del($cacheKey);
         return true;
     }
     
@@ -82,14 +93,14 @@ abstract class RowCacheQuery
      */
     public function delete(array $condition)
     {
-        $row = $this->dbLayer->delete($condition);
+        $row = $this->getDbLayer()->delete($condition);
         if (!$row) {
             return false;
         }
 
         //更新缓存
         $cacheKey = $condition[$this->primaryKey];
-        $this->cacheLayer->del($cacheKey);
+        $this->getCacheLayer()->del($cacheKey);
         return true;
     }
 
@@ -100,21 +111,21 @@ abstract class RowCacheQuery
     {
 
         //查询缓存中是否有数据,根据id
-        $cacheData = $this->cacheLayer->get($id);
+        $cacheData = $this->getCacheLayer()->get($id);
         //如果有数据,返回
         if ($cacheData) {
             return $cacheData;
         }
 
         //如果没有数据,去数据库查询根据primaryKey 和 id
-        $mysqlData = $this->dbLayer->select($this->primaryKey.'='.$id, '*');
+        $mysqlData = $this->getDbLayer()->select($this->primaryKey.'='.$id, '*');
         //如果数据为空,返回false
         if (empty($mysqlData) || !isset($mysqlData[0])) {
             return false;
         }
         $mysqlData = $mysqlData[0];
         //数据存入缓存
-        $this->cacheLayer->save($id, $mysqlData);
+        $this->getCacheLayer()->save($id, $mysqlData);
         //返回数据
         return $mysqlData;
     }
@@ -128,15 +139,15 @@ abstract class RowCacheQuery
             return false;
         }
 
-        list($hits, $miss) = $this->cacheLayer->getList($ids);
+        list($hits, $miss) = $this->getCacheLayer()->getList($ids);
 
         if ($miss) {
                 //未缓存数据从数据库读取
-            $missRows = $this->dbLayer->select($this->primaryKey.' in (' . implode(',', $miss) . ')', '*');
+            $missRows = $this->getDbLayer()->select($this->primaryKey.' in (' . implode(',', $miss) . ')', '*');
             if ($missRows) {
                 foreach ($missRows as $val) {
                     //添加memcache缓存数据
-                    $this->cacheLayer->save($val[$this->primaryKey], $val);
+                    $this->getCacheLayer()->save($val[$this->primaryKey], $val);
                 }
                 $hits = array_merge($hits, $missRows);
             }
