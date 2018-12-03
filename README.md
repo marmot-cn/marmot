@@ -2,6 +2,14 @@
 
 [![Build Status](https://www.travis-ci.org/chloroplast1983/marmot.svg?branch=master)](https://www.travis-ci.org/chloroplast1983/marmot)
 
+## 简介
+
+具体说明可见[wiki](https://github.com/chloroplast1983/marmot/wiki)
+
+## 接口示例
+
+* [用户](./Docs/Api/user.md "用户")
+
 ## 版本
 
 * 2.0
@@ -9,10 +17,7 @@
 	* [2.2.0](./Docs/Version/2.2.md "2.2")
 	* [2.3.0](./Docs/Version/2.3.md "2.3")
 		* [2.3.1](./Docs/Version/2.3.1.md "2.3.1")
-
-## 简介
-
-具体说明可见[wiki](https://github.com/chloroplast1983/marmot/wiki)
+	* [2.4.1](./Docs/Version/2.4.1.md "2.4.1")
 
 ## quick start
 

@@ -152,7 +152,8 @@ class UserDataBaseAdapter implements IUserAdapter
         $userRowCacheQuery = $this->getUserRowCacheQuery();
         $list = $userRowCacheQuery->find($condition, $offset, $size);
         if (empty($list)) {
-            return array();
+            Core::setLastError(RESOURCE_NOT_EXIST);
+            return array(array(), 0);
         }
 
         $ids = array();

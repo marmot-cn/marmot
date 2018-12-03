@@ -184,10 +184,9 @@ class UserController extends Controller
         if ($data['type'] == 'users') {
             if (!empty($data['attributes']['cellphone']) && !empty($data['attributes']['password'])) {
                 $repository = Core::$container->get('Member\Repository\User\UserRepository');
+
                 list($userList, $count) = $repository->filter(
-                    array(
-                        'cellphone' => $data['attributes']['cellphone']
-                    )
+                    array('cellphone' => $data['attributes']['cellphone'])
                 );
 
                 if ($count == 1) {

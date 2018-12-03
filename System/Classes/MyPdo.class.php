@@ -243,16 +243,25 @@ class MyPdo
     //简化操作for insert
     public function insert($table, array $data)
     {
-
-        $cols = array();
-        $vals = array();
+        $cols = $colsStr = $colsArr = array();
+        $vals = $valsStr = $valsArr = array();
+        
         foreach ($data as $key => $val) {
-            $cols[]=$key;
-            $vals[]="'".$this->addsla($val)."'";
+            if (is_array($val)) {
+                $colsArr[] = $key;
+                $valsArr[] = "'".json_encode($val, JSON_UNESCAPED_UNICODE)."'";
+            } else {
+                $colsStr[] = $key;
+                $valsStr[] = "'".$this->addsla($val)."'";
+            }
         }
+        $cols = array_merge($colsStr, $colsArr);
+        $vals = array_merge($valsStr, $valsArr);
+
         $sql  = "INSERT INTO {$table} (";
         $sql .= implode(",", $cols).") VALUES (";
         $sql .= implode(",", $vals).")";
+
         return $this->exec($sql);
     }
 
@@ -261,8 +270,13 @@ class MyPdo
     {
     
         $set = array();
+
         foreach ($data as $key => $val) {
-            $set[] = $key."='".trim($this->addsla($val))."'";
+            if (is_array($val)) {
+                $set[] = $key."='".json_encode($val, JSON_UNESCAPED_UNICODE)."'";
+            } else {
+                $set[] = $key."='".trim($this->addsla($val))."'";
+            }
         }
 
         $where = $comma = '';

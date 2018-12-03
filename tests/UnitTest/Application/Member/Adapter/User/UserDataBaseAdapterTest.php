@@ -336,7 +336,7 @@ class UserDataBaseAdapterTest extends TestCase
             ->willReturn($this->userRowCacheQuery->reveal());
 
         $result = $adapter->filter();
-        $this->assertEmpty($result);
+        $this->assertEquals(array(array(), 0), $result);
     }
 
     private function generateUserIds(int $number = 20) : array
