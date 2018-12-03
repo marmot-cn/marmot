@@ -70,6 +70,7 @@
 	/users
 
 示例
+
 	$data = array("data"=>array(
 						"type"=>"users",
 	                    "attributes"=>array(
@@ -98,6 +99,7 @@
 	/users/signIn
 
 示例
+
 	$data = array("data"=>array(
 						"type"=>"users",
 	                    "attributes"=>array(
