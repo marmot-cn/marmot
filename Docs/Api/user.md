@@ -72,7 +72,7 @@
 示例
 
 	$data = array("data"=>array(
-						"type"=>"users",
+		            "type"=>"users",
 	                    "attributes"=>array(
 	                                        "cellphone"=>"18800000000",   
 	                                        "password"=>"Admin1241"
@@ -101,7 +101,7 @@
 示例
 
 	$data = array("data"=>array(
-						"type"=>"users",
+			    "type"=>"users",
 	                    "attributes"=>array(
 	                                        "cellphone"=>"18800000000",   
 	                                        "password"=>"Admin1241"
