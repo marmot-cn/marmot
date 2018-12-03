@@ -74,9 +74,9 @@
 	$data = array("data"=>array(
 		            "type"=>"users",
 	                    "attributes"=>array(
-	                                        "cellphone"=>"18800000000",   
-	                                        "password"=>"Admin1241"
-	                                       )
+				"cellphone"=>"18800000000",   
+				"password"=>"Admin1241"
+			       )
 	                   )
 	        );
 	$response = $client->request(
@@ -103,9 +103,9 @@
 	$data = array("data"=>array(
 			    "type"=>"users",
 	                    "attributes"=>array(
-	                                        "cellphone"=>"18800000000",   
-	                                        "password"=>"Admin1241"
-	                                       )
+				"cellphone"=>"18800000000",   
+				"password"=>"Admin1241"
+			       )
 	                   )
 	        );
 	$response = $client->request(
