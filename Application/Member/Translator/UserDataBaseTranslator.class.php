@@ -45,7 +45,8 @@ class UserDataBaseTranslator implements ITranslator
                 'userName',
                 'password',
                 'salt',
-                'realName'
+                'realName',
+                'otherInfo'
             );
         }
 
@@ -95,6 +96,16 @@ class UserDataBaseTranslator implements ITranslator
 
         if (in_array('statusTime', $keys)) {
             $expression['status_time'] = $user->getStatusTime();
+        }
+
+        if (in_array('statusTime', $keys)) {
+            $expression['status_time'] = $user->getStatusTime();
+        }
+
+        if (in_array('otherInfo', $keys)) {
+            $expression['other_info'] = array(
+                'avatar' => array('name' => 'avatarName', 'identify' => 'avatarIdentify')
+            );
         }
 
         return $expression;

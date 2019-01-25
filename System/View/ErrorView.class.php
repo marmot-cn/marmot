@@ -33,8 +33,8 @@ class ErrorView implements IView
             $lasetError->getCode(),
             $lasetError->getTitle(),
             $lasetError->getDetail(),
-            ['source' => $lasetError->getSource()],
-            ['meta'   => $lasetError->getMeta()]
+            $lasetError->getSource(),
+            $lasetError->getMeta()
         );
 
         return Encoder::instance(
