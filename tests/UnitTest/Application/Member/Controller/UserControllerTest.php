@@ -1,8 +1,8 @@
 <?php
 namespace Member\Controller;
 
-use System\Classes\Request;
-use System\Classes\CommandBus;
+use Marmot\Framework\Classes\Request;
+use Marmot\Framework\Classes\CommandBus;
 
 use Application\WidgetRules;
 
@@ -73,7 +73,7 @@ class UserControllerTest extends TestCase
     public function testCorrectExtendsController()
     {
         $controller = new UserController();
-        $this->assertInstanceof('System\Classes\Controller', $controller);
+        $this->assertInstanceof('Marmot\Framework\Classes\Controller', $controller);
     }
 
     public function testGetUserRepository()
@@ -87,7 +87,7 @@ class UserControllerTest extends TestCase
     public function testGetCommandBus()
     {
         $this->assertInstanceof(
-            'System\Classes\CommandBus',
+            'Marmot\Framework\Classes\CommandBus',
             $this->childController->getCommandBus()
         );
     }

@@ -2,7 +2,7 @@
 namespace Member\CommandHandler\User;
 
 use PHPUnit\Framework\TestCase;
-use System\Interfaces\ICommand;
+use Marmot\Framework\Interfaces\ICommand;
 use Marmot\Core;
 
 use Member\Model\User;
@@ -37,7 +37,7 @@ class UpdatePasswordUserCommandHandlerTest extends TestCase
     public function testCorrectImplementsICommandHandler()
     {
         $this->assertInstanceOf(
-            'System\Interfaces\ICommandHandler',
+            'Marmot\Framework\Interfaces\ICommandHandler',
             $this->commandHandler
         );
     }

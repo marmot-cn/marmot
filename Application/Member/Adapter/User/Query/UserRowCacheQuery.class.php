@@ -1,7 +1,7 @@
 <?php
 namespace Member\Adapter\User\Query;
 
-use System\Query\RowCacheQuery;
+use Marmot\Framework\Query\RowCacheQuery;
 
 class UserRowCacheQuery extends RowCacheQuery
 {

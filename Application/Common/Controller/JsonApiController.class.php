@@ -6,7 +6,7 @@ use Neomerx\JsonApi\Factories\Factory;
 use Neomerx\JsonApi\Exceptions\JsonApiException;
 use Neomerx\JsonApi\Encoder\Encoder;
 
-use System\View\ErrorView;
+use Marmot\Framework\View\ErrorView;
 use Marmot\Core;
 
 /**

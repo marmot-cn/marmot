@@ -1,7 +1,7 @@
 <?php
 namespace Member\Adapter\User\Query\Persistence;
 
-use System\Classes\Cache;
+use Marmot\Framework\Classes\Cache;
 
 /**
  * user表缓存文件

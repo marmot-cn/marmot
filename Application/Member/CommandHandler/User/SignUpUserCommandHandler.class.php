@@ -1,8 +1,8 @@
 <?php
 namespace Member\CommandHandler\User;
 
-use System\Interfaces\ICommandHandler;
-use System\Interfaces\ICommand;
+use Marmot\Framework\Interfaces\ICommandHandler;
+use Marmot\Framework\Interfaces\ICommand;
 
 use Member\Command\User\SignUpUserCommand;
 use Member\Model\User;

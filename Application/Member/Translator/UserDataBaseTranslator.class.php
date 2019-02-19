@@ -1,12 +1,12 @@
 <?php
 namespace Member\Translator;
 
-use System\Interfaces\ITranslator;
+use Marmot\Framework\Interfaces\ITranslator;
 use Member\Model\User;
 
 class UserDataBaseTranslator implements ITranslator
 {
-    public function arrayToObject(array $expression)
+    public function arrayToObject(array $expression, $object=null)
     {
         $user = new User($expression['user_id']);
         $user->setCellphone($expression['cellphone']);

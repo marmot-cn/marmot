@@ -37,7 +37,7 @@ class UpdatePasswordUserCommandTest extends TestCase
 
     public function testCorrectInstanceExtendsCommand()
     {
-        $this->assertInstanceof('System\Interfaces\ICommand', $this->stub);
+        $this->assertInstanceof('Marmot\Framework\Interfaces\ICommand', $this->stub);
     }
 
     public function testOldPasswordParameter()

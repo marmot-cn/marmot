@@ -4,8 +4,8 @@ namespace Member\Adapter\User\Query;
 use PHPUnit\Framework\TestCase;
 use Marmot\Core;
 
-use System\Interfaces\DbLayer;
-use System\Interfaces\CacheLayer;
+use Marmot\Framework\Interfaces\DbLayer;
+use Marmot\Framework\Interfaces\CacheLayer;
 
 class UserRowCacheQueryTest extends TestCase
 {
@@ -34,7 +34,7 @@ class UserRowCacheQueryTest extends TestCase
      */
     public function testCorrectInstanceExtendsRowCacheQuery()
     {
-        $this->assertInstanceof('System\Query\RowCacheQuery', $this->rowCacheQuery);
+        $this->assertInstanceof('Marmot\Framework\Query\RowCacheQuery', $this->rowCacheQuery);
     }
 
     /**

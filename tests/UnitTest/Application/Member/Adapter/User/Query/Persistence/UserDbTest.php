@@ -24,6 +24,6 @@ class UserDbTest extends TestCase
      */
     public function testCorrectInstanceExtendsDb()
     {
-        $this->assertInstanceof('System\Classes\Db', $this->db);
+        $this->assertInstanceof('Marmot\Framework\Classes\Db', $this->db);
     }
 }

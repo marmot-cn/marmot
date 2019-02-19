@@ -1,7 +1,7 @@
 <?php
 namespace Common\Adapter\Document\Persistence;
 
-use System\Classes\Cache;
+use Marmot\Framework\Classes\Cache;
 
 /**
  * Document 缓存文件

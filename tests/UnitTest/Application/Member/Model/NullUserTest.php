@@ -26,7 +26,7 @@ class NullUserTest extends TestCase
 
     public function testImplementsNull()
     {
-        $this->assertInstanceof('System\Interfaces\INull', $this->nullUser);
+        $this->assertInstanceof('Marmot\Framework\Interfaces\INull', $this->nullUser);
     }
 
     public function testIsNormal()

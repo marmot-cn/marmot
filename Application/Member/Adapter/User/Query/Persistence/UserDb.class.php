@@ -1,7 +1,7 @@
 <?php
 namespace Member\Adapter\User\Query\Persistence;
 
-use System\Classes\Db;
+use Marmot\Framework\Classes\Db;
 
 /**
  * user表数据库层文件

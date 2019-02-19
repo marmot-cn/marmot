@@ -6,7 +6,7 @@ use Neomerx\JsonApi\Encoder\EncoderOptions;
 use Neomerx\JsonApi\Encoder\Parameters\EncodingParameters;
 use Neomerx\JsonApi\Document\Link;
 
-use System\Classes\Server;
+use Marmot\Framework\Classes\Server;
 
 /**
  * @codeCoverageIgnore

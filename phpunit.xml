@@ -23,10 +23,6 @@
         <testsuite name="Application">
             <directory>./tests/UnitTest/Application/</directory>
         </testsuite>
-        <testsuite name="System">
-            <directory>./tests/UnitTest/System/</directory>
-            <file>./tests/UnitTest/CoreTest.php</file>
-        </testsuite>
         <testsuite name="Integration">
             <directory>./tests/IntegrationTest/</directory>
         </testsuite>

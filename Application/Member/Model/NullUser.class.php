@@ -1,7 +1,7 @@
 <?php
 namespace Member\Model;
 
-use System\Interfaces\INull;
+use Marmot\Framework\Interfaces\INull;
 use Marmot\Core;
 
 class NullUser extends User implements INull

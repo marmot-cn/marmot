@@ -3,8 +3,8 @@ namespace Member\CommandHandler\User;
 
 use PHPUnit\Framework\TestCase;
 
-use System\Classes\NullCommandHandler;
-use System\Interfaces\ICommand;
+use Marmot\Framework\Classes\NullCommandHandler;
+use Marmot\Framework\Interfaces\ICommand;
 
 use Member\Command\User\SignUpUserCommand;
 use Member\Command\User\UpdatePasswordUserCommand;
@@ -30,7 +30,7 @@ class UserCommandHandlerFactoryTest extends TestCase
             $command
         );
 
-        $this->assertInstanceOf('System\Classes\NullCommandHandler', $commandHandler);
+        $this->assertInstanceOf('Marmot\Framework\Classes\NullCommandHandler', $commandHandler);
     }
 
     public function testSignUpUserCommandHandler()
@@ -42,7 +42,7 @@ class UserCommandHandlerFactoryTest extends TestCase
             )
         );
 
-        $this->assertInstanceOf('System\Interfaces\ICommandHandler', $commandHandler);
+        $this->assertInstanceOf('Marmot\Framework\Interfaces\ICommandHandler', $commandHandler);
         $this->assertInstanceOf('Member\CommandHandler\User\SignUpUserCommandHandler', $commandHandler);
     }
 
@@ -56,7 +56,7 @@ class UserCommandHandlerFactoryTest extends TestCase
             )
         );
 
-        $this->assertInstanceOf('System\Interfaces\ICommandHandler', $commandHandler);
+        $this->assertInstanceOf('Marmot\Framework\Interfaces\ICommandHandler', $commandHandler);
         $this->assertInstanceOf(
             'Member\CommandHandler\User\UpdatePasswordUserCommandHandler',
             $commandHandler

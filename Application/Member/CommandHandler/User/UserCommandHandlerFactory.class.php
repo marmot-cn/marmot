@@ -1,11 +1,11 @@
 <?php
 namespace Member\CommandHandler\User;
 
-use System\Interfaces\ICommandHandlerFactory;
-use System\Interfaces\ICommandHandler;
-use System\Interfaces\ICommand;
+use Marmot\Framework\Interfaces\ICommandHandlerFactory;
+use Marmot\Framework\Interfaces\ICommandHandler;
+use Marmot\Framework\Interfaces\ICommand;
 
-use System\Classes\NullCommandHandler;
+use Marmot\Framework\Classes\NullCommandHandler;
 use Marmot\Core;
 
 class UserCommandHandlerFactory implements ICommandHandlerFactory

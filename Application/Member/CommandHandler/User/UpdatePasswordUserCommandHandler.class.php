@@ -1,9 +1,9 @@
 <?php
 namespace Member\CommandHandler\User;
 
-use System\Interfaces\ICommandHandler;
-use System\Interfaces\ICommand;
-use System\Interfaces\INull;
+use Marmot\Framework\Interfaces\ICommandHandler;
+use Marmot\Framework\Interfaces\ICommand;
+use Marmot\Framework\Interfaces\INull;
 
 use Member\Model\User;
 use Member\Command\User\UpdatePasswordUserCommand;

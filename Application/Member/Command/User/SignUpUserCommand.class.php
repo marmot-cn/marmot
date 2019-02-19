@@ -1,7 +1,7 @@
 <?php
 namespace Member\Command\User;
 
-use System\Interfaces\ICommand;
+use Marmot\Framework\Interfaces\ICommand;
 
 class SignUpUserCommand implements ICommand
 {

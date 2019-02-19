@@ -1,11 +1,11 @@
 <?php
 namespace Member\Controller;
 
-use System\Classes\Controller;
-use System\Classes\CommandBus;
-use System\Interfaces\ICommand;
-use System\Interfaces\INull;
-use System\Interfaces\IView;
+use Marmot\Framework\Classes\Controller;
+use Marmot\Framework\Classes\CommandBus;
+use Marmot\Framework\Interfaces\ICommand;
+use Marmot\Framework\Interfaces\INull;
+use Marmot\Framework\Interfaces\IView;
 
 use Application\WidgetRules;
 use Common\Controller\JsonApiController;

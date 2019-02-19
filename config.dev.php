@@ -7,7 +7,7 @@ return [
     'database.port'     => 3306,
     'database.dbname'   => 'marmot',
     'database.user'		=> 'root',
-    'database.passwod'	=> '123456',
+    'database.password'	=> '123456',
     'database.tablepre' => 'pcore_',
     //mongo
     'mongo.host' => 'mongodb://mongo:27017',

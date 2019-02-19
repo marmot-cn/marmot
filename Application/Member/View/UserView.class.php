@@ -3,7 +3,7 @@ namespace Member\View;
 
 use Member\Model\User;
 use Common\View\JsonApiView;
-use System\Interfaces\IView;
+use Marmot\Framework\Interfaces\IView;
 
 /**
  * @codeCoverageIgnore

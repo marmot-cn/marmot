@@ -24,6 +24,6 @@ class UserCacheTest extends TestCase
      */
     public function testCorrectInstanceExtendsCache()
     {
-        $this->assertInstanceof('System\Classes\Cache', $this->cache);
+        $this->assertInstanceof('Marmot\Framework\Classes\Cache', $this->cache);
     }
 }

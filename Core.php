@@ -8,10 +8,10 @@
 
 namespace Marmot;
 
-//默认访问程序路径,请勿修改
-define('S_ROOT', dirname(__FILE__).DIRECTORY_SEPARATOR);
-//内核部分文件夹路径
-define('SYS_ROOT', S_ROOT.'System'.DIRECTORY_SEPARATOR);
+use Marmot\Framework\Classes\Error;
+use Marmot\Framework\MarmotCore;
+
+define('APP_ROOT', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 
 /**
  * 文件核心类
@@ -19,29 +19,11 @@ define('SYS_ROOT', S_ROOT.'System'.DIRECTORY_SEPARATOR);
  * @author  chloroplast1983
  * @version 1.0.20130916
  */
-class Core
+class Core extends MarmotCore
 {
     
     private static $instance;
 
-    //框架内的容器,这里暂时使用的是第三方的PHP-DI容器
-    public static $container;
-
-    //缓存驱动
-    public static $cacheDriver;
-
-    //数据库驱动
-    public static $dbDriver;
-
-    //mongo驱动
-    public static $mongoDriver;
-
-    //核心文件映射关系数组
-    private $classMaps;
-
-    //上一次错误
-    private static $lastError;
-    
     /**
      * 使用单例封装全局函数的core调用
      */
@@ -51,22 +33,6 @@ class Core
             self::$instance = new self();
         }
         return self::$instance;
-    }
-    
-    /**
-     * 网站正常启动流程
-     */
-    public function init()
-    {
-        //autoload
-        self::initAutoload();
-        self::initContainer();//引入容器
-        self::initCache();//初始化缓存使用
-        self::initEnv();//初始化环境
-        self::initDb();//初始化mysql
-        self::initMongo();
-        self::initError();
-        self::initRoute();
     }
 
     /**
@@ -90,25 +56,6 @@ class Core
     }
     
     /**
-     * cli模式专用启动路程,用于引导操作框架的一些操作.
-     * 在这里我们要实现如下功能:
-     * 1. 自动加载
-     * 2. 初始化容器
-     * 3. 初始化缓存
-     * 4. 初始化测试持久层存储
-     */
-    public function initCli()
-    {
-        self::initAutoload();//autoload
-        self::initContainer();//引入容器
-        self::initEnv();//初始化环境
-        self::initCache();//初始化缓存使用
-        self::initDb();//初始化mysql
-        self::initMongo();
-        self::initError();
-    }
-    
-    /**
      * 自动加载方法,这里分为2个部分.这里的借鉴了yii框架的自动加载
      * 符合PSR4自动加载规范
      *
@@ -118,14 +65,9 @@ class Core
      *        但是考虑其功能过于繁重,这里改为用文件映射
      *    2.2 应用文件(Application)主要是通过命名规则映射
      */
-    private function initAutoload()
+    protected function initAutoload()
     {
-
-        //加载第三方的composer的autoload
-        include 'vendor/autoload.php';
-        //加载System核心框架内的映射关系 -- 开始
-        $this->classMaps = include SYS_ROOT.'/classMaps.php';
-        //加载System核心框架内的映射关系 -- 结束
+        parent::initAutoload();
 
         //加载框架Application文件的autoload,匿名函数 -- 开始
         spl_autoload_register(
@@ -135,7 +77,7 @@ class Core
                     $classFile = $this->classMaps[$className];
                 } else {
                     $classFile = str_replace('\\', '/', $className) . '.class.php';
-                    $classFile = S_ROOT.'Application/'.$classFile;
+                    $classFile = APP_ROOT.'Application/'.$classFile;
                 }
 
                 if (file_exists($classFile)) {
@@ -148,7 +90,7 @@ class Core
             function ($className) {
 
                 $unitTestFile = str_replace('\\', '/', $className) . '.php';
-                $unitTestFile = S_ROOT.'tests/UnitTest/Application/'.$unitTestFile;
+                $unitTestFile = APP_ROOT.'tests/UnitTest/Application/'.$unitTestFile;
 
                 if (file_exists($unitTestFile)) {
                     include_once $unitTestFile;
@@ -164,12 +106,12 @@ class Core
      * @author  chloroplast1983
      * @version 1.0.20131016
      */
-    private function initEnv()
+    protected function initEnv()
     {
-        Core::$container->set('time', time());
+        parent::initEnv();
         //加载应用配置文件
-        include S_ROOT.'Application/config.php';
-        include S_ROOT.'Application/widgetRules.php';
+        include APP_ROOT.'Application/config.php';
+        include APP_ROOT.'Application/widgetRules.php';
     }
 
     private function initTestEnv()
@@ -177,192 +119,35 @@ class Core
         $_ENV['APP_ENV'] = 'test';
     }
 
+    protected function getAppPath() : string
+    {
+        return APP_ROOT;
+    }
+
     /**
      * 初始化错误信息
      */
-    private function initError()
+    protected function initError()
     {
-        include S_ROOT.'Application/commonErrorConfig.php';
-        include S_ROOT.'Application/errorConfig.php';
+        parent::initError();
 
-        self::setLastError(ERROR_NOT_DEFINED);
+        include APP_ROOT.'Application/errorConfig.php'; 
+        self::$errorDescriptions = self::$errorDescriptions + include 'Application/errorDescriptionConfig.php';
     }
 
-    public static function setLastError(int $errorCode = 0, array $source = array())
-    {
-
-        $commonErrorDescriptions = $errorDescriptions = array();
-
-        $commonErrorDescriptions = include 'Application/commonErrorDescriptionConfig.php';
-        $errorDescriptions = include 'Application/errorDescriptionConfig.php';
-        $errorDescriptions = $errorDescriptions + $commonErrorDescriptions;
-
-        if (!isset($errorDescriptions[$errorCode])) {
-            return false;
-        }
-
-        self::$lastError  = new \System\Classes\Error(
-            $errorCode,
-            $errorDescriptions[$errorCode]['link'],
-            $errorDescriptions[$errorCode]['status'],
-            $errorDescriptions[$errorCode]['code'],
-            $errorDescriptions[$errorCode]['title'],
-            $errorDescriptions[$errorCode]['detail'],
-            !empty($source) ? $source : $errorDescriptions[$errorCode]['source'],
-            $errorDescriptions[$errorCode]['meta']
-        );
-    }
-
-    public static function getLastError() : \System\Classes\Error
-    {
-        return self::$lastError ;
-    }
-
-    /**
-     * 创建容器
-     *
-     * @author  chloroplast1983
-     * @version 1.0.20160215
-     */
-    private function initContainer()
-    {
-        //初始化容器
-        $containerBuilder = new \DI\ContainerBuilder();
-        //这里我们需要使用annotation,所以开启了此功能
-        $containerBuilder->useAnnotations(true);
-        //为容器设置缓存
-        $containerCache = new \Doctrine\Common\Cache\ArrayCache();
-        $containerCache->setNamespace('phpcore');
-        $containerBuilder->setDefinitionCache($containerCache);
-
-        $containerBuilder->writeProxiesToFile(true, S_ROOT.'Cache/proxies');
-        //为容器设置配置文件
-        $containerBuilder->addDefinitions(S_ROOT.'config.'.$_ENV['APP_ENV'].'.php');
-        //创建容器
-        self::$container = $containerBuilder->build();
-    }
-    
-    /**
-     * 路由,需要解决以前随意由个人设置路由的习惯,
-     * 而希望能用统一的路由风格来解决这个问题.
-     *
-     * @version 1.0.20160204
-     */
-    private function initRoute()
-    {
-        //创建路由规则,如果对外提供接口考虑token用于验证
-        $dispatcher = \FastRoute\cachedDispatcher(
-            function (\FastRoute\RouteCollector $r) {
-                //添加默认首页路由 -- 开始
-                $r->addRoute('GET', '/', ['Home\Controller\IndexController','index']);
-
-                //获取配置好的路由规则
-                $routeRules = include S_ROOT.'/Application/routeRules.php';
-                foreach ($routeRules as $route) {
-                    $r->addRoute($route['method'], $route['rule'], $route['controller']);
-                }
-            },
-            [
-                'cacheFile' => S_ROOT. 'Cache/route.cache',
-                'cacheDisabled' => Core::$container->get('cache.route.disable'),
-            ]
-        );
-
-        $httpMethod = $_SERVER['REQUEST_METHOD'];
-        $uri = rawurldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-        $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
-
-        $controller = ['Home\Controller\IndexController','error'];
-        $parameters = [];
-
-        switch ($routeInfo[0]) {
-            case \FastRoute\Dispatcher::NOT_FOUND:
-                self::setLastError(ROUTE_NOT_EXIST);
-                break;
-            case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                // $allowedMethods = $routeInfo[1];
-                self::setLastError(METHOD_NOT_ALLOWED);
-                break;
-            case \FastRoute\Dispatcher::FOUND:
-                $controller = $routeInfo[1];
-                $parameters = $routeInfo[2];
-                break;
-        }
-        self::$container->call($controller, $parameters);
-    }
-    
     /**
      * 初始化数据库
-     * DBW 标记为数据库写操作,假设操作为单库读写.
-     * 如果为一主一从则 初始化 DBR,并且修改 db/cmodel.class.php 中的 select 函数中的
-     * DBW 为 DBR.
-     *
-     * @todo 暂时还未考虑一主多从的情况,鉴于此情况有如下考虑:
-     * 1. 后端使用其他语言开发(golang...),php不在连接数据库
-     * 2. 使用第三方的读写分离工具,而不采用程序的读写分离功能
-     * 3. 如果还需要使用程序的读写分离,且压力大到需要多读,
-     *    则在未来时间内修改框架支持多读实例
      *
      * @version 1.0.20160204
      */
-    private function initDb()
+    protected function initDb()
     {
-        self::$dbDriver = self::$container->get('\System\Classes\MyPdo');
+        parent::initMysql();
+        parent::initMongo();
     }
 
-    /**
-     * 初始化 MongoDB 数据库
-     */
-    private function initMongo()
+    protected function initCache()
     {
-        $mongoHost = self::$container->get('mongo.host');
-
-        if (!empty($mongoHost)) {
-            self::$mongoDriver = new \MongoDB\Client(
-                $mongoHost,
-                self::$container->get('mongo.uriOptions'),
-                self::$container->get('mongo.driverOptions')
-            );
-        }
+        parent::initMemcached(self::$container->get('memcached.serevice'));
     }
-
-    /**
-     * 初始化cache,在框架内暂时把缓存规划为如下几部分:
-     * 1. Row cache: 行缓存,针对数据库一行为一段缓存::memcached
-     * 2. Vector cache: 关系型缓存,针对关系做缓存处理,
-     *    需要考虑不同数据库事务上的支持,
-     *    需要额外考虑mysql和redis存储同样的关系怎么保证一致性,
-     *    存储为数字对应数字::redis
-     * 3. Fragment cache: 片段缓存,用于缓存页面中的一个片段.类似widget的页面内容::memcached
-     * 4. Page cache(暂时不考虑处理): 页面缓存,有如下思路:大内容例如产品详情页等,
-     *    采用分布式文件系统(淘宝有开源的),存储成静态文件.因为考虑内容
-     *    可能超过2MB,超过memcached限制.
-     *    主要这部分缓存暂时不想在PHP部分实现,想在后端服务中去实现.
-     * @todo
-     * 1. 需要优化在使用到memcached的情况下在连接memcached,减少无用的连接.
-     *    比如场景为调取一个静态数据,则不需要连接memcached.
-     * 2. 这里需要处理如果memcached失效的情况,做的应急处理.
-     *
-     * @version 1.0.20160204
-     */
-    private function initCache()
-    {
-        //初始化memcached缓存 -- 开始
-        $memcached = new \Memcached();
-        $memcached->addServers(self::$container->get('memcached.serevice'));
-
-        self::$cacheDriver = new \Doctrine\Common\Cache\MemcachedCache();
-        self::$cacheDriver->setMemcached($memcached);
-        self::$cacheDriver->setNamespace('phpcore');
-        //初始化memcached缓存 -- 结束
-    }
-
-    // /**
-    //  * 全站钩子调用加载,非私有调用
-    //  * @author chloroplast1983
-    //  * @version 1.0.20131016
-    //  */
-    // public function _init_hook(){
-    //  include S_ROOT . 'System/hook/hooks.php';//加载全局钩子文件
-    // }
 }
