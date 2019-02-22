@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7477446c77f1325adc66d65ea54caa7f",
+    "content-hash": "52dab9b7aa8c23b4753b015f6cced7d4",
     "packages": [
         {
             "name": "chloroplast/marmot-common",
@@ -51,12 +51,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chloroplast1983/marmot-framework.git",
-                "reference": "ed8603605feb65a80d82fb8a69d78259df4f60c0"
+                "reference": "f30cc780c8b1ee97589b1020fefc02f82fa09c71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chloroplast1983/marmot-framework/zipball/ed8603605feb65a80d82fb8a69d78259df4f60c0",
-                "reference": "ed8603605feb65a80d82fb8a69d78259df4f60c0",
+                "url": "https://api.github.com/repos/chloroplast1983/marmot-framework/zipball/f30cc780c8b1ee97589b1020fefc02f82fa09c71",
+                "reference": "f30cc780c8b1ee97589b1020fefc02f82fa09c71",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -76,7 +76,8 @@
                 "neomerx/json-api": "0.8.11",
                 "nikic/fast-route": "0.7.0",
                 "ocramius/proxy-manager": "1.0.2",
-                "php-di/php-di": "5.4.6"
+                "php-di/php-di": "5.4.6",
+                "respect/validation": "1.1.15"
             },
             "require-dev": {
                 "fzaninotto/faker": "1.7.1",
@@ -108,7 +109,7 @@
                 "framework",
                 "marmot"
             ],
-            "time": "2019-02-21T05:58:44+00:00"
+            "time": "2019-02-22T07:56:39+00:00"
         },
         {
             "name": "container-interop/container-interop",

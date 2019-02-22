@@ -45,14 +45,14 @@ class Core extends MarmotCore
      */
     public function initTest()
     {
-        self::initAutoload();//autoload
-        self::initTestEnv();//初始化测试环境
-        self::initContainer();//引入容器
-        self::initEnv();//初始化环境
-        self::initCache();//初始化缓存使用
-        self::initDb();//初始化mysql
-        self::initMongo();
-        self::initError();
+        $this->initAutoload();//autoload
+        $this->initTestEnv();//初始化测试环境
+        $this->initContainer();//引入容器
+        $this->initEnv();//初始化环境
+        $this->initCache();//初始化缓存使用
+        $this->initDb();//初始化mysql
+        $this->initMongo();
+        $this->initError();
     }
     
     /**
@@ -67,19 +67,11 @@ class Core extends MarmotCore
      */
     protected function initAutoload()
     {
-        parent::initAutoload();
-
         //加载框架Application文件的autoload,匿名函数 -- 开始
         spl_autoload_register(
             function ($className) {
-
-                if (isset($this->classMaps[$className])) {
-                    $classFile = $this->classMaps[$className];
-                } else {
-                    $classFile = str_replace('\\', '/', $className) . '.class.php';
-                    $classFile = APP_ROOT.'Application/'.$classFile;
-                }
-
+                $classFile = str_replace('\\', '/', $className) . '.class.php';
+                $classFile = APP_ROOT.'Application/'.$classFile;
                 if (file_exists($classFile)) {
                       include_once $classFile;
                 }
@@ -132,7 +124,7 @@ class Core extends MarmotCore
         parent::initError();
 
         include APP_ROOT.'Application/errorConfig.php'; 
-        self::$errorDescriptions = self::$errorDescriptions + include 'Application/errorDescriptionConfig.php';
+        self::$errorDescriptions = self::$errorDescriptions + include APP_ROOT.'Application/errorDescriptionConfig.php';
     }
 
     /**

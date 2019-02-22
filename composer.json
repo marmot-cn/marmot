@@ -1,6 +1,5 @@
 {
     "require": {
-        "respect/validation": "1.1.15",
         "chloroplast/marmot-framework": "dev-dev"
     },
     "require-dev": {
