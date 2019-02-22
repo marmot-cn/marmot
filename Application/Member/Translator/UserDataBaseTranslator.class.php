@@ -6,7 +6,7 @@ use Member\Model\User;
 
 class UserDataBaseTranslator implements ITranslator
 {
-    public function arrayToObject(array $expression, $object=null)
+    public function arrayToObject(array $expression, $object = null)
     {
         $user = new User($expression['user_id']);
         $user->setCellphone($expression['cellphone']);

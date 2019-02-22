@@ -3,8 +3,6 @@
  <description>The coding standard for saas.</description>
   <!-- 应用代码文件夹 -->
   <file>Application</file>
-  <!-- 核心框架代码文件夹 -->
-  <file>System</file>
   <!-- 核心文件 -->
   <file>Core.php</file>
   <!-- 路由文件 -->

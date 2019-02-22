@@ -123,7 +123,7 @@ class Core extends MarmotCore
     {
         parent::initError();
 
-        include APP_ROOT.'Application/errorConfig.php'; 
+        include APP_ROOT.'Application/errorConfig.php';
         self::$errorDescriptions = self::$errorDescriptions + include APP_ROOT.'Application/errorDescriptionConfig.php';
     }
 
