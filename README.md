@@ -2,7 +2,7 @@
 
 ## 简介
 
-具体框架说明可见[wiki](https://github.com/chloroplast1983/marmot-famework/wiki)
+具体框架说明可见[wiki](https://github.com/chloroplast1983/marmot-framework/wiki)
 
 ## 接口示例
 
