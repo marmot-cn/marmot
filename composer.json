@@ -1,6 +1,6 @@
 {
     "require": {
-        "chloroplast/marmot-application": "dev-dev"
+        "chloroplast/marmot-application": "0.1"
     },
     "repositories": {
         "packagist": {
