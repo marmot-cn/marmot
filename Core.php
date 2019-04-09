@@ -78,6 +78,11 @@ class Core extends MarmotCore
         return APP_ROOT;
     }
 
+    protected function initAutoload()
+    {
+        
+    }
+
     /**
      * 初始化数据库
      *
